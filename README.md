@@ -1,7 +1,7 @@
 ### Structure
 #### Same but without Page Object:
-* For running tests use [CucumberRunner.java](../main/src/test/java/cucumber.runners/CucumberRunner.java)
-* For step definition use [SampleSteps.java](../main/src/test/java/cucumber.stepDefinitions/SampleSteps.java)
+* For running tests use [CucumberRunner.java](../main/src/test/java/cucumber/runners/CucumberRunner.java)
+* For step definition use [SampleSteps.java](../main/src/test/java/cucumber/stepDefinitions/SampleSteps.java)
 * Simple scenario example: [Sample1.feature](../main/src/test/resources/features/Sample1.feature)
 * Simple scenario with parameters in steps: [Sample2.feature](../main/src/test/resources/features/Sample2.feature)
 * Scenario outline example: [Sample3.feature](../main/src/test/resources/features/Sample3.feature)
@@ -33,7 +33,7 @@ in order to test that user can:
 ### Setup
 [see wiki for Project Setup](https://github.com/JanisDzalbe/cucumber_java/wiki/Project-Setup)
 
-[see wiki for WebDriver Setup](https://github.com/JanisDzalbe/selenium_java/wiki/WebDriver-Setup)
+[see wiki for WebDriver Setup](https://github.com/JanisDzalbe/cucumber_java/wiki/WebDriver-Setup)
 
 ---
 ### GIT
