@@ -62,6 +62,13 @@ public class SampleSteps {
                 driver.findElement(By.id("heading_2")).getText());
     }
 
+    @And("^Buttons in Locators page are clickable$")
+    public void buttonIsClickable() throws Throwable {
+        driver.findElement(By.name("randomButton1")).click();
+        driver.findElement(By.name("randomButton2")).click();
+    }
+
+
 
     @Given("^I (?:am on|open) age page$")
     public void iAmOnAgePage() throws Throwable {
