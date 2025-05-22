@@ -7,6 +7,8 @@ import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import org.openqa.selenium.Alert;
+
 import java.util.List;
 import java.util.Map;
 
@@ -25,10 +27,29 @@ public class SampleSteps {
         driver.get("https://acctabootcamp.github.io/site");
     }
 
+    @Given("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() throws Throwable {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
     @Then("^I should see home page header$")
     public void iShouldSeeHomePageHeader() throws Throwable {
         assertEquals("This is a home page",
                 driver.findElement(By.cssSelector("h1")).getText());
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeLocatorPageHeaders() throws Throwable {
+        assertEquals("Heading 1",
+                driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text",
+                driver.findElement(By.id("heading_2")).getText());
+    }
+
+    @And("^Buttons in Locators page are clickable$")
+    public void buttonsClickable() throws Throwable {
+        assertTrue(driver.findElement(By.name("randomButton1")).isEnabled());
+        assertTrue(driver.findElement(By.name("randomButton2")).isEnabled());
     }
 
     @And("^I should see home page description$")
@@ -53,6 +74,65 @@ public class SampleSteps {
         driver.get("https://acctabootcamp.github.io/site/examples/age");
     }
 
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() throws Throwable {
+        driver.get("https://acctabootcamp.github.io/site/tasks/provide_feedback");
+    }
+
+    @Given("^I am on enter a number page$")
+    public void iAmOnEnterANumberPage() throws Throwable {
+        driver.get("https://acctabootcamp.github.io/site/tasks/enter_a_number");
+    }
+
+    @When("^I enter an incorrect number value \"([^\"]*)\"$")
+    public void enterIncorrectNumber(String number) {
+        driver.findElement(By.id("numb")).sendKeys(number);
+        driver.findElement(By.className("w3-orange")).click();
+    }
+
+    @When("^I enter a correct number value (\\d+)$")
+    public void enterCorrectNumber(int number) {
+        driver.findElement(By.id("numb")).sendKeys(String.valueOf(number));
+        driver.findElement(By.className("w3-orange")).click();
+    }
+
+    @Then("^I see an error message \"([^\"]*)\"$")
+    public void seeErrorMessage(String message) {
+        assertEquals(message, driver.findElement(By.className("error")).getText());
+    }
+
+    @Then("^I see an alert with \"([^\"]*)\" and the result$")
+    public void iSeeAnAlert(String number) {
+        Alert alert = driver.switchTo().alert();
+        String result = String.format("%.2f", Math.sqrt(Double.parseDouble(number)));
+
+        assertEquals("Square root of " + number + " is " + result, alert.getText());
+        alert.accept();
+
+        assertEquals("", driver.findElement(By.id("ch1_error")).getText());
+    }
+
+    @When("^I enter name: \"([^\"]*)\" and age: (\\d+)$")
+    public void iEnterNameAndAge(String name, int age) {
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @When("I click send")
+    public void iClickSend(){
+        driver.findElement(By.className("w3-blue")).click();
+    }
+
+    @Then("^I see name \"([^\"]*)\" in correct field$")
+    public void iSeeName(String name) {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @Then("^I see age (\\d+) in correct field$")
+    public void iSeeAge(int age) {
+        assertEquals(age, Integer.parseInt(driver.findElement(By.id("age")).getText()));
+    }
+
     @And("^I click submit age$")
     public void iClickSubmitAge() throws Throwable {
         driver.findElement(By.id("submit")).click();
@@ -61,6 +141,16 @@ public class SampleSteps {
     @Then("^I see message: \"([^\"]*)\"$")
     public void iSeeMessage(String message) throws Throwable {
         assertEquals(message, driver.findElement(By.id("message")).getText());
+    }
+
+    @Then("^I see error: \"You haven't entered anything in age field\"$")
+    public void iSeeErrorAge() throws Throwable {
+        assertEquals("You haven't entered anything in age field", driver.findElement(By.id("error")).getText());
+    }
+
+    @Then("^I am not navigated to age message page$")
+    public void notNavigated() throws Throwable {
+        assertEquals("https://acctabootcamp.github.io/site/examples/age", driver.getCurrentUrl());
     }
 
     @When("^I enter values:$")
