@@ -22,6 +22,21 @@ Feature: Introduction to cucumber part 3
       | Tom  | 15  | Hello, Tom, you are a kid |
 
 
+  @debugs
+  Scenario Outline: 'Give us your feedback!' page
+    Given I am on feedback page
+    When I enter name "<name>" and age <age> on feedback page
+    And I click send on feedback page
+    Then I see name "<name>" in check feedback page
+    Then I see age <age> in check feedback page
+
+    @working
+    Examples:
+      | name  | age |
+      | Ann   | 5   |
+      | Marry | 50  |
+      | Bob   | 61  |
+
 #   TODO - create Scenario Outline for 'Give us your feedback!' page
 #   URL: https://acctabootcamp.github.io/site/tasks/provide_feedback
 #   Navigate to page
