@@ -9,10 +9,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -157,5 +157,36 @@ public class SampleSteps {
         assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
     }
 
+    @Given("^I am on the Enter a number page$")
+    public void iAmOnTheNumberPage(){
+        driver.get("https://acctabootcamp.github.io/site/tasks/enter_a_number");
+    }
+
+    @When("^I enter an input: (.*)$")
+    public void incorrectInput(String input){
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(input);
+    }
+
+    @And("^I click the submit button$")
+    public void clickSubmitButton(){
+        driver.findElement(By.className("w3-btn")).click();
+    }
+
+    @Then("^Error message is displayed: (.*)$")
+    public void errorIsDisplayed(String error){
+        assertEquals(error, driver.findElement(By.id("ch1_error")).getText());
+    }
+
+    @Then("^I get a pop-up with the correct answer for number: (.*)$")
+    public void calculationsCheck(String num){
+        assertEquals("Square root of "+num+" is "+ String.format(Locale.US, "%.2f", Math.sqrt(Integer.valueOf(num))), driver.switchTo().alert().getText());
+    }
+
+    @And("^No error message is displayed after pop-up is closed$")
+    public void noErrorAfterGettingResults(){
+        driver.switchTo().alert().accept();
+        assertFalse(driver.findElement(By.id("ch1_error")).isDisplayed());
+    }
 }
 
