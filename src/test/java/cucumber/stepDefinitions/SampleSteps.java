@@ -128,4 +128,38 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://acctabootcamp.github.io/site/examples/actions");
     }
+
+    @Given("^I am on provide feedback page$")
+    public void iAmOnProvideFeedbackPage() {
+        driver.get("https://acctabootcamp.github.io/site/tasks/provide_feedback");
+    }
+
+    @When("^I set name: \"([^\"]*)\"$")
+    public void iSetName(String name) {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("^I set age: (\\d+)$")
+    public void iSetAge(int age) throws Throwable {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("^I click send button")
+    public void iClickSendButton() throws Throwable {
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+    }
+
+    @Then("^I see displayed \"([^\"]*)\" in name field$")
+    public void iSeeDisplayedName(String name) throws Throwable {
+        assertTrue(driver.getCurrentUrl().contains("https://acctabootcamp.github.io/site/tasks/check_feedback.html"));
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @And("^I see displayed (\\d+) in age field$")
+    public void iSeeDisplayedName(int age) throws Throwable {
+        assertTrue(driver.getCurrentUrl().contains("https://acctabootcamp.github.io/site/tasks/check_feedback.html"));
+        assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
+    }
 }
