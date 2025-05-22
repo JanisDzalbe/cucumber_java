@@ -6,6 +6,8 @@
 # - Scenario for correct number
 
   #Should I do @working and @not working here? I'll be honest, I don't quite understand them, however I was not able to attend on thursday
+  # I am unfortunately not able to attend on Thursday, so I did everything ahead of time to the best of my ability :) Hopefully I understood everything correctly and did everything well
+
 Feature: Task 1 test
 
   Background:
