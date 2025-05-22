@@ -19,6 +19,7 @@ public class SampleSteps {
     private WebDriver driver;
 
     public SampleSteps() {
+
         this.driver = Hooks.driver;
     }
 
@@ -131,42 +132,36 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://acctabootcamp.github.io/site/examples/actions");
     }
-    @Given("^I am on number page$")
-    public void iAmOnNumberPage() throws Throwable {
-        driver.get("https://acctabootcamp.github.io/site/tasks/enter_a_number");
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() throws Throwable {
+        driver.get("https://acctabootcamp.github.io/site/tasks/provide_feedback");
     }
-    @And("^I should see number page header$")
-    public void iShouldSeeNumberPageHeader() throws Throwable {
-        assertEquals("Enter a number",
-                driver.findElement(By.cssSelector("h2")).getText());
+    @When("^I enter name \"([^\"]*)\" on feedback page$")
+    public void iEnterNameInField(String name) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+    @When("^I enter age: (\\d+) on feedback page$")
+    public void iEnterAgeInField(int age) throws Throwable {
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
     }
 
-    @And("^I enter \"([^\"]*)\" in the field$")
-    public void iEnterTextInTheField(String text) throws Throwable {
-        driver.findElement(By.id("numb")).sendKeys(text);
+    @And("^I click Send on feedback page$")
+    public void iClickSend() throws Throwable {
+        driver.findElement(By.className("w3-btn-block")).click();
     }
 
-    @And("^I click the result$")
-    public void iClickTheResult() {
-
+    @Then("^I see name \"([^\"]*)\" in check feedback page$")
+    public void nameIsSeen(String message) throws Throwable {
+        assertEquals(message, driver.findElement(By.id("name")).getText());
+    }
+    @Then("^I see age (\\d+) in check feedback page$")
+    public void ageIsSeen(String message) throws Throwable {
+        assertEquals(message, driver.findElement(By.id("age")).getText());
     }
 
-    @And("^I click submit button$")
-    public void iClickSubmitButton() {
-        driver.findElement(By.className("w3-btn")).click();
-    }
 
-    @Then("^Error message is: \"([^\"]*)\"$")
-    public void errorMessageIs(String message) throws Throwable {
-        Thread.sleep(2000);
-        assertEquals(message, driver.findElement(By.id("ch1_error")).getText());
-        // Write code here that turns the phrase above into concrete actions
 
-    }
-    @Then("^Message is: \"([^\"]*)\"$")
-    public void messageIs(String message) throws Throwable {
-        Alert alert = driver.switchTo().alert();
-        String result = alert.getText();
-        assertEquals(message, result);
-    }
+
 }

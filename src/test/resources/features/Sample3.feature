@@ -21,9 +21,19 @@ Feature: Introduction to cucumber part 3
       | name | age | message                   |
       | Tom  | 15  | Hello, Tom, you are a kid |
 
-
 #   TODO - create Scenario Outline for 'Give us your feedback!' page
 #   URL: https://acctabootcamp.github.io/site/tasks/provide_feedback
 #   Navigate to page
 #   Set name and age based on test Examples
 #   Click "Send" button and verify that previous input is displayed in correct fields
+
+  Scenario Outline: Give us your feedback
+    Given I am on feedback page
+      When I enter name "<name>" on feedback page
+      And I enter age: <age> on feedback page
+      And I click Send on feedback page
+      Then I see name "<name>" in check feedback page
+     Then I see age <age> in check feedback page
+    Examples:
+      | name | age |
+      |  Sam | 18  |
