@@ -126,7 +126,7 @@ public class SampleSteps {
     }
     @Given("^I am on number page$")
     public void iAmOnNumberPage() throws Throwable {
-        driver.get("https://kristinek.github.io/site/tasks/enter_a_number");
+        driver.get("https://acctabootcamp.github.io/site/tasks/enter_a_number");
     }
     @And("^I should see number page header$")
     public void iShouldSeeNumberPageHeader() throws Throwable {
