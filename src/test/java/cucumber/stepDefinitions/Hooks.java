@@ -17,16 +17,22 @@ public class Hooks {
     public static WebDriver driver;
     static String libWithDriversLocation = System.getProperty("user.dir") + File.separator + "lib" + File.separator;
 
-    @Before
-    public void openBrowser() throws MalformedURLException {
-        if (System.getProperty("os.name").contains("Mac") || System.getProperty("os.name").contains("mac"))
-            System.setProperty("webdriver.chrome.driver", libWithDriversLocation + "chromedriver");
-        else
-            System.setProperty("webdriver.chrome.driver", libWithDriversLocation + "chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.manage().deleteAllCookies();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+@Before
+public void openBrowser() throws MalformedURLException {
+    String os = System.getProperty("os.name").toLowerCase();
+
+    if (os.contains("mac") || os.contains("nix") || os.contains("nux") || os.contains("aix")) {
+        // macOS or Linux
+        System.setProperty("webdriver.chrome.driver", libWithDriversLocation + "chromedriver");
+    } else {
+        // Windows (assumes .exe required)
+        System.setProperty("webdriver.chrome.driver", libWithDriversLocation + "chromedriver.exe");
     }
+
+    driver = new ChromeDriver();
+    driver.manage().deleteAllCookies();
+    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+}
 
     @After
     public void embedScreenshot(Scenario scenario) {
