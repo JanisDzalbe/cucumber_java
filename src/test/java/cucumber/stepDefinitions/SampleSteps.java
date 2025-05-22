@@ -4,9 +4,11 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -99,4 +101,50 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://acctabootcamp.github.io/site/examples/actions");
     }
+
+    @Given("number page is displayed")
+    public void numberPageIsDisplayed() {driver.get("https://acctabootcamp.github.io/site/tasks/enter_a_number");
+    }
+
+//(String name) throws Throwable
+    @When("enter an invalid number value: {string}")
+    public void enterAnInvalidNumberValue(String number) {
+        driver.findElement(By.id("numb")).sendKeys(number);
+
+    }
+
+    @And("press submit button")
+    public void pressSubmitButton() {
+        driver.findElement(By.className("w3-btn")).click();
+    }
+
+    @Then("the {string} text is displayed")
+    public void theTextIsDisplayed(String error) {
+      assertEquals(error, driver.findElement(By.id("ch1_error")).getText());;
+    }
+
+    @When("enter valid number: {int}")
+    public void enterValidNumber(int arg0) {
+        driver.findElement(By.id("numb")).sendKeys("89");
+    }
+
+
+    @When("enter valid {string}")
+    public void enterValid(String number) {
+        driver.findElement(By.id("numb")).sendKeys(number);
+    }
+
+    @Then("the pop-up with {string} and correct answer is displayed")
+    public void thePopUpWithAndCorrectAnswerIsDisplayed(String number) {
+        Alert alert = driver.switchTo().alert();
+        Integer x = Integer.valueOf(number);
+        double squareText = Math.sqrt(x);
+        DecimalFormat df = new DecimalFormat("#.00");
+        String expectedAlertText = "Square root of " + number + " is " + df.format(squareText);
+        assertEquals(expectedAlertText, alert.getText());
+    }
 }
+
+
+
+
