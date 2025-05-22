@@ -16,10 +16,10 @@ Feature: Introduction to cucumber part 3
       | Ann   | 5   | Hello, Ann, you are a kid      |
       | Marry | 50  | Hello, Marry, you are an adult |
       | Bob   | 61  | Hello, Bob, you are an adult   |
-  @not_working
-    Examples:
-      | name | age | message                   |
-      | Tom  | 15  | Hello, Tom, you are a kid |
+#  @not_working
+#    Examples:
+#      | name | age | message                   |
+#      | Tom  | 15  | Hello, Tom, you are a kid |
 
 
 #   TODO - create Scenario Outline for 'Give us your feedback!' page
@@ -27,3 +27,14 @@ Feature: Introduction to cucumber part 3
 #   Navigate to page
 #   Set name and age based on test Examples
 #   Click "Send" button and verify that previous input is displayed in correct fields
+  Scenario Outline: Give us feedback
+    Given I am on feedback page
+    When I set name: "<name>"
+    And I set age: <age>
+    And I click send
+    Then I see previous input: "<name>" and <age>
+    Examples:
+      |  name | age |
+      | John  | 12  |
+      | Ann   | 25  |
+      | Marry | 62  |

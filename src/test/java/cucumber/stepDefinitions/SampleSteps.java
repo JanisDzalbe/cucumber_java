@@ -130,4 +130,33 @@ public class SampleSteps {
                 driver.getCurrentUrl());
     }
 
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackpage() {
+        driver.get("https://acctabootcamp.github.io/site/tasks/provide_feedback");
+    }
+
+    @When("^I set name: \"([^\"]*)\"$")
+    public void iSetName(String name) {
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("^I set age: (\\d+)$")
+    public void iSetAge(int age) {
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("^I click send$")
+    public void iClickSend() {
+        driver.findElement(By.className("w3-btn-block")).click();
+    }
+
+    @Then("^I see previous input: \"([^\"]*)\" and (\\d+)$")
+    public void iSeePreviousInput(String name, int age)
+    {
+        assertEquals(name,
+                driver.findElement(By.id("name")).getText());
+        assertEquals(String.valueOf(age),
+                driver.findElement(By.id("age")).getText());
+    }
+
 }
