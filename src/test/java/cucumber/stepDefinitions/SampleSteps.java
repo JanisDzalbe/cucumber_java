@@ -4,9 +4,12 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.eo.Do;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +27,27 @@ public class SampleSteps {
     public void iAmOnTheHomePage() throws Throwable {
         driver.get("https://acctabootcamp.github.io/site");
     }
+
+    @Given("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() throws Throwable {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeHomePageHeaderAndLocators() throws Throwable {
+        assertEquals("Heading 1",
+                driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text",
+                driver.findElement(By.id("heading_2")).getText());
+    }
+
+    @And("^Buttons in Locators page are clickable$")
+    public void buttonInLocatorPageAreClickable() throws Throwable {
+        assertTrue(driver.findElement(By.cssSelector("[name='randomButton1'")).isEnabled());
+        assertTrue(driver.findElement(By.id("buttonId")).isEnabled());
+    }
+
+
 
     @Then("^I should see home page header$")
     public void iShouldSeeHomePageHeader() throws Throwable {
@@ -63,6 +87,19 @@ public class SampleSteps {
         assertEquals(message, driver.findElement(By.id("message")).getText());
     }
 
+
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeError(String message) throws Throwable {
+        assertEquals(message, driver.findElement(By.id("error")).getText());
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() throws Throwable {
+        System.out.println(driver.getCurrentUrl());
+        assertEquals("https://acctabootcamp.github.io/site/examples/age" ,driver.getCurrentUrl());
+    }
+
     @When("^I enter values:$")
     public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
         for (Map.Entry<String, String> e : valuesToEnter.entrySet()) {
@@ -99,4 +136,67 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://acctabootcamp.github.io/site/examples/actions");
     }
+
+    @Given("^I am no feedback page$")
+    public void iAmOnFeedbackPAge() {
+        driver.get("https://acctabootcamp.github.io/site/tasks/provide_feedback");
+    }
+
+    @When("^I am setting: \"([^\"]*)\" and (\\d+)$")
+    public void iAmOnFeedbackPAge(String name, int age) {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("^I click Send button$")
+    public void iClickSendButton() {
+        driver.findElement(By.className("w3-btn-block")).click();
+    }
+
+    @Then("^I see name \"([^\"]*)\" in check feedback page$")
+    public void iSeeName(String name) {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @And("^I see age (\\d+) in check feedback page$")
+    public void iSeeAge(String age) {
+        assertEquals(age, driver.findElement(By.id("age")).getText());
+    }
+
+    @Given("^I go to Enter a number page$")
+    public void iGoToEnterANumberPage() {
+        driver.get("https://acctabootcamp.github.io/site/tasks/enter_a_number");
+    }
+
+    @When("^I enter \"([^\"]*)\" in textfield$")
+    public void iEnterValueInTextfield(String value) {
+        driver.findElement(By.id("numb")).sendKeys(value);
+    }
+
+    @And("^I press submit button on Enter a number page$")
+    public void iPressSubmitButtonOnEnterANumberPage() {
+        driver.findElement(By.className("w3-orange")).click();
+    }
+
+    @Then("^I see \"([^\"]*)\" on Enter a number page$")
+    public void iSeeErrorMessageOnEnterANumberPage(String message) {
+        assertEquals(message, driver.findElement(By.id("ch1_error")).getText());
+    }
+
+    @Then("^I see correct alert message of calculating sqrt - \"([^\"]*)\" from \"([^\"]*)\"$")
+    public void iSeeCorrectAlertMessageOfCalculatingSqrt(String expectedResult, String inputValue) {
+
+//        double calcResult = Math.sqrt(inputValue);
+        DecimalFormat df = new DecimalFormat("#.00");
+        String formattedNumber = df.format(Double.valueOf(expectedResult));
+        String fullMessageText = "Square root of " + inputValue + " is " + formattedNumber;
+
+        Assertions.assertEquals(fullMessageText, driver.switchTo().alert().getText());
+    }
+
+
+
+
 }
