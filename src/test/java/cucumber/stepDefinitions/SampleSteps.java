@@ -73,6 +73,34 @@ public class SampleSteps {
         driver.get("https://acctabootcamp.github.io/site/examples/age");
     }
 
+    @Given("^I (?:am on|open) feedback page$")
+    public void iAmOnFeedbackPage() throws Throwable {
+        driver.get("https://acctabootcamp.github.io/site/tasks/provide_feedback");
+    }
+
+    @When("^I enter name \"([^\"]*)\" and age (\\d+) on feedback page$")
+    public void iEnterNameAndAgeOnFeedbackPage(String name, int age) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("^I click send on feedback page$")
+    public void iClickSendOnFeedback() throws Throwable {
+        driver.findElement(By.tagName("button")).click();
+    }
+
+    @And("^I see name \"([^\"]*)\" in check feedback page$")
+    public void iSeeNameInFeedbackCheck(String name) throws Throwable {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @And("^I see age (\\d+) in check feedback page$")
+    public void iSeeAgeInFeedbackCheck(int age) throws Throwable {
+        assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
+    }
+
     @And("^I click submit age$")
     public void iClickSubmitAge() throws Throwable {
         driver.findElement(By.id("submit")).click();
