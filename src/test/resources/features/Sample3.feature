@@ -1,29 +1,32 @@
-@regression
-Feature: Introduction to cucumber part 3
+Feature: Introduction to cucumber part 2
   As a test engineer
-  I want to be able to write and execute a scenario outline
+  I want to be able to write and execute a scenario with parameters
 
-  @debugs
-  Scenario Outline: a new scenario outline
+  Background:
     Given I am on age page
-    When I enter name: "<name>"
-    And I enter age: <age>
+
+  Scenario: a new scenario 1 with regex
+    When I enter name: "Ann"
+    And I enter age: 5
     And I click submit age
-    Then I see message: "<message>"
-  @working
-    Examples:
-      | name  | age | message                        |
-      | Ann   | 5   | Hello, Ann, you are a kid      |
-      | Marry | 50  | Hello, Marry, you are an adult |
-      | Bob   | 61  | Hello, Bob, you are an adult   |
-  @not_working
-    Examples:
-      | name | age | message                   |
-      | Tom  | 15  | Hello, Tom, you are a kid |
+    Then I see message: "Hello, Ann, you are a kid"
 
+  Scenario: a new scenario 2 with regex
+    When I enter name: "Bob"
+    And I enter age: 61
+    And I click submit age
+    Then I see message: "Hello, Bob, you are an adult"
 
-#   TODO - create Scenario Outline for 'Give us your feedback!' page
-#   URL: https://acctabootcamp.github.io/site/tasks/provide_feedback
-#   Navigate to page
-#   Set name and age based on test Examples
-#   Click "Send" button and verify that previous input is displayed in correct fields
+#  TODO - Add implementation for missing steps
+#  @test
+#  Scenario: a new scenario error
+#    When I enter name: "John"
+#    And I click submit age
+#    Then I see error: "You haven't entered anything in age field"
+#    And I am not navigated to age message page
+  @test
+  Scenario: a new scenario error
+    When I enter name: "John"
+    And I click submit age
+    Then I see error: "You haven't entered anything in age field"
+    And I am not navigated to age message page
