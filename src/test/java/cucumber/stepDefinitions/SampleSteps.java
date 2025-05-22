@@ -90,6 +90,29 @@ public class SampleSteps {
     public void iAmNotOnAgePage() throws Throwable {
         assertEquals("https://acctabootcamp.github.io/site/examples/age", driver.getCurrentUrl());
     }
+    @Given("^I (?:am on|open) feedback page$")
+    public void iAmOnFeedbackPage() throws Throwable {
+        driver.get("https://acctabootcamp.github.io/site/tasks/provide_feedback");
+    }
+    @When("^I enter name \"([^\"]*)\" and age (\\d*) on feedback page$")
+    public void iEnterNameAndAgeOnFeedbackPage(String name, int age) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+    @And("^I click send button$")
+    public void iClickOnSendButtonFeedbackPage() throws Throwable {
+        driver.findElement(By.tagName("button")).click();
+    }
+    @Then("^I see correct name \"([^\"]*)\" input on feedback page$")
+    public void iSeeCorrectInputName(String name) throws Throwable {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+    @Then("^I see correct age (\\d*) input on feedback page$")
+    public void iSeeCorrectInputName(int age) throws Throwable {
+        assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
+    }
     @When("^I enter values:$")
     public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
         for (Map.Entry<String, String> e : valuesToEnter.entrySet()) {
