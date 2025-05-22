@@ -25,10 +25,30 @@ public class SampleSteps {
         driver.get("https://acctabootcamp.github.io/site");
     }
 
+    @Given("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() throws Throwable {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
     @Then("^I should see home page header$")
     public void iShouldSeeHomePageHeader() throws Throwable {
         assertEquals("This is a home page",
                 driver.findElement(By.cssSelector("h1")).getText());
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeLocatorsPageHeaders() throws Throwable {
+        assertEquals("Heading 1",
+                driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text",
+                driver.findElement(By.id("heading_2")).getText());
+    }
+
+    @Then("^Buttons in Locators page are clickable$")
+    public void locatorsPageButtonsAreClickable() throws Throwable {
+        assertTrue( driver.findElement(By.cssSelector("[name = \"randomButton1\"]")).isEnabled());
+        assertTrue( driver.findElement(By.cssSelector("[name = \"randomButton2\"]")).isEnabled());
+
     }
 
     @And("^I should see home page description$")
@@ -61,6 +81,17 @@ public class SampleSteps {
     @Then("^I see message: \"([^\"]*)\"$")
     public void iSeeMessage(String message) throws Throwable {
         assertEquals(message, driver.findElement(By.id("message")).getText());
+    }
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeErrorMessage(String message) throws Throwable {
+        assertEquals(message, driver.findElement(By.id("error")).getText());
+    }
+
+    @Given("^I am not navigated to age message page$")
+    public void assertAgePage() throws Throwable {
+        assertEquals("https://acctabootcamp.github.io/site/examples/age",
+                driver.getCurrentUrl());
     }
 
     @When("^I enter values:$")
