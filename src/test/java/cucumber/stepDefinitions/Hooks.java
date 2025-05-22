@@ -19,10 +19,10 @@ public class Hooks {
 
     @Before
     public void openBrowser() throws MalformedURLException {
-        if (System.getProperty("os.name").contains("Mac") || System.getProperty("os.name").contains("mac"))
-            System.setProperty("webdriver.chrome.driver", libWithDriversLocation + "chromedriver");
-        else
-            System.setProperty("webdriver.chrome.driver", libWithDriversLocation + "chromedriver.exe");
+//        if (System.getProperty("os.name").contains("Mac") || System.getProperty("os.name").contains("mac"))
+//            System.setProperty("webdriver.chrome.driver", libWithDriversLocation + "chromedriver");
+//        else
+//            System.setProperty("webdriver.chrome.driver", libWithDriversLocation + "chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().deleteAllCookies();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));

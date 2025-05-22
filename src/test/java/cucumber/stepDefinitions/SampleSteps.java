@@ -17,6 +17,7 @@ public class SampleSteps {
     private WebDriver driver;
 
     public SampleSteps() {
+
         this.driver = Hooks.driver;
     }
 
@@ -25,12 +26,29 @@ public class SampleSteps {
         driver.get("https://acctabootcamp.github.io/site");
     }
 
+    @Given("^I am on the locators page$")
+    public void iAmOnLocatorPage() throws Throwable {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
     @Then("^I should see home page header$")
     public void iShouldSeeHomePageHeader() throws Throwable {
         assertEquals("This is a home page",
                 driver.findElement(By.cssSelector("h1")).getText());
     }
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeLocatorPageHeaders() throws Throwable {
+        assertEquals("Heading 1",
+                driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text",
+                driver.findElement(By.id("heading_2")).getText());
+    }
 
+    @Then("^Buttons in Locators page are clickable$")
+    public void locatorPageButtonsAreClickable() throws Throwable {
+        assertTrue(driver.findElement(By.cssSelector("*[name=\"randomButton1\"]")).isEnabled());
+        assertTrue(driver.findElement(By.cssSelector("*[name=\"randomButton2\"]")).isEnabled());
+    }
     @And("^I should see home page description$")
     public void iShouldSeeHomePageDescription() throws Throwable {
         assertEquals("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -63,6 +81,15 @@ public class SampleSteps {
         assertEquals(message, driver.findElement(By.id("message")).getText());
     }
 
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void errorMessageAppears(String message) throws Throwable {
+        assertEquals(message, driver.findElement(By.id("error")).getText());
+    }
+
+    @Then("I am not navigated to age message page$")
+    public void iAmNotOnAgePage() throws Throwable {
+        assertEquals("https://acctabootcamp.github.io/site/examples/age", driver.getCurrentUrl());
+    }
     @When("^I enter values:$")
     public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
         for (Map.Entry<String, String> e : valuesToEnter.entrySet()) {
