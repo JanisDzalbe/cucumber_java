@@ -159,4 +159,37 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://acctabootcamp.github.io/site/examples/actions");
     }
+
+    @Given("^I am on enter a number page$")
+    public void iAmOnEnterANumberPage() {
+        driver.get("https://acctabootcamp.github.io/site/tasks/enter_a_number");
+    }
+
+    @When("^I enter \"([^\"]*)\" in number field$")
+    public void iEnterValueInNumberField(String value) {
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(value);
+    }
+
+    @And("^I click number submit button$")
+    public void iClickNumberSubmitButton() {
+        driver.findElement(By.tagName("button")).click();
+    }
+
+    @Then("^I see error message: \"([^\"]*)\"$")
+    public void iSeeInlineError(String expected) {
+        String actual = driver.findElement(By.id("ch1_error")).getText();
+        assertEquals(expected, actual);
+    }
+
+    @Then("^I see result message: \"([^\"]*)\"$")
+    public void iSeeAlertMessage(String expected) {
+        String actual = driver.switchTo().alert().getText();
+        assertEquals(expected, actual);
+        driver.switchTo().alert().accept();
+    }
+
 }
+
+
+
