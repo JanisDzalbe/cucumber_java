@@ -128,5 +128,34 @@ public class SampleSteps {
     public void noRedirectionCheck(){
         assertEquals("https://acctabootcamp.github.io/site/examples/age", driver.getCurrentUrl());
     }
+
+    @Given("^I am on feedback page$")
+    public void iAmOnTheFeedbackPage() {
+        driver.get("https://acctabootcamp.github.io/site/tasks/provide_feedback");
+    }
+
+    @When("^I enter feedback name: \"(.*)\"$")
+    public void enterNameInFeedback(String name){
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("^I enter feedback age: (\\d+)$")
+    public void enterAgeInFeedback(int age){
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("^I click the send button$")
+    public void clickSendButton(){
+        driver.findElement(By.className("w3-btn-block")).click();
+    }
+
+    @Then("^Previous inputted (\"(.*)\") and (\\d+) are displayed correctly$")
+    public void checkInputsAreCorrect(String name, int age){
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+        assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
+    }
+
 }
 
