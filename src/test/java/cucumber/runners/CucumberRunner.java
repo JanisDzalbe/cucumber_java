@@ -12,7 +12,7 @@ import org.openqa.selenium.WebDriver;
                 "junit:cucumber-report/junit-report.xml",
                 "json:cucumber-report/json-report.json"},
         tags = "not @test and not @bug",
-        glue = {"stepDefinitions"}
+        glue = {"cucumber.stepDefinitions"}
 )
 public class CucumberRunner {
 

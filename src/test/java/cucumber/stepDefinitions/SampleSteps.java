@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -12,6 +13,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -48,6 +50,19 @@ public class SampleSteps {
         driver.findElement(By.id("age")).sendKeys(String.valueOf(age));
     }
 
+    @Given("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() throws Throwable {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeLocatorPageHeaders() throws Throwable {
+        assertEquals("Heading 1",
+                driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text",
+                driver.findElement(By.id("heading_2")).getText());
+    }
+
+
     @Given("^I (?:am on|open) age page$")
     public void iAmOnAgePage() throws Throwable {
         driver.get("https://acctabootcamp.github.io/site/examples/age");
@@ -68,9 +83,9 @@ public class SampleSteps {
         assertEquals(message, driver.findElement(By.id("error")).getText());
     }
 
-    @Then("^I am not navigated to age message page")
-    public void assertAgePageUrl(String message) throws Throwable {
-        assertEquals("https://acctabootcamp.github.io/site/examples/age", driver.getCurrentUrl());
+    @And("^I am not navigated to age message page")
+    public void assertAgePageUrl() throws Throwable {
+       assertEquals("https://acctabootcamp.github.io/site/examples/age", driver.getCurrentUrl());
     }
 
     @When("^I enter values:$")
@@ -108,5 +123,43 @@ public class SampleSteps {
     @Given("^I am on action page$")
     public void iAmOnActionPage() {
         driver.get("https://acctabootcamp.github.io/site/examples/actions");
+    }
+    @Given("^I am on number page$")
+    public void iAmOnNumberPage() throws Throwable {
+        driver.get("https://kristinek.github.io/site/tasks/enter_a_number");
+    }
+    @And("^I should see number page header$")
+    public void iShouldSeeNumberPageHeader() throws Throwable {
+        assertEquals("Enter a number",
+                driver.findElement(By.cssSelector("h2")).getText());
+    }
+
+    @And("^I enter \"([^\"]*)\" in the field$")
+    public void iEnterTextInTheField(String text) throws Throwable {
+        driver.findElement(By.id("numb")).sendKeys(text);
+    }
+
+    @And("^I click the result$")
+    public void iClickTheResult() {
+
+    }
+
+    @And("^I click submit button$")
+    public void iClickSubmitButton() {
+        driver.findElement(By.className("w3-btn")).click();
+    }
+
+    @Then("^Error message is: \"([^\"]*)\"$")
+    public void errorMessageIs(String message) throws Throwable {
+        Thread.sleep(2000);
+        assertEquals(message, driver.findElement(By.id("ch1_error")).getText());
+        // Write code here that turns the phrase above into concrete actions
+
+    }
+    @Then("^Message is: \"([^\"]*)\"$")
+    public void messageIs(String message) throws Throwable {
+        Alert alert = driver.switchTo().alert();
+        String result = alert.getText();
+        assertEquals(message, result);
     }
 }
