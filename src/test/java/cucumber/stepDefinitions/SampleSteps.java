@@ -4,8 +4,11 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
@@ -113,6 +116,39 @@ public class SampleSteps {
     public void iSeeCorrectInputName(int age) throws Throwable {
         assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
     }
+
+    @Given("^I (?:am on|open) Enter a number page$")
+    public void iAmOnEnterANumberPage() throws Throwable {
+        driver.get("https://acctabootcamp.github.io/site/tasks/enter_a_number");
+    }
+
+    @When("^I enter a number: \"([^\"]*)\"$")
+    public void iEnterANumberOnEnterANumberPage(String name) throws Throwable {
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(name);
+    }
+    @And("^I click on submit button$")
+    public void iClickOnSubmitButtonEnterANumberPage() throws Throwable {
+        driver.findElement(By.className("w3-orange")).click();
+    }
+    @Then("^I see an error \"([^\"]*)\" message$")
+    public void iSeeAnErrorMessage(String error) throws Throwable {
+        assertEquals(error, driver.findElement(By.id("ch1_error")).getText());
+    }
+    @Then("^I see a pop up message with an answer for a number: \"([^\"]*)\"$")
+    public void iSeeAnAnswer(String number) throws Throwable {
+        int intNumber = Integer.parseInt(number);
+        double numberSq = Math.sqrt(intNumber);
+        String formatted = String.format("%.2f", numberSq);
+        String allertExp = "Square root of " + intNumber + " is " + formatted;
+
+        Alert alert = driver.switchTo().alert();
+        String allertText = alert.getText();
+        Assertions.assertEquals(allertExp, allertText);
+        alert.accept();
+        assertEquals("", driver.findElement(By.id("ch1_error")).getText());
+    }
+
     @When("^I enter values:$")
     public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
         for (Map.Entry<String, String> e : valuesToEnter.entrySet()) {
