@@ -6,6 +6,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
@@ -99,4 +100,33 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://acctabootcamp.github.io/site/examples/actions");
     }
+
+    @Given("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorsPageHeaders(){
+        assertTrue(driver.findElement(By.id("heading_1")).isDisplayed());
+        assertTrue(driver.findElement(By.id("heading_2")).isDisplayed());
+    }
+
+    @And("^Buttons in Locators page are clickable$")
+    public void buttonsInLocatorsPageAreClickable(){
+        for(WebElement button : driver.findElements(By.cssSelector("[type=button]"))){
+            assertTrue(button.isEnabled());
+        }
+    }
+
+    @Then("^I see error: \"(.*)\"$")
+    public void errorNothingInAgeField(String errorMessage){
+        assertEquals(errorMessage, driver.findElement(By.id("error")).getText());
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void noRedirectionCheck(){
+        assertEquals("https://acctabootcamp.github.io/site/examples/age", driver.getCurrentUrl());
+    }
 }
+
