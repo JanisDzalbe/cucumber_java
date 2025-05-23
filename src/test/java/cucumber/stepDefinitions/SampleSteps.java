@@ -143,6 +143,7 @@ public class SampleSteps {
         String expectedAlertText = "Square root of " + number + " is " + df.format(squareText);
         assertEquals(expectedAlertText, alert.getText());
     }
+
 }
 
 

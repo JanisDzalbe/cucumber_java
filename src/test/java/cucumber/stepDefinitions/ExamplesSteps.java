@@ -55,22 +55,7 @@ public class ExamplesSteps {
         numberInput.sendKeys(String.valueOf(arg0));
     }
 
-    @And("I click {adj} link")
-    public void iClickGreatLink() {
-    }
 
-    // Can't escape / character itself: https://github.com/cucumber/cucumber-expressions#escaping
-    @And("I enter bad/good/mediocre text")
-    public void iEnterBadText() {
-    }
-
-    @And("I eat {} banana(s)")
-    public void iEatOneBanana(String word) {
-    }
-
-    @And("I enter number {int}")
-    public void iEnterNumber(int number) {
-    }
 
     @When("I clicked on checkboxes modified:")
     public void iClickedOnCheckboxesModified(List<String> values) throws Throwable {
