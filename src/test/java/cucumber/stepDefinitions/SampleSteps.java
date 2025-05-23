@@ -58,6 +58,15 @@ public class SampleSteps {
         driver.findElement(By.id("submit")).click();
     }
 
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iISeeError(String message) throws Throwable {
+        assertEquals(message, driver.findElement(By.id("error")).getText());
+    }
+    @And("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() throws Throwable{
+        assertEquals("https://acctabootcamp.github.io/site/examples/age", driver.getCurrentUrl());
+    }
+
     @Then("^I see message: \"([^\"]*)\"$")
     public void iSeeMessage(String message) throws Throwable {
         assertEquals(message, driver.findElement(By.id("message")).getText());
