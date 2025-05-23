@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.java.an.E;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -206,6 +207,23 @@ public class SampleSteps {
     @And("^I click the send feedback$")
     public void clickSendFeedbackButton(){
         driver.findElement(By.className("w3-btn-block")).click();
+    }
+
+    @When("^I set the values:$")
+    public void feedbackValueSet(Map<String,String> values){
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(values.get("name"));
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(values.get("age"));
+        driver.findElement(By.cssSelector(".w3-radio[value="+values.get("genre")+"]")).click();
+    }
+
+    @Then("^All set values are displayed correctly:$")
+    public void checkIfValuesCorrect(Map<String,String> values) throws Exception {
+        Thread.sleep(1500);
+        assertEquals(values.get("name"),driver.findElement(By.id("name")).getText());
+        assertEquals(values.get("age"),driver.findElement(By.id("age")).getText());
+        assertEquals(values.get("genre"),driver.findElement(By.id("gender")).getText());
     }
 }
 

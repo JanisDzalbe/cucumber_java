@@ -39,3 +39,21 @@ Feature: Introduction to cucumber part 4
   # - All input MUST use Examples for data
   # - Step can use Map or Domain object
   # Click "Send" button and verify that previous input is displayed in correct fields
+  Scenario Outline: Feeback page test
+    When I am on feedback page
+    And I set the values:
+    |name|<name>|
+    |age |<age>  |
+    |genre|<genre>|
+    And I click send feedback
+    Then All set values are displayed correctly:
+      |name|<name>|
+      |age |<age>  |
+      |genre|<genre>|
+
+    Examples:
+    |name|age|genre|
+    |Damian|20|male|
+    |Stasys|45|female|
+    |Anabele|28|female|
+    |Kristina|16|male |
