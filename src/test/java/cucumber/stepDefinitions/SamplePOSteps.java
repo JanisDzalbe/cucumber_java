@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.java.bs.A;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -52,5 +53,15 @@ public class SamplePOSteps {
     public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
         agePage.enterName(valuesToEnter.get("name"));
         agePage.enterAge(valuesToEnter.get("age"));
+    }
+
+    @Then("^I see error: \"(.*)\" using PO")
+    public void checkForErrors(String errorMessage){
+        agePage.checkErrorMessage(errorMessage);
+    }
+
+    @And("^I remain in age page using PO$")
+    public void checkNoRedirection(){
+        agePage.checkUrl(driver.getCurrentUrl());
     }
 }
