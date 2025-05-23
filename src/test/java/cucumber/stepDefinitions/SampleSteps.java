@@ -71,7 +71,7 @@ public class SampleSteps {
     public void provideFeedbackPage() throws Throwable {
         driver.get("https://acctabootcamp.github.io/site/tasks/provide_feedback");
     }
-
+/*
     @When("^I enter name: \"([^\"]*)\" and age (\\d+) on feedback page$")
     public void iEnterNameAndAge(String name, int age) throws Throwable {
         driver.findElement(By.id("fb_name")).clear();
@@ -79,12 +79,13 @@ public class SampleSteps {
         driver.findElement(By.id("fb_age")).clear();
         driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
     }
-
+*/
+    /*
     @And("^I click Send on feedback page$")
     public void iClickSendOnFeedbackPage() throws Throwable {
         driver.findElement(By.tagName("button")).click();
     }
-
+*/
     @Given("^I (?:am on|open) age page$")
     public void iAmOnAgePage() throws Throwable {
         driver.get("https://acctabootcamp.github.io/site/examples/age");
@@ -99,17 +100,18 @@ public class SampleSteps {
     public void iSeeMessage(String message) throws Throwable {
         assertEquals(message, driver.findElement(By.id("message")).getText());
     }
-
+/*
     @Then("^I see name \"([^\"]*)\" in check feedback page$")
     public void iSeeNameInFeedbackPage(String name) throws Throwable {
         assertEquals(name, driver.findElement(By.id("name")).getText());
     }
-
+*/
+    /*
     @Then("^I see age (\\d+) in check feedback page$")
     public void iSeeAgeInFeedbackPage(int age) throws Throwable {
         assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
     }
-
+*/
     @Then("^I see error: \"([^\"]*)\"$")
     public void iSeeErrorMessage (String message) throws Throwable {
         assertEquals(message, driver.findElement(By.id("error")).getText());
@@ -155,5 +157,43 @@ public class SampleSteps {
     @Given("^I am on action page$")
     public void iAmOnActionPage() {
         driver.get("https://acctabootcamp.github.io/site/examples/actions");
+    }
+
+    @Given("^I (?:am on|open) feedback page$")
+    public void openFeedbackPage() throws Throwable {
+        driver.get("https://acctabootcamp.github.io/site/tasks/provide_feedback");
+    }
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguage(List<String> languages) throws Throwable {
+        for (String language : languages) {
+            driver.findElement(By.xpath("//*[@value='" + language + "']")).click();
+        }
+    }
+
+    @And("^I click send feedback button$")
+    public void iClickSendFeedbackButton() throws Throwable {
+        driver.findElement(By.className("w3-btn-block")).click();
+    }
+
+    @Then("I can see languages \"(.*)\" in feedback check$")
+    public void languagesForFeedbackIsSeen(String languages) throws Throwable {
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+
+    @When("^I enter values to send:$")
+    public void iEnterValuesToSend(Map<String, String> valuesToSend) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(valuesToSend.get("name"));
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(valuesToSend.get("age"));
+        driver.findElement(By.cssSelector("[value='" + valuesToSend.get("gender") + "']")).click();
+    }
+
+    @Then("I can see input in feedback check$")
+    public void inputInFeedbackIsSeen(Map<String, String> valuesToSend) throws Throwable {
+        assertEquals(valuesToSend.get("name"), driver.findElement(By.id("name")).getText());
+        assertEquals(valuesToSend.get("age"), driver.findElement(By.id("age")).getText());
+        assertEquals(valuesToSend.get("gender"), driver.findElement(By.id("gender")).getText());
     }
 }
