@@ -16,7 +16,8 @@ Feature: Introduction to cucumber part 3: Homework, Task 2
   Background:
     Given I am on People with job page
 
-Scenario Outline: User can edit a person
+#Test 1
+Scenario Outline: User can add a new person
 
 When I click on Add person button
 Then I am redirected to add new person page
@@ -29,6 +30,24 @@ And I can see record number has increased
   |Jonathan|Doctor   |
   |Peter   |Scientist|
   |Irvin   |Artist   |
+
+#Test 2
+Scenario  User can edit a person
+#person0.fa-pencil
+#person0.getValue
+When I click on pencil icon near the record to edit record
+Then I am redirected to add new person page
+And I enter a new name "Simon" and a new job "Florist"
+And I click on Add button
+Then I am redirected to main page
+And I can see changes are saved
+
+#Test 3
+Scenario  User can remove a person
+#person2 > span.closebtn
+First get a count of records/ get a value of record is displayed
+When I click on x icon near the record to delete record
+And ? Checkc if you still page; check if record count became smaller/ try to find a record
 
 
 #Scenario Outline: Error cases scenario
