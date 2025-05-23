@@ -148,7 +148,7 @@ public class SampleSteps {
 
     @And("^I click the send button$")
     public void clickSendButton(){
-        driver.findElement(By.className("w3-btn-block")).click();
+        driver.findElement(By.className("w3-btn")).click();
     }
 
     @Then("^Previous inputted (\"(.*)\") and (\\d+) are displayed correctly$")
@@ -168,9 +168,11 @@ public class SampleSteps {
         driver.findElement(By.id("numb")).sendKeys(input);
     }
 
-    @And("^I click the submit button$")
+
+
+    @And("^I click send feedback$")
     public void clickSubmitButton(){
-        driver.findElement(By.className("w3-btn")).click();
+        driver.findElement(By.className("w3-btn-block")).click();
     }
 
     @Then("^Error message is displayed: (.*)$")
@@ -187,6 +189,23 @@ public class SampleSteps {
     public void noErrorAfterGettingResults(){
         driver.switchTo().alert().accept();
         assertFalse(driver.findElement(By.id("ch1_error")).isDisplayed());
+    }
+
+    @When("^I select feedback languages$")
+    public void selectLanguages(List<String> languages){
+        for(String box : languages){
+            driver.findElement(By.cssSelector("[value="+box+"]")).click();
+        }
+    }
+
+    @Then("^I can see languages (\"(.*)\") in feedback check$")
+    public void feedbackLanguagesTest(String languages) throws Exception{
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+
+    @And("^I click the send feedback$")
+    public void clickSendFeedbackButton(){
+        driver.findElement(By.className("w3-btn-block")).click();
     }
 }
 
