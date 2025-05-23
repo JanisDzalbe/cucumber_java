@@ -1,3 +1,4 @@
+@RegressionTest
 Feature: Introduction to cucumber part 1
   As a test engineer
   I want to be able to write and execute a simple scenario
