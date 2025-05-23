@@ -151,4 +151,26 @@ public class SampleSteps {
         assertEquals(arg0, driver.findElement(By.id("name")).getText());
         assertEquals(arg1, driver.findElement(By.id("age")).getText());
     }
+
+    @Given("^I (?:am on|open) feedback page$")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://acctabootcamp.github.io/site/tasks/provide_feedback");
+    }
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) throws Throwable {
+        for (String lang :languages){
+            driver.findElement(By.cssSelector("[value='" + lang + "']")).click();
+        }
+    }
+
+    @And("I click send feedback")
+    public void iClickSendFeedback() {
+        driver.findElement(By.className("w3-btn-block")).click();
+    }
+
+    @Then("I can see languages {string} in feedback check")
+    public void iCanSeeLanguagesInFeedbackCheck(String arg0) {
+        assertEquals(arg0, driver.findElement(By.id("language")).getText());
+    }
 }
