@@ -2,11 +2,16 @@ package cucumber.stepDefinitions;
 
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.*;
 
 public class Task2Steps {
     private WebDriver driver;
@@ -32,22 +37,30 @@ public class Task2Steps {
 
     @And("^I enter name \"([^\"]*)\"$")
     public void iEnterName(String text) throws Throwable {
-        driver.findElement(By.id("name")).sendKeys(text);
+        WebElement nameInput = driver.findElement(By.id("name"));
+        nameInput.clear();
+        nameInput.sendKeys(text);
     }
 
     @And("^I enter surname \"([^\"]*)\"$")
     public void iEnterSurname(String text) throws Throwable {
-        driver.findElement(By.id("surname")).sendKeys(text);
+        WebElement surNameInput = driver.findElement(By.id("surname"));
+        surNameInput.clear();
+        surNameInput.sendKeys(text);
     }
 
     @And("^I enter job \"([^\"]*)\"$")
     public void iEnterJob(String text) throws Throwable {
-        driver.findElement(By.id("job")).sendKeys(text);
+        WebElement jobInput = driver.findElement(By.id("job"));
+        jobInput.clear();
+        jobInput.sendKeys(text);
     }
 
     @And("^I enter Date of Birth \"([^\"]*)\"$")
     public void iEnterDateOfBirth(String text) throws Throwable {
-        driver.findElement(By.id("dob")).sendKeys(text);
+        WebElement dateOfBirthInput = driver.findElement(By.id("dob"));
+        dateOfBirthInput.clear();
+        dateOfBirthInput.sendKeys(text);
     }
 
     @And("^I choose language \"([^\"]*)\"$")
@@ -88,6 +101,12 @@ public class Task2Steps {
         driver.findElement(By.className("fa-pencil")).click();
     }
 
+
+    @And("^I click on the Edit button$")
+    public void iClickOnTheEditButton() {
+        driver.findElement(By.xpath("//button[contains(text(),'Edit')]")).click();
+    }
+
     @And("^I Click Delete button$")
     public void iClickOnDeleteButton() {
         driver.findElement(By.className("closebtn")).click();
@@ -98,6 +117,35 @@ public class Task2Steps {
     public void iClickOnResetButton() throws Throwable {
         WebElement resetButton = driver.findElement(By.xpath("//button[contains(text(), 'Reset')]"));
         resetButton.click();
+    }
+
+    @And("^I click on Clear all fields button$")
+    public void iClickOnClearAllFieldsButton() {
+        driver.findElement(By.className("w3-btn")).click();
+    }
+
+    @Then("^I should see empty fields$")
+    public void iSeeEmptyFields() throws Throwable {
+        assertEquals("", driver.findElement(By.id("name")).getAttribute("value"));
+        assertEquals("", driver.findElement(By.id("surname")).getAttribute("value"));
+        assertEquals("", driver.findElement(By.id("job")).getAttribute("value"));
+        assertEquals("", driver.findElement(By.id("dob")).getAttribute("value"));
+
+        List<WebElement> lang = driver.findElements(By.cssSelector("input[name='language']"));
+        for (WebElement element : lang) {
+            if (element.getAttribute("id").equals("english")) {
+                assertTrue(element.isSelected());
+            } else {
+                assertFalse(element.isSelected());
+            }
+        }
+
+        List<WebElement> gen = driver.findElements(By.cssSelector("input[name='gender']"));
+        for (WebElement element : gen) {
+            assertFalse(element.isSelected());
+        }
+        WebElement status = driver.findElement(By.id("status"));
+        assertEquals("employee", status.getAttribute("value"));
 
     }
 

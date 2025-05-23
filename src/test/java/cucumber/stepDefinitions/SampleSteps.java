@@ -69,8 +69,6 @@ public class SampleSteps {
         driver.findElement(By.name("randomButton2")).click();
     }
 
-
-
     @Given("^I (?:am on|open) age page$")
     public void iAmOnAgePage() throws Throwable {
         driver.get("https://acctabootcamp.github.io/site/examples/age");
@@ -193,11 +191,5 @@ public class SampleSteps {
         assertEquals(valuesToEnter.get("age"), driver.findElement(By.id("age")).getText());
         assertEquals(valuesToEnter.get("gender"), driver.findElement(By.id("gender")).getText());
     }
-
-
-
-
-
-
 
 }
