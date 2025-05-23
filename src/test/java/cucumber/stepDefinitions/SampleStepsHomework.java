@@ -65,6 +65,8 @@ public class SampleStepsHomework {
             System.out.println(el.getText());
         }
     }
+
+
 }
 
 

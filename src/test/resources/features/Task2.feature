@@ -16,8 +16,7 @@ Feature: Introduction to cucumber part 3: Homework, Task 2
   Background:
     Given I am on People with job page
 
-
-Scenario Outline: User can add a new person
+Scenario Outline: User can edit a person
 
 When I click on Add person button
 Then I am redirected to add new person page
@@ -29,6 +28,7 @@ And I can see record number has increased
   |name    | job     |
   |Jonathan|Doctor   |
   |Peter   |Scientist|
+  |Irvin   |Artist   |
 
 
 #Scenario Outline: Error cases scenario
