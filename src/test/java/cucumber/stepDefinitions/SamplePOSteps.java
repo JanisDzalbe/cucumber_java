@@ -53,4 +53,14 @@ public class SamplePOSteps {
         agePage.enterName(valuesToEnter.get("name"));
         agePage.enterAge(valuesToEnter.get("age"));
     }
+
+    @Then("^I see error: \"(.*)\" using PO$")
+    public void iSeeError(String error) throws Throwable {
+        agePage.checkErrorMessage(error);
+    }
+
+    @And("^I remain in age page using PO$")
+    public void assertAgePageUrl() {
+        assertEquals("https://acctabootcamp.github.io/site/examples/age", driver.getCurrentUrl());
+    }
 }

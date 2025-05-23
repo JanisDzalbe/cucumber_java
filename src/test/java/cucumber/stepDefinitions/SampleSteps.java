@@ -26,8 +26,8 @@ public class SampleSteps {
 
     }
 
-    @Given ("^I am on the locators page$")
-    public void iAmOnTheLocatorsPage () throws Throwable {
+    @Given("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() throws Throwable {
         driver.get("https://acctabootcamp.github.io/site/examples/locators");
     }
 
@@ -45,7 +45,7 @@ public class SampleSteps {
                 driver.findElement(By.id("heading_2")).getText());
     }
 
-    @Then ("^Buttons in Locators page are clickable$")
+    @Then("^Buttons in Locators page are clickable$")
     public void locatorPageButtonsAreClickable() throws Throwable {
         assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton1\"]")).isEnabled());
         assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton2\"]")).isEnabled());
@@ -131,10 +131,6 @@ public class SampleSteps {
     }
 
 
-
-
-
-
     //            SAMPLE 3
     @Given("^I am on feedback page$")
     public void iAmOnFeedbackPage() {
@@ -165,4 +161,47 @@ public class SampleSteps {
     }
 
 
+    //        SAMPLE 4
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> values) throws Throwable {
+        for (String value : values) {
+            driver.findElement(By.cssSelector("[value='" + value + "']")).click();
+        }
+    }
+
+    @And("^I click send feedback$")
+    public void iClickSendFeedback() throws Throwable {
+        driver.findElement(By.tagName("button")).click();
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iSeeLanguagesInFeedbackCheck(String message) throws Throwable {
+        assertEquals(message, driver.findElement(By.id("language")).getText());
+    }
+
+
+    //     SAMPLE 5
+
+    @When("^I enter feedback values:$")
+    public void iEnterFeedbackValues(Map<String, String> valuesToEnter) throws Throwable {
+        for (Map.Entry<String, String> e : valuesToEnter.entrySet()) {
+            driver.findElement(By.id("fb_name")).clear();
+            driver.findElement(By.id("fb_name")).sendKeys(valuesToEnter.get("name"));
+            driver.findElement(By.id("fb_age")).clear();
+            driver.findElement(By.id("fb_age")).sendKeys(valuesToEnter.get("age"));
+            driver.findElement(By.cssSelector("[value='" + valuesToEnter.get("gender") + "'")).click();
+        }
+    }
+
+    @And("^I click send$")
+    public void iClickSend() throws Throwable {
+        driver.findElement(By.tagName("button")).click();
+    }
+
+    @Then("^I can see input in feedback check$")
+    public void iSeeInputInFeedbackCheck(Map<String, String> valuesToEnter) throws Throwable {
+        assertEquals(valuesToEnter.get("name"), driver.findElement(By.id("name")).getText());
+        assertEquals(valuesToEnter.get("age"), driver.findElement(By.id("age")).getText());
+        assertEquals(valuesToEnter.get("gender"), driver.findElement(By.id("gender")).getText());
+    }
 }
