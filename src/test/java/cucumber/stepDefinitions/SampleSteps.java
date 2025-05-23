@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -8,7 +9,9 @@ import io.cucumber.java.eo.Do;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
+import java.text.Bidi;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
@@ -143,11 +146,28 @@ public class SampleSteps {
     }
 
     @When("^I am setting: \"([^\"]*)\" and (\\d+)$")
-    public void iAmOnFeedbackPAge(String name, int age) {
+    public void iAMSettingNameAndAge(String name, int age) {
         driver.findElement(By.id("fb_name")).clear();
         driver.findElement(By.id("fb_name")).sendKeys(name);
         driver.findElement(By.id("fb_age")).clear();
         driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @When("^I can see input in feedback check$")
+    public void iCanSeeInputInFeedbackCheck(Map<String, String> valuesToEnter) {
+        assertEquals(valuesToEnter.get("name"), driver.findElement(By.id("name")).getText());
+        assertEquals(valuesToEnter.get("age"), driver.findElement(By.id("age")).getText());
+        assertEquals(valuesToEnter.get("genre"), driver.findElement(By.id("gender")).getText());
+    }
+
+    @When("^I set name, age and genre$")
+    public void iSetNameAgeAndGenre(Map<String, String> valuesToEnter) {
+       driver.findElement(By.id("fb_name")).clear();
+       driver.findElement(By.id("fb_name")).sendKeys(valuesToEnter.get("name"));
+       driver.findElement(By.id("fb_age")).clear();
+       driver.findElement(By.id("fb_age")).sendKeys(valuesToEnter.get("age"));
+       driver.findElement(By.cssSelector("[value='" + valuesToEnter.get("genre") + "']")).click();
+
     }
 
     @And("^I click Send button$")
@@ -165,14 +185,25 @@ public class SampleSteps {
         assertEquals(age, driver.findElement(By.id("age")).getText());
     }
 
+    @When("^I select feedback languages$")
+    public void iSelectedFeedbackLanguage(List<String> languages) {
+        for (String language: languages) {
+            driver.findElement(By.cssSelector("[value='" + language+ "'")).click();
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguageInFeedbackCheck(String message) {
+        assertEquals(message, driver.findElement(By.id("language")).getText());
+    }
     @Given("^I go to Enter a number page$")
     public void iGoToEnterANumberPage() {
         driver.get("https://acctabootcamp.github.io/site/tasks/enter_a_number");
     }
 
-    @When("^I enter \"([^\"]*)\" in textfield$")
-    public void iEnterValueInTextfield(String value) {
-        driver.findElement(By.id("numb")).sendKeys(value);
+    @When("^I enter (\\d+\\.\\d+) in textfield$")
+    public void iEnterValueInTextfield(double value) {
+        driver.findElement(By.id("numb")).sendKeys(String.valueOf(value));
     }
 
     @And("^I press submit button on Enter a number page$")
@@ -185,12 +216,10 @@ public class SampleSteps {
         assertEquals(message, driver.findElement(By.id("ch1_error")).getText());
     }
 
-    @Then("^I see correct alert message of calculating sqrt - \"([^\"]*)\" from \"([^\"]*)\"$")
-    public void iSeeCorrectAlertMessageOfCalculatingSqrt(String expectedResult, String inputValue) {
-
-//        double calcResult = Math.sqrt(inputValue);
+    @Then("^I see correct alert message of calculating sqrt - (\\d+\\.\\d+) from (\\d+\\.\\d+)$")
+    public void iSeeCorrectAlertMessageOfCalculatingSqrt(Double expectedResult, Double inputValue) {
         DecimalFormat df = new DecimalFormat("#.00");
-        String formattedNumber = df.format(Double.valueOf(expectedResult));
+        String formattedNumber = df.format(expectedResult);
         String fullMessageText = "Square root of " + inputValue + " is " + formattedNumber;
 
         Assertions.assertEquals(fullMessageText, driver.switchTo().alert().getText());

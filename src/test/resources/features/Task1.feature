@@ -15,9 +15,9 @@ Feature: Task1
       | test  | Please enter a number |
 
   Scenario: for checking correct value input
-    When I enter "56.25" in textfield
+    When I enter 56.25 in textfield
     And I press submit button on Enter a number page
-    Then I see correct alert message of calculating sqrt - "7.5" from "56.25"
+    Then I see correct alert message of calculating sqrt - 7.5 from 56.25
 
 # TODO - Create 1 scenario outline and 1 scenario for page with url: "https://acctabootcamp.github.io/site/tasks/enter_a_number"
 # - Scenario outline for error cases. One example for each case:
