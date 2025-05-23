@@ -178,6 +178,22 @@ public class SampleSteps {
         assertEquals(languages, driver.findElement(By.id("language")).getText());
     }
 
+    @When("^I enter feedback values:$")
+    public void iEnterFeedbackValues(Map<String, String> valuesToEnter) throws Throwable {
+
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(valuesToEnter.get("name"));
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(valuesToEnter.get("age"));
+        driver.findElement(By.cssSelector("[value='" + valuesToEnter.get("gender") + "']")).click();
+    }
+    @Then("^I can see input in feedback check$")
+    public void inputFeedbackSeen(Map<String, String> valuesToEnter) throws Throwable {
+        assertEquals(valuesToEnter.get("name"), driver.findElement(By.id("name")).getText());
+        assertEquals(valuesToEnter.get("age"), driver.findElement(By.id("age")).getText());
+        assertEquals(valuesToEnter.get("gender"), driver.findElement(By.id("gender")).getText());
+    }
+
 
 
 
