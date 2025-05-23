@@ -57,7 +57,7 @@ public class AgePage {
     }
 
     public void checkErrorMessage(String errorMessage) {
-        assertEquals(errorText.getText(), errorMessage);
+        assertEquals(errorMessage, errorText.getText());
         assertTrue(errorText.isDisplayed());
     }
 

@@ -157,4 +157,39 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://acctabootcamp.github.io/site/examples/actions");
     }
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguage(List<String> languages) throws Throwable {
+        for (String language : languages) {
+            driver.findElement(By.xpath("//*[@value='" + language + "']")).click();
+        }
+    }
+
+    @When("^I click send feedback$")
+    public void iClickSendFeedbackButton() throws Throwable {
+        driver.findElement(By.className("w3-btn-block")).click();
+    }
+
+    @Then("^I can see languages \"(.*)\" in feedback check$")
+    public void languagesForFeedbackIsSeen(String languages) throws Throwable {
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+
+    @When("^I enter feedback values:$")
+    public void iEnterFeedbackValues(Map<String, String> valuesToEnter) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(valuesToEnter.get("name"));
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(valuesToEnter.get("age"));
+        driver.findElement(By.cssSelector("[value='" + valuesToEnter.get("gender") + "']")).click();
+    }
+
+    @Then("^I can see input in feedback check$")
+    public void inputForFeedbackIsSeen(Map<String, String> valuesToEnter) throws Throwable {
+        assertEquals(valuesToEnter.get("name"), driver.findElement(By.id("name")).getText());
+        assertEquals(valuesToEnter.get("age"), driver.findElement(By.id("age")).getText());
+        assertEquals(valuesToEnter.get("gender"), driver.findElement(By.id("gender")).getText());
+    }
+
+
 }
