@@ -1,11 +1,13 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 import java.util.Map;
@@ -183,5 +185,23 @@ public class SampleSteps {
     @Then("^I can see languages \"([^\"]*)\" in feedback check$")
     public void iCanSeeLanguagesInFeedbackCheck(String languages) throws Throwable {
         assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+
+    @When("^I set the following:$")
+    public void iSetValues(Map<String, String> table) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(table.get("name"));
+
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(table.get("age"));
+
+        driver.findElement(By.cssSelector("input[type='radio'][value='"+ table.get("gender") + "']")).click();
+    }
+
+    @When("^I see my input in feedback check$")
+    public void iSeeInputInFeedbackCheck(Map<String, String> table) throws Throwable {
+        assertEquals(table.get("name"), driver.findElement(By.id("name")).getText());
+        assertEquals(table.get("age"), driver.findElement(By.id("age")).getText());
+        assertEquals(table.get("gender"), driver.findElement(By.id("gender")).getText());
     }
 }
