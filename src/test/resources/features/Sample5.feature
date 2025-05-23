@@ -31,6 +31,23 @@ Feature: Introduction to cucumber part 4
       | Ann  | 5   | Hello, Ann, you are a kid    |
       | Bob  | 61  | Hello, Bob, you are an adult |
 
+ Scenario Outline: a new scenario for feedback
+  Given I am on feedback page
+  When I enter feedback values:
+    | name     | <name >  |
+    |  age     | <age>    |
+    | gender   | <gender> |
+   And I click send feedback
+  Then I can see input in feedback check
+    | name     | <name >  |
+    |  age     | <age>    |
+    | gender   | <gender> |
+  Examples:
+    | name  | age | gender  |
+    | Ann   | 5   | female  |
+    | Bob   | 61  | male    |
+
+
  # TODO - create Scenario Outline for 'Give us your feedback!' page
   # URL: https://acctabootcamp.github.io/site/tasks/provide_feedback
   # Navigate to page
