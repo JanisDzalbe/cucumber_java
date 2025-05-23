@@ -220,7 +220,6 @@ public class SampleSteps {
 
     @Then("^All set values are displayed correctly:$")
     public void checkIfValuesCorrect(Map<String,String> values) throws Exception {
-        Thread.sleep(1500);
         assertEquals(values.get("name"),driver.findElement(By.id("name")).getText());
         assertEquals(values.get("age"),driver.findElement(By.id("age")).getText());
         assertEquals(values.get("genre"),driver.findElement(By.id("gender")).getText());
