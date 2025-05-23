@@ -57,13 +57,13 @@ public class AgePage {
     }
 
     public void checkErrorMessage(String errorMessage) {
-        assertEquals(errorText.getText(), errorMessage);
+        assertEquals(errorMessage, errorText.getText());
         assertTrue(errorText.isDisplayed());
     }
 
     public void checkThatFormIsClean() {
-        assertEquals(nameInput.getAttribute("value"), "Enter name here");
-        assertEquals(ageInput.getAttribute("value"), "");
+        assertEquals("Enter name here", nameInput.getAttribute("value"));
+        assertEquals("", ageInput.getAttribute("value"));
         assertFalse(errorText.isDisplayed());
     }
 }
