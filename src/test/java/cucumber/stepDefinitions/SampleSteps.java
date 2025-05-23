@@ -125,4 +125,30 @@ public class SampleSteps {
         assertTrue(driver.findElement(By.cssSelector("[name = \"randomButton1\"]")).isEnabled());
         assertTrue(driver.findElement(By.cssSelector("[name = \"randomButton2\"]")).isEnabled());
     }
+
+    @Given("^I am on give us your feedback page$")
+    public void iAmOnGiveUsYourFeedbackPage() throws Throwable{
+        driver.get("https://acctabootcamp.github.io/site/tasks/provide_feedback");
+    }
+
+    @When("I enter my name: {string}")
+    public void iEnterMyName(String arg0) {
+        driver.findElement(By.id("fb_name")).sendKeys(arg0);
+    }
+
+    @And("I enter age: {string}")
+    public void iEnterAge(String arg0) {
+        driver.findElement(By.id("fb_age")).sendKeys(arg0);
+    }
+
+    @And("I click send button")
+    public void iClickSendButton() {
+        driver.findElement(By.className("w3-blue")).click();
+    }
+
+    @Then("I verify that my name is {string} and my age is {string}")
+    public void iVerifyThatMyNameIsAndMyAgeIs(String arg0, String arg1) {
+        assertEquals(arg0, driver.findElement(By.id("name")).getText());
+        assertEquals(arg1, driver.findElement(By.id("age")).getText());
+    }
 }
