@@ -50,24 +50,17 @@ public class taskTwoSteps {
         driver.findElement(By.cssSelector("[onclick='addPersonWithJobToList()']")).click();
     }
 
+    @When("I edit the {int}{word} person")
+    public void selectPersonToEdit(int index, String ordinal) {
+        driver.findElements(By.className("w3-padding-16")).get(index - 1).findElement(By.className("editbtn")).click();
+    }
+
     @Then("The list includes a person named {string} with job {string}")
     public void verifyPersonAdded(String name, String job) {
         List<WebElement> names = driver.findElements(By.className("name"));
         List<WebElement> jobs = driver.findElements(By.className("job"));
         assertEquals(name, names.get(names.size() - 1).getText());
         assertEquals(job, jobs.get(jobs.size() - 1).getText());
-    }
-
-    @When("I edit the {int}{word} person")
-    public void selectPersonToEdit(int index, String ordinal) {
-        driver.findElements(By.className("w3-padding-16")).get(index - 1).findElement(By.className("editbtn")).click();
-    }
-
-    @And("I update the job field to {string}")
-    public void updateJob(String job) {
-        WebElement jobInput = driver.findElement(By.id("job"));
-        jobInput.clear();
-        jobInput.sendKeys(job);
     }
 
     @And("I update the name field to {string}")
@@ -77,15 +70,17 @@ public class taskTwoSteps {
         nameInput.sendKeys(name);
     }
 
+    @And("I update the job field to {string}")
+    public void updateJob(String job) {
+        WebElement jobInput = driver.findElement(By.id("job"));
+        jobInput.clear();
+        jobInput.sendKeys(job);
+    }
+
     @And("I update the name to {string} and job to {string}")
     public void updateNameAndJob(String name, String job) {
         updateName(name);
         updateJob(job);
-    }
-
-    @And("Press edit Button")
-    public void saveChanges() {
-        driver.findElement(By.xpath("//*[@id='modal_button' and text()='Edit']")).click();
     }
 
     @Then("The {int}{word} person’s name is {string} and job is {string}")
@@ -93,6 +88,16 @@ public class taskTwoSteps {
         WebElement person = driver.findElements(By.className("w3-padding-16")).get(index - 1);
         assertEquals(name, person.findElement(By.className("name")).getText());
         assertEquals(job, person.findElement(By.className("job")).getText());
+    }
+
+    @And("Press edit Button")
+    public void saveChanges() {
+        driver.findElement(By.xpath("//*[@id='modal_button' and text()='Edit']")).click();
+    }
+
+    @And("The total number of people decreased")
+    public void verifyListIsShorter() {
+        assertNotEquals(INITIAL_COUNT, driver.findElements(By.className("w3-padding-16")).size());
     }
 
     @When("I delete the person name {string}")
@@ -114,24 +119,14 @@ public class taskTwoSteps {
         }
     }
 
-    @And("The total number of people decreased")
-    public void verifyListIsShorter() {
-        assertNotEquals(INITIAL_COUNT, driver.findElements(By.className("w3-padding-16")).size());
-    }
-
-    @When("I reset the people list")
-    public void resetPeopleList() {
-        driver.findElement(By.cssSelector("[onclick='resetListOfPeople()']")).click();
-    }
-
     @Then("The default list is shown")
     public void verifyDefaultListIsShown() {
         verifyDefaultList();
     }
 
-    @And("I clear all inputs")
-    public void clearInputFields() {
-        driver.findElement(By.id("addPersonBtn")).click();
+    @When("I reset the people list")
+    public void resetPeopleList() {
+        driver.findElement(By.cssSelector("[onclick='resetListOfPeople()']")).click();
     }
 
     @Then("All input fields are empty")
@@ -140,5 +135,10 @@ public class taskTwoSteps {
         WebElement jobField = driver.findElement(By.id("job"));
         assertEquals("", nameField.getAttribute("value"));
         assertEquals("", jobField.getAttribute("value"));
+    }
+
+    @And("I clear all inputs")
+    public void clearInputFields() {
+        driver.findElement(By.id("addPersonBtn")).click();
     }
 }
