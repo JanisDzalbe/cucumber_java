@@ -9,4 +9,4 @@
 #   * adding a person
 #   * editing a person
 #   * removing a person
-# - check that clear button on adding a user works correctly
+# - check that clear button on adding a person works correctly
