@@ -36,7 +36,7 @@ Feature: Task2
 
   Scenario: Test to reset list after adding a person
     When I press Add Person button
-    And I fulfill person information with: "Nadi" and "Teacher"
+    And I fill person information with: "Nadi" and "Teacher"
     And I press Add button
     And I press Reset List button
     Then I see original list of people

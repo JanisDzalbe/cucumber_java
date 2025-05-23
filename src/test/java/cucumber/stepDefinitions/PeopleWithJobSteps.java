@@ -56,8 +56,8 @@ public class PeopleWithJobSteps {
         peopleWithJobPage.clickAddPersonButton();
     }
 
-    @When("^I fulfill person information with: \"([^\"]*)\" and \"([^\"]*)\"$")
-    public void iFulfillPersonInformation(String name, String job) throws Throwable {
+    @When("^I fill person information with: \"([^\"]*)\" and \"([^\"]*)\"$")
+    public void iFillPersonInformation(String name, String job) throws Throwable {
         enterANewPersonPage.inputName(name);
         enterANewPersonPage.inputJob(job);
     }
