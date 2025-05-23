@@ -61,6 +61,10 @@ public class AgePage {
         assertTrue(errorText.isDisplayed());
     }
 
+    public String getError () {
+        return errorText.getText();
+    }
+
     public void checkThatFormIsClean() {
         assertEquals(nameInput.getAttribute("value"), "Enter name here");
         assertEquals(ageInput.getAttribute("value"), "");

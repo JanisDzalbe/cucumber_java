@@ -180,6 +180,23 @@ public class SampleSteps {
         }
     }
 
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> values) throws Throwable {
+        for (String value : values) {
+            driver.findElement(By.cssSelector("[value='" + value + "']")).click();
+        }
+    }
+
+    @When("^I click send feedback$")
+    public void iClickSendButton() {
+        driver.findElement(By.className("w3-blue")).click();
+    }
+
+    @Then("^I can see languages \"English,Spanish\" in feedback check$")
+    public void iCanSeeLanguages(){
+        assertEquals("English,Spanish", driver.findElement(By.id("language")).getText());
+    }
+
     @Then("^message for checkboxes \"([^\"]*)\" is seen$")
     public void messageForCheckboxesIsSeen(String message) throws Throwable {
         assertEquals(message, driver.findElement(By.id("result_checkbox")).getText());
@@ -189,4 +206,19 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://acctabootcamp.github.io/site/examples/actions");
     }
+
+    @When("^I enter values for name, age and gender:$")
+    public void iEnterFeedbackValues(Map<String, String> valuesToEnter) throws Throwable {
+        driver.findElement(By.id("fb_name")).sendKeys(valuesToEnter.get("name"));
+        driver.findElement(By.id("fb_age")).sendKeys(valuesToEnter.get("age"));
+        driver.findElement(By.xpath("//*[@value='" + valuesToEnter.get("gender") + "']")).click();
+    }
+
+    @Then("^I see correct input with \"([^\"]*)\", \"([^\"]*)\" and \"([^\"]*)\"$")
+    public void iSeeCorrectInput(String name, String age, String gender) {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+        assertEquals(age, driver.findElement(By.id("age")).getText());
+        assertEquals(gender, driver.findElement(By.id("gender")).getText());
+    }
+
 }

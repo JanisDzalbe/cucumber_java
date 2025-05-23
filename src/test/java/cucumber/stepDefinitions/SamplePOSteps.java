@@ -53,4 +53,14 @@ public class SamplePOSteps {
         agePage.enterName(valuesToEnter.get("name"));
         agePage.enterAge(valuesToEnter.get("age"));
     }
+
+    @Then("^I see error: \"You haven't entered anything in age field\" using PO$")
+    public void iSeeError() {
+        assertEquals("You haven't entered anything in age field", agePage.getError());
+    }
+
+    @Then("^I remain in age page using PO$")
+    public void remainOnAgePage() {
+        assertEquals(agePage.getPageUrl(), driver.getCurrentUrl());
+    }
 }

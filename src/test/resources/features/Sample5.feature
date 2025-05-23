@@ -39,3 +39,17 @@ Feature: Introduction to cucumber part 4
   # - All input MUST use Examples for data
   # - Step can use Map or Domain object
   # Click "Send" button and verify that previous input is displayed in correct fields
+
+  Scenario Outline: Give us your feedback
+    Given I am on feedback page
+    When I enter values for name, age and gender:
+      | name   | <name>   |
+      | age    | <age>    |
+      | gender | <gender> |
+    And I click send feedback
+    Then I see correct input with "<name>", "<age>" and "<gender>"
+    Examples:
+      | name | age | gender |
+      | Anna | 24  | female |
+      | Luna | 35  | female |
+      | Alex | 48 | male    |
