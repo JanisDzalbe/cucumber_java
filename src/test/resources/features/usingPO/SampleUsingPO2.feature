@@ -5,7 +5,6 @@ Feature: Introduction to cucumber part 2
 Background:
   Given I am on age page using PO
 
-
   Scenario: a new scenario 1 with regex
     When I enter name: "Ann" using PO
     And I enter age: 5 using PO
