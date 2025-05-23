@@ -162,4 +162,26 @@ public class SampleSteps {
         assertTrue(driver.getCurrentUrl().contains("https://acctabootcamp.github.io/site/tasks/check_feedback.html"));
         assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
     }
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://acctabootcamp.github.io/site/tasks/provide_feedback");
+    }
+
+    @When("^I select feedback languages$")
+    public void iSelectLanguages(List<String> languages) throws Throwable {
+        for (String language : languages) {
+            driver.findElement(By.cssSelector("input[type='checkbox'][value='" + language + "']")).click();
+        }
+    }
+
+    @And("^I click send feedback$")
+    public void iClickSendFeedback() throws Throwable {
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String languages) throws Throwable {
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
 }
