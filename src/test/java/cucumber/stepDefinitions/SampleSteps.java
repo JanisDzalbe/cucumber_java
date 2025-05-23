@@ -130,6 +130,8 @@ public class SampleSteps {
             System.out.println("key is " + e.getKey());
             System.out.println("value is " + e.getValue());
         }
+        driver.findElement(By.id("name")).clear();
+        driver.findElement(By.id("name")).sendKeys(valuesToEnter.get("name"));
     }
 
     @And("^I should see menu$")
@@ -158,4 +160,41 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://acctabootcamp.github.io/site/examples/actions");
     }
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) throws Throwable {
+        for (String language : languages) {
+            driver.findElement(By.cssSelector("[value='" + language + "']")).click();
+        }
+    }
+
+    @When("^I click send feedback$")
+    public void iClickAndSendFeedback() throws Throwable {
+        driver.findElement(By.className("w3-btn-block")).click();
+    }
+
+
+    @Then("^I can see languages \"(.*)\" in feedback check$")
+    public void languagesForFeedbackCheck(String languages) throws Throwable {
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+
+
+    @When("^I enter feedback values:$")
+    public void iEnterFeedbakValues(Map<String, String> valuesToEnter) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(valuesToEnter.get("name"));
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(valuesToEnter.get("age"));
+        driver.findElement(By.cssSelector("[value='" + valuesToEnter.get("gender") + "']")).click();
+    }
+
+
+    @Then("^I can see input in feedback check$")
+    public void inpitForFeedbackSeen(Map<String, String> valuesToEnter) throws Throwable {
+        assertEquals(valuesToEnter.get("name"), driver.findElement(By.id("name")).getText());
+        assertEquals(valuesToEnter.get("age"), driver.findElement(By.id("age")).getText());
+        assertEquals(valuesToEnter.get("gender"), driver.findElement(By.id("gender")).getText());
+    }
+
 }
