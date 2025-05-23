@@ -52,4 +52,5 @@ public class Task1Steps {
 
         assertTrue(driver.switchTo().alert().getText().contains(String.format(Locale.US,"%.2f", correctSquareRoot)));
     }
+
 }
