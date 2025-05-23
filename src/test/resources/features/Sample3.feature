@@ -41,6 +41,8 @@ Feature: Introduction to cucumber part 3
     And I see my age is: "<age>"
     And I see my languages are: "<languages>"
     #should I use plural or not while writing a case like this? ^
+    # Also I interpreted the step add your own functionality as create something more than just the provided things. Sorry if I misunderstood lol
+    # It took me a while to get the languages working as well
     @working
     Examples:
     | name | age | languages        |

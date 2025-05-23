@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.ParameterType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -152,7 +153,7 @@ public class SampleSteps {
         driver.findElement(By.id("fb_age")).sendKeys(age);
     }
 
-    @And("I click send")
+    @And("I click send (feedback)")
     public void iClickSend() {
         driver.findElement(By.xpath("//button[@type='submit']")).click();
     }
@@ -167,6 +168,7 @@ public class SampleSteps {
         assertEquals(age, driver.findElement(By.cssSelector("span#age")).getText());
     }
 
+    // I did this for task 3, which I now think I misinterpreted. oops
     @And("I select my language(s): {string}")
     public void iSelectMyLanguages(String language) {
         // I want to accept several languages as input, i.e. English, French. Only way of doing it I could think of lol
@@ -189,4 +191,34 @@ public class SampleSteps {
         }
     }
 
+    @When("^I select feedback languages:$")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        for (String lang : languages) {
+            driver.findElement(By.cssSelector("input[value='" + lang + "']")).click();
+        }
+    }
+
+    @Then("I can see languages {string} in feedback check")
+    public void iCanSeeLanguagesInFeedbackCheck(String languages) {
+        assertEquals(languages, driver.findElement(By.cssSelector("span#language")).getText());
+        // would it be better practice here to split it into strings and assert that they are in it? in case the order changes? not sure
+    }
+
+    @When("I enter my information:")
+    public void iEnterMyInformation(Map<String, String> data) {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(data.get("name"));
+
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(data.get("age"));
+
+        driver.findElement(By.cssSelector("input[type=radio][value=" + data.get("gender") + "]")).click();
+    }
+
+    @Then("I see my information:")
+    public void iSeeMyInformation(Map<String, String> data) {
+        assertEquals(data.get("name"), driver.findElement(By.cssSelector("span#name")).getText());
+        assertEquals(data.get("age"), driver.findElement(By.cssSelector("span#age")).getText());
+        assertEquals(data.get("gender"), driver.findElement(By.cssSelector("span#gender")).getText());
+    }
 }
