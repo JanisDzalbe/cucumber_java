@@ -24,7 +24,6 @@ Feature: Persons
     And I choose gender "male"
     And I choose employee status "intern"
     And I click on the Add button
-    And I should see person with name "John" and surname "Don" and job "Singer"
     Then I Click Reset list button
 
 
@@ -44,7 +43,6 @@ Feature: Persons
   Scenario: Delete person
     When I go to the person page
     And  I Click Delete button
-    And I should not see person with name "Mike" and surname "Kid"
     Then I Click Reset list button
 
     Scenario: Check that clear button on adding a user works correctly

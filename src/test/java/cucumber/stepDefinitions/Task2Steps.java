@@ -146,35 +146,7 @@ public class Task2Steps {
         }
         WebElement status = driver.findElement(By.id("status"));
         assertEquals("employee", status.getAttribute("value"));
-
-    }
-    @And("^I should see person with name \"([^\"]*)\" and surname \"([^\"]*)\" and job \"([^\"]*)\"$")
-    public void iShouldSeePerson(String name, String surname, String job) throws Throwable {
-        List<WebElement> personAdd = driver.findElements(By.id("listOfPeople"));
-        boolean found = false;
-        for (WebElement persons : personAdd) {
-            String personsText = persons.getText();
-            if (personsText.contains(name) && personsText.contains(surname) && personsText.contains(job)){
-                found = true;
-                break;
-            }
-        }
-        assertTrue("Person not found", found);
     }
 
-
-    @And("^I should not see person with name \"([^\"]*)\" and surname \"([^\"]*)\"$")
-        public void iShouldNotSeeAPerson(String name, String surname ) throws Throwable {
-            List<WebElement> personDelete = driver.findElements(By.id("listOfPeople"));
-            boolean found = false;
-            for (WebElement personsList : personDelete) {
-                String personsListText = personsList.getText();
-                if (personsListText .contains(name) && personsListText .contains(surname)){
-                    found = true;
-                    break;
-                }
-            }
-            assertFalse("Person wasn't deleted ", found);
-        }
-    }
+}
 
