@@ -53,9 +53,7 @@ Feature: Task 2
     Then I click Clear all fields button
     And Fields with name and job are clear
 
-
-
-
+  
 # TODO - Create 1 scenario outline and create scenario or scenario outlines for page
 # https://acctabootcamp.github.io/site/tasks/list_of_people.html OR
 # https://acctabootcamp.github.io/site/tasks/list_of_people_with_jobs.html
