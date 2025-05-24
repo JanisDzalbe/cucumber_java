@@ -148,7 +148,7 @@ public class Task2Steps {
         assertEquals("employee", status.getAttribute("value"));
 
     }
-    @Then("^I should see person with name \"([^\"]*)\" and surname \"([^\"]*)\" and job \"([^\"]*)\"$")
+    @And("^I should see person with name \"([^\"]*)\" and surname \"([^\"]*)\" and job \"([^\"]*)\"$")
     public void iShouldSeePerson(String name, String surname, String job) throws Throwable {
         List<WebElement> rows = driver.findElements(By.id("listOfPeople"));
         boolean found = false;
@@ -161,7 +161,7 @@ public class Task2Steps {
         }
         assertTrue("Person not found in the list", found);
     }
-    @Then("^I should not see person with name \\\"([^\\\"]*)\\\" and surname \\\"([^\\\"]*)\\\"$")
+    @And("^I should not see person with name \\\"([^\\\"]*)\\\" and surname \\\"([^\\\"]*)\\\"$")
     public void iShouldNotSeePerson(String name, String surname) throws Throwable {
         List<WebElement> rows = driver.findElements(By.cssSelector("listOfPeople"));
         boolean found = false;

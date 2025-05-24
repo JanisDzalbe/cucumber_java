@@ -24,7 +24,7 @@ Feature: Persons
     And I choose gender "male"
     And I choose employee status "intern"
     And I click on the Add button
-    Then I should see person with name "John" and surname "Don" and job "Singer"
+    And I should see person with name "John" and surname "Don" and job "Singer"
     Then I Click Reset list button
 
 
