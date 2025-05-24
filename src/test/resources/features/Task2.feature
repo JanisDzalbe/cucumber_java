@@ -30,10 +30,10 @@ Feature: Persons
   Scenario: Edit person
     When I go to the person page
     And I click Edit button
-    And I enter name "John"
-    And I enter surname "Don"
-    And I enter job "Singer"
-    And I enter Date of Birth "01/01/1995"
+    And I enter name "Johnny"
+    And I enter surname "Depp"
+    And I enter job "Actor"
+    And I enter Date of Birth "09/06/1963"
     And I choose language "spanish"
     And I choose gender "male"
     And I choose employee status "intern"
