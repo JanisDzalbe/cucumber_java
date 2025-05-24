@@ -39,7 +39,7 @@ public class SampleStepsHomework {
         assertEquals("https://acctabootcamp.github.io/site/tasks/enter_a_new_person_with_a_job.html", driver.getCurrentUrl());
     }
 
-    @And("^I enter name \"([^\"]*)\" and job \"([^\"]*)\"$")
+    @And("^I enter a new name \"([^\"]*)\" and a new job \"([^\"]*)\"$")
     public void iEnterNameAndJob(String name, String job) throws Throwable {
         driver.findElement(By.id("name")).clear();
         driver.findElement(By.id("name")).sendKeys(name);

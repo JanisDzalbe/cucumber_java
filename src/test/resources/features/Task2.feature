@@ -20,8 +20,8 @@ Feature: Introduction to cucumber part 3: Homework, Task 2
 Scenario Outline: User can add a new person
 
 When I click on Add person button
-Then I am redirected to add new person page
-And I enter name "<name>" and job "<job>"
+And I am redirected to add new person page
+And I enter a new name "<name>" and a new job "<job>"
 And I click on Add button
 Then I am redirected to main page
 And I can see record number has increased
@@ -36,7 +36,7 @@ Scenario  User can edit a person
 #person0.fa-pencil
 #person0.getValue
 When I click on pencil icon near the record to edit record
-Then I am redirected to add new person page
+And I am redirected to add new person page
 And I enter a new name "Simon" and a new job "Florist"
 And I click on Add button
 Then I am redirected to main page
@@ -45,10 +45,27 @@ And I can see changes are saved
 #Test 3
 Scenario  User can remove a person
 #person2 > span.closebtn
-First get a count of records/ get a value of record is displayed
-When I click on x icon near the record to delete record
-And ? Checkc if you still page; check if record count became smaller/ try to find a record
+When I count how many records are displayed
+And I click on x icon near the first record to delete record
+Then I check if I am still on main page
+And Check if record count has decreased by one
 
+#Test 4
+Scenario: User reset main page after additing a new person
+  When I count how many records are displayed
+  And I click on Add person button
+  Then I am redirected to add new person page
+  And I enter name "Alise" and job "Driver"
+  And I click on Add button
+  Then I am redirected to main page
+  And I click on reset button
+
+  When I click on Add person button
+  And I am redirected to add new person page
+  And I enter name "<name>" and job "<job>"
+  And I click on Add button
+  Then I am redirected to main page
+  And I can see record number has increased
 
 #Scenario Outline: Error cases scenario
 #Given I am on Enter a number page
