@@ -86,6 +86,10 @@ public class SampleStepsHomework {
         driver.findElement(By.xpath("(//button[normalize-space(text())='Edit'])[1]")).click();
     }
 
+    @When("^I click on the \"x\" icon next to the record to delete it$"){
+    public void iClickOnDeleteButtonAtPersonPage() throws Throwable {
+        driver.findElement(By.cssSelector("#person2 > span.closebtn")).click();
+    }
 }
 
 

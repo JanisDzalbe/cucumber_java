@@ -40,13 +40,13 @@ Scenario: User can edit a person
   Then I am redirected to the main page
   And I can see that the name and job have been updated to "Simon" and "Florist"
 
-##Test 3
-#Scenario  User can remove a person
-##person2 > span.closebtn
-#  When I click on the "x" icon next to the record to delete it
-#  Then I remain on the main page
-#  And I can see that the number of records has decreased
-#
+#Test 3
+Scenario  User can remove a person
+
+  When I click on the "x" icon next to the third record to delete it
+  Then I remain on the main page
+  And I can see that the number of records has decreased
+
 ##Test 4
 #Scenario: User resets main page after adding a new person
 #
