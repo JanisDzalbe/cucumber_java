@@ -6,7 +6,7 @@
 # - Scenario for correct number
 
 Feature: Cucumber Task 1
-  I want to be good at writing and executing a scenarios and scenario outlines within this task
+  I want to be good at writing and executing scenarios and scenario outlines within this task
 
   Background:
     Given I am on the Enter a number page
