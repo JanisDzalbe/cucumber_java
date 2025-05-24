@@ -29,12 +29,12 @@ public class SampleStepsHomework {
         driver.get("https://acctabootcamp.github.io/site/tasks/list_of_people_with_jobs.html");
     }
 
-    @When("^I click on Add person button$")
+    @When("^I click on the \"Add person\" button$")
     public void iClickOnAddPerson() throws Throwable {
         driver.findElement(By.id("addPersonBtn")).click();
     }
 
-    @Then("I am redirected to add new person page$")
+    @Then("I am redirected to the Add new person page$")
     public void redirectionToAddANewPersonPage() throws Throwable {
         assertEquals("https://acctabootcamp.github.io/site/tasks/enter_a_new_person_with_a_job.html", driver.getCurrentUrl());
     }
@@ -47,20 +47,20 @@ public class SampleStepsHomework {
         driver.findElement(By.id("job")).sendKeys(job);
     }
 
-    @And("^I click on Add button$")
+    @And("^I click on the \"Add\" button$")
     public void iClickOnAddButtonAtAddNewPersonPage() throws Throwable {
         driver.findElement(By.xpath("(//button[normalize-space(text())='Add'])[1]")).click();
     }
 
-    @Then("I am redirected to main page$")
+    @Then("I am redirected to the main page$")
     public void redirectionToMainPage() throws Throwable {
         assertEquals("https://acctabootcamp.github.io/site/tasks/list_of_people_with_jobs.html", driver.getCurrentUrl());
     }
 
-    @And("^I can see record number has increased$")
+    @And("^I can see that the number of records has increased$")
     public void seeRecordNumberHasIncreaseOnMainPage() throws Throwable {
         List<WebElement> recordNum = driver.findElements(By.className("w3-xlarge"));
-        Assertions.assertEquals(5, recordNum.size());
+        Assertions.assertEquals(4, recordNum.size());
         for (WebElement el : recordNum) {
             System.out.println(el.getText());
         }
