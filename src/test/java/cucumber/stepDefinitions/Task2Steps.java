@@ -111,4 +111,3 @@ public class Task2Steps {
         assertEquals("Accountant", people.get(2).findElement(By.className("job")).getText());
     }
 }
-
