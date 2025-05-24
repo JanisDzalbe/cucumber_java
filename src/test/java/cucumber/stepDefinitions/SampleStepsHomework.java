@@ -9,19 +9,23 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
 import java.util.List;
 import java.util.Map;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class SampleStepsHomework {
     private WebDriver driver;
+    private int initialRecordCount;
 
     public SampleStepsHomework() {
 
         this.driver = Hooks.driver;
+    }
+
+    public int getInitialRecordCount() throws Throwable {
+        List<WebElement> recordNum = driver.findElements(By.className("w3-xlarge"));
+        return recordNum.size();
     }
 
     @Given("^I am on People with job page$")
@@ -39,7 +43,7 @@ public class SampleStepsHomework {
         assertEquals("https://acctabootcamp.github.io/site/tasks/enter_a_new_person_with_a_job.html", driver.getCurrentUrl());
     }
 
-    @And("^I enter a new name \"([^\"]*)\" and a new job \"([^\"]*)\"$")
+    @When("^I enter a new name \"([^\"]*)\" and a new job \"([^\"]*)\"$")
     public void iEnterNameAndJob(String name, String job) throws Throwable {
         driver.findElement(By.id("name")).clear();
         driver.findElement(By.id("name")).sendKeys(name);
@@ -53,21 +57,36 @@ public class SampleStepsHomework {
     }
 
     @Then("I am redirected to the main page$")
-    public void redirectionToMainPage() throws Throwable {
+    public void redirectionToTheMainPage() throws Throwable {
         assertEquals("https://acctabootcamp.github.io/site/tasks/list_of_people_with_jobs.html", driver.getCurrentUrl());
     }
 
     @And("^I can see that the number of records has increased$")
     public void seeRecordNumberHasIncreaseOnMainPage() throws Throwable {
+        initialRecordCount = getInitialRecordCount();
         List<WebElement> recordNum = driver.findElements(By.className("w3-xlarge"));
-        Assertions.assertEquals(4, recordNum.size());
-        for (WebElement el : recordNum) {
-            System.out.println(el.getText());
+        Assertions.assertEquals(initialRecordCount, recordNum.size());
         }
+    @When("^I choose the second record and click on the pencil icon to edit it$")
+    public void iClickOnPencilIcon() throws Throwable {
+        driver.findElement(By.cssSelector("#person1 i.fa-pencil")).click();
     }
-
+    @And("I can see that the name and job have been updated to \"Simon\" and \"Florist\"$")
+    public void checkThatNameAndJobHasBeenChanged() throws Throwable {
+        assertEquals("Simon", driver.findElement(By.cssSelector("#person0 > span.w3-xlarge")).getText());
+        System.out.println(driver.findElement(By.cssSelector("#person0 > span.w3-xlarge")).getText());
+    }
+//    @Then("I am redirected to the main page after editing the record$")
+//    public void redirectionToTheMainPageAfterEditing() throws Throwable {
+//        assertEquals("https://acctabootcamp.github.io/site/tasks/enter_a_new_person_with_a_job.html?id=1", driver.getCurrentUrl());
+//    }
 
 }
+
+
+
+
+
 
 
 

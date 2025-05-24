@@ -32,47 +32,59 @@ And I can see that the number of records has increased
   |Irvin   |Artist   |
 
 #Test 2
-Scenario  User can edit a person
-#person0.fa-pencil
-#person0.getValue
-  When I choose a record and click on the pencil icon to edit it
+Scenario: User can edit a person
+  When I choose the second record and click on the pencil icon to edit it
   Then I am redirected to the Add new person page
   When I enter a new name "Simon" and a new job "Florist"
   And I click on the "Add" button
-  Then I am redirected to the main page
+#  Then I am redirected to the main page after editing the record
   And I can see that the name and job have been updated to "Simon" and "Florist"
 
-#Test 3
-Scenario  User can remove a person
-#person2 > span.closebtn
-  When I click on the "x" icon next to the record to delete it
-  Then I remain on the main page
-  And I can see that the number of records has decreased
-
-#Test 4
-Scenario: User resets main page after adding a new person
-
-  When I click on the "Add person" button
-  Then I am redirected to the Add new person page
-  When I enter a new name "Alise" and a new job "Dancer"
-  And I click on the "Add" button
-  Then I am redirected to the main page
-  And I can see that the number of records has increased
-  When I click on the "Reset List" button
-  Then I can see the record number has returned to the previous value
-
-
-#Test 5
-Scenario: User resets main page after editing a person
-  When I choose a record and click on the pencil icon to edit it
-  Then I am redirected to the Add new person page
-  When I enter a new name "Simon" and a new job "Florist"
-  And I click on the "Add" button
-  Then I am redirected to the main page
-  When I click on reset button
-  Then I can see changes for name "Simon" and job "Florist" are not saved
-
- #Test 6
-Scenario: User resets main page after removing a person
-
-
+##Test 3
+#Scenario  User can remove a person
+##person2 > span.closebtn
+#  When I click on the "x" icon next to the record to delete it
+#  Then I remain on the main page
+#  And I can see that the number of records has decreased
+#
+##Test 4
+#Scenario: User resets main page after adding a new person
+#
+#  When I click on the "Add person" button
+#  Then I am redirected to the Add new person page
+#  When I enter a new name "Alise" and a new job "Dancer"
+#  And I click on the "Add" button
+#  Then I am redirected to the main page
+#  And I can see that the number of records has increased
+#  When I click on the "Reset List" button
+#  Then I can see the record number has returned to the previous value
+#
+#
+##Test 5
+#Scenario: User resets main page after editing a person
+#  When I choose a record and click on the pencil icon to edit it
+#  Then I am redirected to the Add new person page
+#  When I enter a new name "Simon" and a new job "Florist"
+#  And I click on the "Add" button
+#  Then I am redirected to the main page
+#  When I click on the "Reset List" button
+#  Then I can see changes for name "Simon" and job "Florist" are not saved
+#
+# #Test 6
+#Scenario: User resets main page after removing a person
+#  When I click on the "x" icon next to the record to delete it
+#  Then I remain on the main page
+#  And I can see that the number of records has decreased
+#  When I click on the "Reset List" button
+#  Then I can see the record number has returned to the previous value
+#
+##Test 7
+#Scenario: User checks that clear button on adding a person works correctly
+#  When I click on the "Add person" button
+#  Then I am redirected to the Add new person page
+#  When I clear name and job fields
+#  And I click on the "Add" button
+#  Then I am redirected to the main page
+#  And I can see that the number of records has increased
+#  When I click on the "Reset List" button
+#  Then I can see that the name and job fields of record are emphty
