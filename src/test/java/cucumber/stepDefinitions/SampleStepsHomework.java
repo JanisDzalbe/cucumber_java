@@ -73,13 +73,18 @@ public class SampleStepsHomework {
     }
     @And("I can see that the name and job have been updated to \"Simon\" and \"Florist\"$")
     public void checkThatNameAndJobHasBeenChanged() throws Throwable {
-        assertEquals("Simon", driver.findElement(By.cssSelector("#person0 > span.w3-xlarge")).getText());
+        assertEquals("Simon", driver.findElement(By.cssSelector("#person1 > span.w3-xlarge")).getText());
         System.out.println(driver.findElement(By.cssSelector("#person0 > span.w3-xlarge")).getText());
     }
-//    @Then("I am redirected to the main page after editing the record$")
-//    public void redirectionToTheMainPageAfterEditing() throws Throwable {
-//        assertEquals("https://acctabootcamp.github.io/site/tasks/enter_a_new_person_with_a_job.html?id=1", driver.getCurrentUrl());
-//    }
+
+    @Then("I am redirected to the Editing page$")
+    public void redirectionToTheEditingPage() throws Throwable {
+        assertEquals("https://acctabootcamp.github.io/site/tasks/enter_a_new_person_with_a_job.html?id=1", driver.getCurrentUrl());
+}
+    @And("^I click on the \"Edit\" button$")
+    public void iClickOnEditButtonAtEditPersonPage() throws Throwable {
+        driver.findElement(By.xpath("(//button[normalize-space(text())='Edit'])[1]")).click();
+    }
 
 }
 

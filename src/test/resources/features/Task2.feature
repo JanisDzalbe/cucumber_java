@@ -34,10 +34,10 @@ And I can see that the number of records has increased
 #Test 2
 Scenario: User can edit a person
   When I choose the second record and click on the pencil icon to edit it
-  Then I am redirected to the Add new person page
+  Then I am redirected to the Editing page
   When I enter a new name "Simon" and a new job "Florist"
-  And I click on the "Add" button
-#  Then I am redirected to the main page after editing the record
+  And I click on the "Edit" button
+  Then I am redirected to the main page
   And I can see that the name and job have been updated to "Simon" and "Florist"
 
 ##Test 3
@@ -51,7 +51,7 @@ Scenario: User can edit a person
 #Scenario: User resets main page after adding a new person
 #
 #  When I click on the "Add person" button
-#  Then I am redirected to the Add new person page
+#  Then I am redirected to the Editing page
 #  When I enter a new name "Alise" and a new job "Dancer"
 #  And I click on the "Add" button
 #  Then I am redirected to the main page
@@ -65,7 +65,7 @@ Scenario: User can edit a person
 #  When I choose a record and click on the pencil icon to edit it
 #  Then I am redirected to the Add new person page
 #  When I enter a new name "Simon" and a new job "Florist"
-#  And I click on the "Add" button
+#  And I click on the "Edit" button
 #  Then I am redirected to the main page
 #  When I click on the "Reset List" button
 #  Then I can see changes for name "Simon" and job "Florist" are not saved
