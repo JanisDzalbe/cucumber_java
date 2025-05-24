@@ -5,13 +5,15 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class SampleSteps {
@@ -223,6 +225,173 @@ public class SampleSteps {
         assertEquals(valuesToEnter.get("gender"), driver.findElement(By.id("gender")).getText());
     }
 
+
+
+
+
+
+
+    @Given("^I am on the People with jobs page$")
+    public void iAmOnPeopleWithJobsPage() {
+        driver.get("https://acctabootcamp.github.io/site/tasks/list_of_people_with_jobs.html");
+    }
+
+    @When("^I click the Add person button$")
+    public void iClickAddPersonButton() {
+        driver.findElement(By.id("addPersonBtn")).click();
+    }
+
+    @When("^I enter name ([^\"]*) and job ([^\"]*)$")
+    public void iEnterNameAndJob(String name, String job) {
+        driver.findElement(By.id("name")).clear();
+        driver.findElement(By.id("name")).sendKeys(name);
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("job")).sendKeys(job);
+    }
+
+    @Then("^I should see ([^\"]*) with job ([^\"]*) in the list$")
+    public void iShouldSeePersonInList(String name, String job) {
+        String personBlock = driver.findElement(By.id("listOfPeople")).getText();
+        assertTrue(personBlock.contains(name));
+        assertTrue(personBlock.contains(job));
+    }
+
+    @When("^I click the edit icon for ([^\"]*)$")
+    public void iClickEditIconFor(String name) {
+        List<WebElement> people = driver.findElements(By.cssSelector("#listOfPeople li"));
+        for (WebElement person : people) {
+            if (person.getText().contains(name)) {
+                person.findElement(By.cssSelector(".fa-pencil")).click();
+                break;
+            }
+        }
+    }
+
+    @And("^I update name to ([^\"]*) and job to ([^\"]*)$")
+    public void iUpdateNameAndJob(String newName, String newJob) {
+        WebElement nameField = driver.findElement(By.id("name"));
+        WebElement jobField = driver.findElement(By.id("job"));
+
+        nameField.clear();
+        nameField.sendKeys(newName);
+        jobField.clear();
+        jobField.sendKeys(newJob);
+    }
+    @And("^I should not see ([^\"]*) in the list$")
+    public void iShouldNotSeePersonInList(String oldName) {
+        String personBlock = driver.findElement(By.id("listOfPeople")).getText();
+        assertTrue(!personBlock.contains(oldName));
+    }
+    @When("^I click the save button$")
+    public void iClickSaveButton() {
+        // matches either Add or Edit (same modal)
+        driver.findElement(By.xpath("//button[text()='Add' or text()='Edit']")).click();
+    }
+    String deletedPersonName; // store globally in the class
+
+    @When("^I delete a random person$")
+    public void iDeleteRandomPerson() {
+        List<WebElement> people = driver.findElements(By.cssSelector("#listOfPeople li"));
+
+        if (people.isEmpty()) {
+            throw new RuntimeException("No people found to delete");
+        }
+
+        int randomIndex = new Random().nextInt(people.size());
+
+        WebElement selected = people.get(randomIndex);
+        deletedPersonName = selected.findElement(By.cssSelector(".w3-xlarge")).getText();
+
+        String js = String.format("deletePerson(%d)", randomIndex);
+        ((JavascriptExecutor) driver).executeScript(js);
+    }
+    @When("^I click the delete icon for ([^\"]*)$")
+    public void iClickDeleteIconFor(String name) {
+        List<WebElement> people = driver.findElements(By.cssSelector("#listOfPeople li"));
+        for (WebElement person : people) {
+            if (person.getText().contains(name)) {
+                person.findElement(By.cssSelector("span[onclick^='deletePerson']")).click();
+                break;
+            }
+        }
+    }
+
+    @Then("^([^\"]*) should not be in the list$")
+    public void personShouldNotBeInList(String name) {
+        String listText = driver.findElement(By.id("listOfPeople")).getText();
+        assertTrue("Person still found: " + name, !listText.contains(name));
+    }
+
+    @When("^I add a new person ([^\"]*) with job ([^\"]*)$")
+    public void iAddNewPerson(String name, String job) {
+        driver.findElement(By.id("addPersonBtn")).click();
+        driver.findElement(By.id("name")).clear();
+        driver.findElement(By.id("name")).sendKeys(name);
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("job")).sendKeys(job);
+        driver.findElement(By.xpath("//button[text()='Add']")).click();
+    }
+
+    @And("^I click Reset List$")
+    public void iClickResetList() {
+        driver.findElement(By.xpath("//button[text()='Reset List']")).click();
+    }
+
+    @Then("^I should see the original people:$")
+    public void iShouldSeeOriginalPeople(List<String> expectedNames) {
+        String list = driver.findElement(By.id("listOfPeople")).getText();
+        for (String name : expectedNames) {
+            assertTrue("Missing: " + name, list.contains(name));
+        }
+    }
+    @And("^I should not see ([^\"]*) in the list person$")
+    public void iShouldNotSeeName(String name) {
+        String list = driver.findElement(By.id("listOfPeople")).getText();
+        assertFalse("Still found: " + name, list.contains(name));
+    }
+
+
+    @When("^I edit ([^\"]*) to name ([^\"]*) and job ([^\"]*)$")
+    public void iEditNameAndJob(String originalName, String newName, String newJob) {
+        // Click edit icon for the original name
+        List<WebElement> people = driver.findElements(By.cssSelector("#listOfPeople li"));
+        for (int i = 0; i < people.size(); i++) {
+            if (people.get(i).getText().contains(originalName)) {
+                String js = String.format("openModalForEditPersonWithJob(%d)", i);
+                ((JavascriptExecutor) driver).executeScript(js);
+                break;
+            }
+        }
+
+        // Fill in the new name and job
+        WebElement nameField = driver.findElement(By.id("name"));
+        nameField.clear();
+        nameField.sendKeys(newName);
+
+        WebElement jobField = driver.findElement(By.id("job"));
+        jobField.clear();
+        jobField.sendKeys(newJob);
+    }
+
+    @And("^I click (Add|Edit) button$")
+    public void iClickAddOrEditButton(String buttonText) {
+        // This works because the visible text in the button is either "Add" or "Edit"
+        driver.findElement(By.xpath("//button[text()='" + buttonText + "']")).click();
+    }
+
+    @When("^I delete ([^\"]*)$")
+    public void iDeletePersonByName(String nameToDelete) {
+        List<WebElement> people = driver.findElements(By.cssSelector("#listOfPeople li"));
+
+        for (int i = 0; i < people.size(); i++) {
+            String personText = people.get(i).getText();
+            if (personText.contains(nameToDelete)) {
+                String js = String.format("deletePerson(%d)", i);
+                ((JavascriptExecutor) driver).executeScript(js);
+                break;
+            }
+        }
+    }
 }
 
 
