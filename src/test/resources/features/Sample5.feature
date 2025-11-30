@@ -32,7 +32,7 @@ Feature: Introduction to cucumber part 4
       | Bob  | 61  | Hello, Bob, you are an adult |
 
  # TODO - create Scenario Outline for 'Give us your feedback!' page
-  # URL: https://acctabootcamp.github.io/site/tasks/provide_feedback
+  # URL: https://janisdzalbe.github.io/example-site/tasks/provide_feedback
   # Navigate to page
   # Set Name, Age and Genre
   # - All input MUST be done in single step

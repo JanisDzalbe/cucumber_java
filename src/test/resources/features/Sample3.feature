@@ -23,7 +23,7 @@ Feature: Introduction to cucumber part 3
 
 
 #   TODO - create Scenario Outline for 'Give us your feedback!' page
-#   URL: https://acctabootcamp.github.io/site/tasks/provide_feedback
+#   URL: https://janisdzalbe.github.io/example-site/tasks/provide_feedback
 #   Navigate to page
 #   Set name and age based on test Examples
 #   Click "Send" button and verify that previous input is displayed in correct fields

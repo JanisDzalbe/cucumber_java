@@ -19,7 +19,7 @@ public class AgePage {
 
 
     public String getPageUrl() {
-        return "https://acctabootcamp.github.io/site/examples/age";
+        return "https://janisdzalbe.github.io/example-site/examples/age";
     }
 
     public void enterName(String name) {

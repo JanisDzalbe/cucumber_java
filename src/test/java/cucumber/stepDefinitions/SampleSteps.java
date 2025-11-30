@@ -50,7 +50,7 @@ public class SampleSteps {
 
     @Given("^I (?:am on|open) age page$")
     public void iAmOnAgePage() throws Throwable {
-        driver.get("https://acctabootcamp.github.io/site/examples/age");
+        driver.get("https://janisdzalbe.github.io/example-site/examples/age");
     }
 
     @And("^I click submit age$")
@@ -97,6 +97,6 @@ public class SampleSteps {
 
     @Given("^I am on action page$")
     public void iAmOnActionPage() {
-        driver.get("https://acctabootcamp.github.io/site/examples/actions");
+        driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
 }

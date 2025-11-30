@@ -10,7 +10,7 @@
 #### Task 1
 In [Task1.feature](../main/src/test/resources/features/Task1.feature) create 1 scenario outline and
 1 scenario for page with url:
-"https://acctabootcamp.github.io/site/tasks/enter_a_number"
+"https://janisdzalbe.github.io/example-site/tasks/enter_a_number"
   * Scenario outline for error cases:
       * enter number too small
       * enter number too big
@@ -18,17 +18,14 @@ In [Task1.feature](../main/src/test/resources/features/Task1.feature) create 1 s
   * Scenario for correct number
 
 #### Task 2
-In [Task2.feature](../main/src/test/resources/features/Task2.feature) create 1 scenario outline and
-create scenario or scenario outlines for page https://acctabootcamp.github.io/site/tasks/list_of_people.html or https://acctabootcamp.github.io/site/tasks/list_of_people_with_jobs.html
+In [Task2.feature](../main/src/test/resources/features/Task2.feature) create scenarios (or scenario outlines) for page https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html
 in order to test that user can:
   * add a new person
   * edit a person
   * remove a person
-  * reset original list after:
-     * adding a person
-     * editing a person
-     * removing a person
-  * check that clear button on adding a user works correctly
+  * reset original list after changes (adding a person, editing a person or removing a person)
+
+_Note_: Make sure that changes to the list are asserted
 
 ### Setup
 [see wiki for Project Setup](https://github.com/JanisDzalbe/cucumber_java/wiki/Project-Setup)
