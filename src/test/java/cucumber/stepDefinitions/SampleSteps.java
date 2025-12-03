@@ -153,4 +153,41 @@ public class SampleSteps {
                 currentUrl.endsWith("/examples/age"));  //are we still on the same page? has to end with /examples/age
 
     }
+
+
+
+                    //Sample3 Task
+
+
+    @Given("^I am on the feedback page$")
+    public void iAmOnTheFeedbackPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter feedback name: \"([^\"]*)\"$")
+    public void iEnterFeedbackName(String name) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("^I enter feedback age: (\\d+)$")
+    public void iEnterFeedbackAge(int age) throws Throwable {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("^I click send feedback button$")
+    public void iClickSendFeedbackButton() throws Throwable {
+        driver.findElement(By.xpath("//button[text()='Send']")).click();        //find button by xpath, 'send'text
+    }
+
+    @Then("^I should see feedback name displayed as: \"([^\"]*)\"$")
+    public void iShouldSeeFeedbackNameDisplayedAs(String expectedName) throws Throwable {
+        assertEquals(expectedName, driver.findElement(By.id("name")).getText());
+    }
+
+    @And("^I should see feedback age displayed as: \"([^\"]*)\"$")
+    public void iShouldSeeFeedbackAgeDisplayedAs(String expectedAge) throws Throwable {
+        assertEquals(expectedAge, driver.findElement(By.id("age")).getText());
+}
 }
