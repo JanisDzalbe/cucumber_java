@@ -6,6 +6,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
@@ -99,4 +100,30 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+    @When("^I am on the locators page$")
+    public void iAmOnLocatorsPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/examples/locators");
+    }
+    @Then("^I should see both locators page headers$")
+    public void assertTwoHeaders() {
+        WebElement header1 = driver.findElement(By.id("heading_1"));
+        WebElement header2 = driver.findElement(By.id("heading_2"));
+        assertTrue(header1.isDisplayed());
+        assertTrue(header2.isDisplayed());
+        assertEquals("Heading 1", header1.getText());
+        assertEquals("Heading 2 text", header2.getText());
+    }
+    @And("^Buttons in Locators page are clickable$")
+    public void assertTwoButtons() {
+        WebElement btn1 = driver.findElement(By.cssSelector("[name='randomButton1']"));
+        WebElement btn2 = driver.findElement(By.id("buttonId"));
+        assertTrue(btn1.isEnabled());
+        assertTrue(btn2.isEnabled());
+    }
+
+
+
+
+
+
 }
