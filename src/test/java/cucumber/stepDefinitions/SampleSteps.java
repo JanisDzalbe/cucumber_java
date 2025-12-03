@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -98,5 +99,55 @@ public class SampleSteps {
     @Given("^I am on action page$")
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
+    }
+
+    @When("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() throws Throwable{
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorsPageHeaders() throws Throwable{
+        assertTrue(driver.findElement(By.id("heading_1")).isDisplayed());
+        assertTrue(driver.findElement(By.id("heading_2")).isDisplayed());
+        assertEquals("Heading 1", driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text", driver.findElement(By.id("heading_2")).getText());
+    }
+
+    @And("^Buttons in Locators page are clickable$")
+    public void buttonsInLocatorsPageAreClickable() throws Throwable{
+        assertTrue(driver.findElement(By.cssSelector("[name='randomButton1']")).isEnabled());
+        assertTrue(driver.findElement(By.cssSelector("[name='randomButton2']")).isEnabled());
+    }
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter name in Feedback page: \"([^\"]*)\"$")
+    public void iEnterNameInFeedbackPage(String name) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("^I enter age in Feedback page: (\\d+)$")
+    public void iEnterAgeInFeedbackPage(int age) throws Throwable {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("^I click send button$")
+    public void iClickSendButton() throws Throwable {
+        driver.findElement(By.cssSelector("[type=\"submit\"]")).click();
+    }
+    @And("^I see name \"([^\"]*)\" in check Feedback page$")
+    public void iSeeNameInFeedbackPage(String name) throws Throwable {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @And("^I see age (\\d+) in check Feedback page$")
+    public void iSeeAgeInCheckFeedbackPage(int age) throws Throwable{
+        assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
     }
 }
