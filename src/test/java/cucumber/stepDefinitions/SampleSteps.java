@@ -5,6 +5,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -127,8 +128,8 @@ public class SampleSteps {
 
   @Then("^I see error: \"([^\"]*)\"$")
   public void iSeeError(String arg0) throws Throwable {
-    assertTrue(driver.findElement(By.id("error")).isDisplayed());
-    assertEquals(arg0, driver.findElement(By.id("error")).getText());
+    assertTrue(driver.findElement(By.className("error")).isDisplayed());
+    assertEquals(arg0, driver.findElement(By.className("error")).getText());
   }
 
   @And("I am not navigated to age message page")
@@ -177,5 +178,26 @@ public class SampleSteps {
   @And("^I check field fb-age: (\\d+)$")
   public void iCheckFieldFbAgeFbAge(int age) {
     assertEquals(age, Integer.parseInt(driver.findElement(By.id("age")).getText()));
+  }
+
+  @Given("^I (?:am on|open) EnterNumber page$")
+  public void iAmOnEnterNumberPage() {
+      driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+  }
+
+  @When("^I enter number in field \"([^\"]*)\"$")
+  public void iEnterNumberInFieldInput(String number) {
+    driver.findElement(By.id("numb")).sendKeys(number);
+  }
+
+  @And("I click submit number")
+  public void iClickSubmitNumber() {
+    driver.findElement(By.className("w3-orange")).click();
+  }
+
+  @Then("^I see alert \"([^\"]*)\"$")
+  public void iSeeAlertMessage(String message) {
+    Alert alert=driver.switchTo().alert();
+    assertEquals(message,alert.getText());
   }
 }
