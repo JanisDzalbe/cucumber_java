@@ -133,5 +133,63 @@ public class SampleSteps {
         assertEquals("https://janisdzalbe.github.io/example-site/examples/age",driver.getCurrentUrl());
         assertFalse(driver.getCurrentUrl().contains("https://janisdzalbe.github.io/example-site/examples/age_2.html?name=fgg&age=99") );
     }
+
+    @And("^Navigate to page$")
+    public void navigation()
+    {
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age",driver.getCurrentUrl());
+        assertFalse(driver.getCurrentUrl().contains("https://janisdzalbe.github.io/example-site/examples/age_2.html?name=fgg&age=99") );
+    }
+
+
+    @Given("^I am on feedback page$")
+    public void navigateToPage()
+    {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+    @And("I set name \"([^\"]*)\"$")
+    public void enterNameInFeedbackPage(String name) {
+       WebElement nameField =driver.findElement(By.id("fb_name"));
+        nameField.sendKeys(name);
+    }
+
+    @And("I set age (\\d+)$")
+    public void enterAgeInFeedbackPage(int age) {
+        WebElement ageField =driver.findElement(By.id("fb_age"));
+        ageField.sendKeys(String.valueOf(age));
+    }
+    @And("^I click send$")
+    public void clickSend () {
+        WebElement sendBtn =driver.findElement(By.cssSelector("*[type='submit']"));
+        sendBtn.click();
+    }
+    @Then ("^I should see name as \"([^\"]*)\" and age as (\\d+)$")
+    public void validateFields(String name,int age)
+    {
+        WebElement nameField =driver.findElement(By.id("name"));
+        WebElement ageField =driver.findElement(By.id("age"));
+        assertEquals(name,nameField.getText() );
+        assertEquals(String.valueOf(age),ageField.getText());
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
