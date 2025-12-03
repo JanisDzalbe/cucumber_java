@@ -6,12 +6,15 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -22,7 +25,7 @@ public class SampleSteps {
 
     @Given("^I am on the home page$")
     public void iAmOnTheHomePage() throws Throwable {
-        driver.get("https://acctabootcamp.github.io/site");
+        driver.get("https://janisdzalbe.github.io/example-site/");
     }
 
     @Then("^I should see home page header$")
@@ -99,4 +102,37 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+
+
+                    //Simple1 Task
+
+
+
+    @When("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorsPageHeaders() throws Throwable {
+        assertTrue("First header should be displayed",
+                driver.findElement(By.id("heading_1")).isDisplayed());            //check h1
+
+        assertTrue("Second header should be displayed",
+                driver.findElement(By.id("heading_2")).isDisplayed());            //check h2
+    }
+
+    @And("^Buttons in Locators page are clickable$")
+    public void buttonsInLocatorsPageAreClickable() throws Throwable {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
+        WebElement button1 = driver.findElement(By.name("randomButton1"));      //2 buttons we have
+        WebElement button2 = driver.findElement(By.name("randomButton2"));
+
+        assertNotNull("Button 1 isn't clickable", wait.until(ExpectedConditions.elementToBeClickable(button1)));
+        assertNotNull("Button 2 isn't clickable", wait.until(ExpectedConditions.elementToBeClickable(button2)));
+
+        }
+
 }
