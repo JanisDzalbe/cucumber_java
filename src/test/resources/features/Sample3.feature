@@ -22,7 +22,21 @@ Feature: Introduction to cucumber part 3
       | Tom  | 15  | Hello, Tom, you are a kid |
 
 
-#   TODO - create Scenario Outline for 'Give us your feedback!' page
+#   create Scenario Outline for 'Give us your feedback!' page
+    @test
+    Scenario Outline: entering only name and surname in feedback
+      Given I am on Provide Feedback page
+      When  I enter the name: "<name>"
+      And   I enter the age: <age>
+      And   I click Send
+      Then  I see the confirmation check page
+      And   I see the name is "<name>" and age is <age>
+
+      Examples:
+        | name  | age |
+        | Ann   | 5   |
+        | Marry | 50  |
+
 #   URL: https://janisdzalbe.github.io/example-site/tasks/provide_feedback
 #   Navigate to page
 #   Set name and age based on test Examples

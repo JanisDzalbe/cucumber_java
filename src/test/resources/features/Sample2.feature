@@ -17,7 +17,7 @@ Feature: Introduction to cucumber part 2
     And I click submit age
     Then I see message: "Hello, Bob, you are an adult"
 
-#  @test
+  @test
   Scenario: a new scenario error
     When I enter name: "John"
     And I click submit age

@@ -1,6 +1,6 @@
 Feature: Testing
 
-  @test
+#  @test
   Scenario Outline: a new scenario with 1-row table
     Given I am on action page
     When I clicked on checkboxes modified:

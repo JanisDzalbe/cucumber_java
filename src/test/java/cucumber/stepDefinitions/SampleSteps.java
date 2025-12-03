@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import com.google.common.base.Equivalence;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -115,7 +116,7 @@ public class SampleSteps {
         assertEquals("Heading 2 text", driver.findElement(By.id("heading_2")).getText());
     }
 
-    @And("^Buttons in Locators page are clickable$")
+    @Then("^Buttons in Locators page are clickable$")
     public void buttonsInLocatorsPageAreClickable() {
         assertTrue(driver.findElement(By.cssSelector("[name='randomButton1']")).isEnabled());
         assertTrue(driver.findElement(By.cssSelector("[name='randomButton2']")).isEnabled());
@@ -126,8 +127,44 @@ public class SampleSteps {
         assertEquals(error, driver.findElement(By.id("error")).getText());;
     }
 
-    @And("^I am not navigated to age message page$")
+    @Then("^I am not navigated to age message page$")
     public void iAmNotNavigatedToAgeMessagePage() {
         assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
+    }
+
+    // Sample 3
+    @Given("^I am on Provide Feedback page$")
+    public void iAmOnProvideFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter the name: \"([^\"]*)\"$")
+    public void iEnterTheName(String name) {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @When("^I enter the age: (\\d+)$")
+    public void iEnterTheAge(int age) {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @When("^I click Send$")
+    public void iClickSend() {
+        driver.findElement(By.cssSelector("[type=\"submit\"]")).click();
+    }
+
+    @Then("^I see the confirmation check page$")
+    public void iSeeTheConfirmationCheckPage() {
+//        assertTrue(driver.getCurrentUrl().contains("check_feedback.html"));
+        // randomly fails, possibly need to wait()
+        assertEquals("Is this the feedback you want to give us?", driver.findElement(By.tagName("h2")).getText());
+    }
+
+    @Then("^I see the name is \"([^\"]*)\" and age is (\\d+)$")
+    public void iSeeTheNameIsAndAgeIsAge(String name, int age) {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+        assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
     }
 }
