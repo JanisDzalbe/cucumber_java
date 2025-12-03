@@ -10,8 +10,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*
 
 public class SampleSteps {
     private WebDriver driver;
@@ -118,6 +117,19 @@ public class SampleSteps {
     public void assertLocatorPageButtons() throws Throwable {
         assertTrue(driver.findElement(By.cssSelector("[name='randomButton1']")).isEnabled());
         assertTrue(driver.findElement(By.cssSelector("[name='randomButton2']")).isEnabled());
+    }
+
+    //Sample Task 2
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void assertAgePageError(String errorText) throws Throwable {
+        assertTrue(driver.findElement(By.id("error")).isDisplayed());
+        assertEquals(errorText, driver.findElement(By.id("error")).getText());
+    }
+
+    @Then("^I am not navigated to age message page$")
+    public void assertUrlNotAgeMessagePage(String errorText) throws Throwable {
+        assertFalse(driver.getCurrentUrl().contains("https://janisdzalbe.github.io/example-site/examples/age_2"));
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
     }
 }
 
