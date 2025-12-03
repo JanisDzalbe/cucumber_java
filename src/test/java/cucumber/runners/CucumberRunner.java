@@ -10,8 +10,8 @@ import org.junit.runner.RunWith;
         plugin = {"pretty", "html:cucumber-report/html-report",
                 "junit:cucumber-report/junit-report.xml",
                 "json:cucumber-report/json-report.json"},
-        tags = "not @test and not @bug",
-        glue = {"stepDefinitions"}
+        tags = "@test and not @bug",
+        glue = {"cucumber.stepDefinitions"}
 )
 public class CucumberRunner {
 

@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -128,6 +129,81 @@ public class SampleSteps {
         assertEquals("https://janisdzalbe.github.io/example-site/examples/age",
                 driver.getCurrentUrl());
         assertFalse(driver.getCurrentUrl().contains("https://janisdzalbe.github.io/example-site/examples/age_2"));
+    }
+
+    //sample3 task
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage(){
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter name FB: \"([^\"]*)\"$")
+    public void iEnterNameFB(String name) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("^I enter age FB: (\\d+)$")
+    public void iEnterAgeFB(int age) throws Throwable {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("^I click send button$")
+    public void iClickSendButton() throws Throwable {
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+    }
+
+    @Then("^I see name \"([^\"]*)\" in feedback$")
+    public void iSeeNameInFB(String name) throws Throwable {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @And("^I see age (\\d+) in feedback$")
+    public void iSeeAgeInFB(int age) throws Throwable {
+        assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
+    }
+
+    //Task1
+    @Given("^I am on enter a number page$")
+    public void iAmOnEnterANumberPage(){
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+
+    @When("^I enter number: \"([^\"]*)\"$")
+    public void iEnterNumber(String number) throws Throwable {
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(number);
+    }
+
+    @And("^I click submit$")
+    public void iClickSubmit() throws Throwable {
+        driver.findElement(By.className("w3-btn")).click();
+    }
+
+    @Then("^I see error message: \"([^\"]*)\"$")
+    public void iSeeErrorMessage(String message) {
+        assertTrue(driver.findElement(By.id("ch1_error")).isDisplayed());
+        assertEquals(message, driver.findElement(By.id("ch1_error")).getText());
+    }
+
+    // working scenario
+    @And("^I enter number: (\\d+)$")
+    public void iEnterNumber(int number) throws Throwable {
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(String.valueOf(number));
+    }
+
+    @Then("^I see popup message: \"([^\"]*)\"$")
+    public void iSeePopupMessage(String message) {
+        Alert alert = driver.switchTo().alert();
+        assertEquals(message, alert.getText());
+        alert.accept();
+    }
+
+    @And("^I don't see error message$")
+    public void iDontSeeErrorMessage() {
+        assertFalse(driver.findElement(By.id("ch1_error")).isDisplayed());
     }
 
 }
