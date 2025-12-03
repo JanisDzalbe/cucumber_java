@@ -27,5 +27,7 @@
       And I click submit number
       Then I see alert <message>
       Examples:
-        | Input | message                      |
+        | Input  | message                     |
         | 55     |"Square root of 55 is 7.42"  |
+        | 66     |"Square root of 66 is 8.12"  |
+        | 77     |"Square root of 77 is 8.77"  |
