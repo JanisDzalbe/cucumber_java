@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -189,5 +190,50 @@ public class SampleSteps {
     @And("^I should see feedback age displayed as: \"([^\"]*)\"$")
     public void iShouldSeeFeedbackAgeDisplayedAs(String expectedAge) throws Throwable {
         assertEquals(expectedAge, driver.findElement(By.id("age")).getText());
-}
+    }
+
+
+                //Task 1
+
+
+    @Given("^I am on the enter a number page$")
+    public void iAmOnTheEnterANumberPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+
+    @When("^I enter number value: \"([^\"]*)\"$")
+    public void iEnterNumberValue(String value) throws Throwable {
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(value);
+    }
+
+    @And("^I click submit number button$")
+    public void iClickSubmitNumberButton() throws Throwable {
+        driver.findElement(By.xpath("//button[text()='Submit']")).click();  //find button by text using xpath
+    }
+
+    @Then("^I should see an error: \"([^\"]*)\"$")
+    public void iShouldSeeAnError(String expectedError) throws Throwable {
+        assertEquals(expectedError, driver.findElement(By.id("ch1_error")).getText());
+    }
+
+    @Then("^I should see a success alert for number \"([^\"]*)\"$")
+    public void iShouldSeeSuccessAlert(String inputValue) throws Throwable {
+        double number = Double.parseDouble(inputValue);                         //what we input
+        double sqrt = Math.sqrt(number);
+        String expectedAlertText = String.format("Square root of %d is %.2f", (int)number, sqrt);   //for later checking if the alert text is right
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));      //wait for alert
+        Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+
+        assertEquals(expectedAlertText, alert.getText());                   //verify if alert text is right
+
+        alert.accept();
+    }
+
+    @And("^I should not see any error message$")
+    public void iShouldNotSeeAnyErrorMessage() throws Throwable {
+        WebElement error = driver.findElement(By.id("ch1_error"));
+        assertFalse("Error message should not be visible", error.isDisplayed());
+    }
 }
