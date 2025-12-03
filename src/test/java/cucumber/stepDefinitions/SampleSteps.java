@@ -195,6 +195,44 @@ public class SampleSteps {
 
 
 
+    // Task 1 feature
+    @Given("^I am on enter a number page$")
+    public void iAmOnEnterANumberPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+
+    @When("^I enter number \"([^\"]*)\"$")
+    public void iEnterNumber(String input) {
+        WebElement inputField = driver.findElement(By.id("numb"));
+        inputField.clear();
+        inputField.sendKeys(input);
+    }
+
+    @And("^I click submit number button$")
+    public void iClickSubmitNumberButton() {
+        // Button uses onclick(), so we use CSS: button[type='button']
+        driver.findElement(By.cssSelector("button[type='button']")).click();
+    }
+
+    @Then("I should see number error {string}")
+    public void iShouldSeeNumberError(String expected) {
+        String actual = driver.findElement(By.id("ch1_error")).getText();
+        assertEquals(expected, actual);
+    }
+
+
+    @Then("I should see result {string}")
+    public void iShouldSeeResult(String expected) {
+
+        Alert alert = driver.switchTo().alert();
+        String text = alert.getText();
+
+        assertTrue(text.contains(expected));
+
+        alert.accept();
+    }
+
+
 
 
 
