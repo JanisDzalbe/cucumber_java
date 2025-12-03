@@ -12,6 +12,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -99,4 +100,34 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+    // Sample1 task
+    @When("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() {driver.get("https://janisdzalbe.github.io/example-site/examples/locators");}
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorsPageHeaders() {
+        assertTrue(driver.findElement(By.id("heading_1")).isDisplayed());
+        assertTrue(driver.findElement(By.id("heading_2")).isDisplayed());
+    }
+
+    @Then("^Buttons in Locators page are clickable$")
+    public void buttonsInLocatorsPageAreClickable() {
+        assertTrue(driver.findElement(By.cssSelector("[name='randomButton1']")).isEnabled());
+        assertTrue(driver.findElement(By.cssSelector("[name='randomButton1']")).isEnabled());
+    }
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void errorHaventEnteredAnythingInAgeField(String errorText) {
+        assertTrue(driver.findElement(By.id("error")).isDisplayed());
+        assertEquals(errorText, driver.findElement(By.id("error")).getText());
+    }
+
+    @Then("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage(){
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age",
+                driver.getCurrentUrl());
+        assertFalse(driver.getCurrentUrl().contains("https://janisdzalbe.github.io/example-site/examples/age_2"));
+    }
+
 }
