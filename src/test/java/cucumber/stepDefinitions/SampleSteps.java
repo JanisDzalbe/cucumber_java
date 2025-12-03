@@ -135,4 +135,22 @@ public class SampleSteps {
 
         }
 
+
+                //Sample2 Task
+
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeError(String errorMessage) throws Throwable {
+        assertEquals(errorMessage, driver.findElement(By.id("error")).getText());
+    }
+
+
+    @And("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() throws Throwable {
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(
+                "We should be still on the age page",
+                currentUrl.endsWith("/examples/age"));  //are we still on the same page? has to end with /examples/age
+
+    }
 }
