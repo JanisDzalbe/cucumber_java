@@ -28,6 +28,7 @@
       When I enter number in field "<Input>"
       And I click submit number
       Then I see alert <message>
+      And I do not see error
       Examples:
         | Input  | message                     |
         | 55     |"Square root of 55 is 7.42"  |

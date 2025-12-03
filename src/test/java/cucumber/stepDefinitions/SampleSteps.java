@@ -200,6 +200,7 @@ public class SampleSteps {
   public void iSeeAlertMessage(String message) {
     Alert alert=driver.switchTo().alert();
     assertEquals(message,alert.getText());
+    alert.accept();
   }
   @Given("^I (?:am on|open) ListOfPeople page$")
   public void iAmOnListOfPeoplePage() {
@@ -312,4 +313,8 @@ public class SampleSteps {
   assertEquals(10,count);
   }
 
+  @And("I do not see error")
+  public void iDoNotSeeError() {
+    assertFalse(driver.findElement(By.className("error")).isDisplayed());
+  }
 }
