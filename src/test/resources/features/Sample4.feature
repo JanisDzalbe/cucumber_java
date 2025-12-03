@@ -6,7 +6,7 @@ Feature: Introduction to cucumber part 4
   Background:
     Given I am on age page
 
-  Scenario: a new scenario with 1-row table
+  Scenario: a new scenario with 1-row table (multiple checkboxes)
     Given I am on action page
     When I clicked on checkboxes:
       | Option 1 |
@@ -14,19 +14,18 @@ Feature: Introduction to cucumber part 4
     And I click the result checkbox button
     Then message for checkboxes "You selected value(s): Option 1, Option 3" is seen
 
-  Scenario: a new scenario with 1-row table
+  Scenario: a new scenario with 1-row table (single checkbox)
     Given I am on action page
     When I clicked on checkboxes:
       | Option 2 |
     And I click the result checkbox button
     Then message for checkboxes "You selected value(s): Option 2" is seen
 
-#  TODO - Add implementation for missing steps
-#  @test
-#  Scenario: Feedback with only languages
-#    Given I am on feedback page
-#    When I select feedback languages
-#      | English |
-#      | Spanish |
-#    And I click send feedback
-#    Then I can see languages "English,Spanish" in feedback check
+  @test
+  Scenario: Feedback with only languages
+    Given I am on feedback page
+    When I select feedback languages
+      | English |
+      | Spanish |
+    And I click send feedback
+    Then I can see languages "English,Spanish" in feedback check
