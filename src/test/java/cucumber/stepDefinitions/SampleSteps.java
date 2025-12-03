@@ -141,4 +141,63 @@ public class SampleSteps {
             assertTrue(button.isEnabled());
         }
     }
+
+    /// Sample3 task
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter name \"([^\"]*)\" and age (\\d+)$")
+    public void iEnterNameAndAge(String name, int age) {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("^I click send button$")
+    public void iClickSendButton() {
+        driver.findElement(By.cssSelector("button[type='submit'], button.w3-btn-block")).click();
+    }
+
+    @Then("^I see feedback name \"([^\"]*)\" and age (\\d+)$")
+    public void iShouldSeeFeedbackNameAndAge(String expectedName, int expectedAge) {
+        assertTrue(driver.findElements(By.cssSelector("div.description")).get(0).getText().contains(expectedName));
+        assertTrue(driver.findElements(By.cssSelector("div.description")).get(1).getText().contains(String.valueOf(expectedAge)));
+    }
+
+    /// Task 1 implementation
+    @Given("^I am on enter number page$")
+    public void iAmOnEnterNumberPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+
+    @When("^I enter number \"([^\"]*)\"$")
+    public void iEnterNumber(String value) {
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(value);
+    }
+
+    @And("^I click submit button")
+    public void iClickSubmitButton() {
+        driver.findElement(By.cssSelector("button[type='button'], w3-btn")).click();
+    }
+
+    @Then("^I see the corresponding error \"([^\"]*)\"$")
+    public void iSeeCorrespondingError(String expectedError) {
+        assertEquals(expectedError, driver.findElement(By.id("ch1_error")).getText());
+    }
+
+    @Then("^I see the message \"([^\"]*)\"$")
+    public void iSeeTheMessage(String expectedText) {
+        assertEquals(expectedText, driver.switchTo().alert().getText());
+        driver.switchTo().alert().accept();
+    }
+
+    @Then("^No errors are shown$")
+    public void noErrorsAreShown() {
+        assertTrue( driver.findElement(By.id("ch1_error")).getText().isEmpty());
+    }
+
 }
