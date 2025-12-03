@@ -8,6 +8,7 @@ import io.cucumber.java.en.When;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
@@ -200,4 +201,41 @@ public class SampleSteps {
     Alert alert=driver.switchTo().alert();
     assertEquals(message,alert.getText());
   }
+  @Given("^I (?:am on|open) ListOfPeople page$")
+  public void iAmOnListOfPeoplePage() {
+    driver.get(" https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+  }
+
+  @When("I click Add Person")
+  public void iClickAddPerson() {
+    driver.findElement(By.xpath("//button[text()=\"Add person\"]")).click();
+  }
+
+  @And("^I enter Job: \"([^\"]*)\"$")
+  public void iEnterJob(String job) {
+    driver.findElement(By.id("job")).clear();
+    driver.findElement(By.id("job")).sendKeys(job);
+  }
+
+  @And("I click Add")
+  public void iClickAdd() {
+    driver.findElement(By.xpath("//button[text()=\"Add\"]")).click();
+  }
+
+  @Then("I see name: {string} and job {string}")
+  public void iSeeNameAndJob(String name,String job) {
+    List<WebElement> allElements = driver.findElements(By.xpath("//*[@id=\"listOfPeople\"]/div"));
+    WebElement Person = null;
+    for (WebElement element : allElements) {
+      String inputVal = element.findElement(By.className("name")).getText();
+      String Jobval = element.findElement(By.className("job")).getText();
+      if (inputVal.equals(name) && Jobval.equals(job)) {
+        Person = element;
+        break;
+      }
+    }
+    assertEquals(name, Person.findElement(By.className("name")).getText());
+    assertEquals(job, Person.findElement(By.className("job")).getText());
+  }
+
 }

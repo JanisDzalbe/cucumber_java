@@ -21,6 +21,8 @@
     |1     |Number is too small      |
     |1111   |Number is too big        |
     |a      |Please enter a number    |
+    |       |You haven't entered anything|
+
 
     Scenario Outline:  I enter correct input
       When I enter number in field "<Input>"
