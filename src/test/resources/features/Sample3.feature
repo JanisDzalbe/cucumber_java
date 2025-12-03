@@ -23,7 +23,15 @@ Feature: Introduction to cucumber part 3
 
 
 #   TODO - create Scenario Outline for 'Give us your feedback!' page
-#   URL: https://janisdzalbe.github.io/example-site/tasks/provide_feedback
-#   Navigate to page
-#   Set name and age based on test Examples
-#   Click "Send" button and verify that previous input is displayed in correct fields
+  Scenario Outline: Verify Feedback page
+    Given I am on feedback page
+    When I set name: "<name>"
+    And I set age: <age>
+    And I click Send button
+    Then I see "<name>" in check feedback page
+    And I see <age> in check feedback page
+    Examples:
+      | name | age |
+      | John | 5  |
+      | Ann  | 25 |
+      | Bob  | 61 |
