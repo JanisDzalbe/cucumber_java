@@ -130,5 +130,22 @@ public class SampleSteps {
         }
     }
 
+    //Sample 2 Task..................................................................
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeErrorMessage(String expectedError) throws Throwable {
+        String actualError = driver.findElement(By.id("error")).getText();
+        assertEquals(expectedError, actualError);
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() throws Throwable {
+        List<WebElement> messageElements = driver.findElements(By.id("message"));
+
+        assertTrue("Unexpectedly navigated to message page",
+                messageElements.size() == 0);
+    }
+
+
 
 }
