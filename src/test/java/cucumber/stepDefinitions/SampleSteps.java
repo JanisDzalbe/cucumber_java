@@ -37,6 +37,28 @@ public class SampleSteps {
                 driver.findElement(By.cssSelector("p")).getText());
     }
 
+    //Sample 1 task
+    @When("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() throws Throwable {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeLocatorsPageHeaders() throws Throwable {
+        assertTrue(driver.findElement(By.id("heading_1")).isDisplayed());
+        assertTrue(driver.findElement(By.id("heading_2")).isDisplayed());
+        assertEquals("Heading 1",
+                driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text",
+                driver.findElement(By.id("heading_2")).getText());
+    }
+
+    @And("^Buttons in Locators page are clickable$")
+    public void buttonsInLocatorsPageClickable() throws Throwable {
+        assertTrue(driver.findElement(By.cssSelector("input[name='randomButton1']")).isEnabled());
+        assertTrue(driver.findElement(By.id("buttonId")).isEnabled());
+    }
+
     @When("^I enter name: \"([^\"]*)\"$")
     public void iEnterName(String name) throws Throwable {
         driver.findElement(By.id("name")).clear();
@@ -61,6 +83,19 @@ public class SampleSteps {
     @Then("^I see message: \"([^\"]*)\"$")
     public void iSeeMessage(String message) throws Throwable {
         assertEquals(message, driver.findElement(By.id("message")).getText());
+    }
+
+    //Sample 2 Task
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeAgePageError(String error) throws Throwable {
+        assertTrue(driver.findElement(By.id("error")).isDisplayed());
+        assertEquals(error, driver.findElement(By.id("error")).getText());
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgePage() throws Throwable {
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age",
+                driver.getCurrentUrl());
     }
 
     @When("^I enter values:$")
@@ -99,4 +134,5 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
 }
