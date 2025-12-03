@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -162,5 +163,45 @@ public class SampleSteps {
     @And("^I see input age: (\\d+)$")
     public void inputAge(int age) throws Throwable {
         assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
+    }
+
+    //Task1
+    @Given("^I am on Enter a number page$")
+    public void iAmOnEnteraNumberPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+
+    @When("^I enter invalid number or text: (.*)$")
+    public void iEnterInvalidNumberOrText(String input) throws Throwable {
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(String.valueOf(input));
+    }
+
+    @And("^I press Submit button$")
+    public void clickSubmitButton() throws Throwable {
+        driver.findElement(By.className("w3-btn")).click();
+    }
+
+    @Then("^I see error message: \"([^\"]*)\"$")
+    public void iSeeErrorMessage(String message) throws Throwable {
+        assertEquals(message, driver.findElement(By.id("ch1_error")).getText());
+    }
+
+    @When("^I enter number: (\\d+)$")
+    public void iEnterNumber(int number) throws Throwable {
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(String.valueOf(number));
+    }
+
+    @Then("^I see alert message: \"([^\"]*)\"$")
+    public void iSeeAlertMessage(String message) throws Throwable {
+        Alert alert = driver.switchTo().alert();
+        assertEquals(message, alert.getText());
+        alert.accept();
+    }
+
+    @And("^No error is shown$")
+    public void noErrorIsShown() throws Throwable {
+        assertTrue(driver.findElements(By.id("ch1_error")).isEmpty());
     }
 }
