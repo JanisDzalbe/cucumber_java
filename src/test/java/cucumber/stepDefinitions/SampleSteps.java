@@ -11,8 +11,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class SampleSteps {
@@ -97,12 +96,12 @@ public class SampleSteps {
     assertEquals(message, driver.findElement(By.id("result_checkbox")).getText());
   }
 
-  @Given("^I am on action page$")
+  @Given("^I (?:am on|open) action page$")
   public void iAmOnActionPage() {
     driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
   }
 
-  @When("I am on the locators page")
+  @Given("I (?:am on|open) the locators page$")
   public void iAmOnTheLocatorsPage() {
 
     driver.get("https://janisdzalbe.github.io/example-site/examples/locators");
@@ -118,22 +117,65 @@ public class SampleSteps {
   @And("Buttons in Locators page are clickable")
   public void buttonsInLocatorsPageAreClickable() {
     assertAll(
-            ()->assertTrue( driver.findElement(By.name("randomButton1")).isEnabled()),
-            ()->assertTrue( driver.findElement(By.name("randomButton1")).isDisplayed()),
-            ()->assertTrue( driver.findElement(By.name("randomButton2")).isEnabled()),
-            ()->assertTrue( driver.findElement(By.name("randomButton2")).isDisplayed())
+            () -> assertTrue(driver.findElement(By.name("randomButton1")).isEnabled()),
+            () -> assertTrue(driver.findElement(By.name("randomButton1")).isDisplayed()),
+            () -> assertTrue(driver.findElement(By.name("randomButton2")).isEnabled()),
+            () -> assertTrue(driver.findElement(By.name("randomButton2")).isDisplayed())
     );
 
   }
 
-  @Then("I see error: {string}")
-  public void iSeeError(String arg0) {
-      assertEquals(arg0,driver.findElement(By.id("error")).getText());
+  @Then("^I see error: \"([^\"]*)\"$")
+  public void iSeeError(String arg0) throws Throwable {
+    assertTrue(driver.findElement(By.id("error")).isDisplayed());
+    assertEquals(arg0, driver.findElement(By.id("error")).getText());
   }
 
   @And("I am not navigated to age message page")
   public void iAmNotNavigatedToAgeMessagePage() {
-      assertEquals("https://janisdzalbe.github.io/example-site/examples/age",driver.getCurrentUrl());
+    assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
 
+  }
+
+  @Given("I (?:am on|open) feedback page$")
+  public void iAmOnFeedbackPage() {
+    // Write code here that turns the phrase above into concrete actions
+    driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+  }
+
+  // sample 3
+  @And("I click send")
+  public void iClickSend() {
+    // Write code here that turns the phrase above into concrete actions
+    driver.findElement(By.xpath("//*[@id=\"fb_form\"]/form/button")).click();
+  }
+
+
+  @When("I enter fb name: {string}")
+  public void iEnterFbName(String arg0) {
+    driver.findElement(By.xpath("//*[@id=\"fb_name\"]")).clear();
+    driver.findElement(By.xpath("//*[@id=\"fb_name\"]")).sendKeys(arg0);
+  }
+
+  @And("^I enter fb-age: (\\d+)$")
+  public void iEnterFbAgeFbAge(int age) {
+    driver.findElement(By.xpath("//*[@id=\"fb_age\"]")).sendKeys(String.valueOf(age));
+  }
+
+
+  @Then("^I see feedback fields$")
+  public void iSeeFeedbackFields() {
+      assertNotEquals("https://janisdzalbe.github.io/example-site/tasks/provide_feedback",driver.getCurrentUrl());
+  }
+
+  @And("^I check field fb name: \"([^\"]*)\"$")
+  public void iCheckFieldFbName(String name) {
+    assertEquals(name, driver.findElement(By.id("name")).getText());
+  }
+
+
+  @And("^I check field fb-age: (\\d+)$")
+  public void iCheckFieldFbAgeFbAge(int age) {
+    assertEquals(age, Integer.parseInt(driver.findElement(By.id("age")).getText()));
   }
 }
