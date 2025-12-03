@@ -5,8 +5,9 @@
 #   * enter text instead of the number
 # - Scenario for correct number
 
-Feature: Task 1
-  scenario outline for error cases. One example for each case
+Feature: Numbers page
+  As a user
+  I want to be able to find the square root of a valid number
 
   Background:
     Given I am on the numbers page
