@@ -27,7 +27,7 @@ Feature: Introduction to cucumber part 3
 #   Navigate to page
 #   Set name and age based on test Examples
 #   Click "Send" button and verify that previous input is displayed in correct fields
-  Scenario Outline: for 'Give us your feedback!' page
+  Scenario Outline: Verify Feedback page
     Given I am on feedback page
     When I enter name in Feedback page: "<name>"
     And I enter age in Feedback page: <age>
