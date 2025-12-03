@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -170,6 +171,48 @@ public class SampleSteps {
         WebElement ageField =driver.findElement(By.id("age"));
         assertEquals(name,nameField.getText() );
         assertEquals(String.valueOf(age),ageField.getText());
+    }
+    @Given ("^I am on enter a number page$")
+    public void iGoToEnterNumberPage()
+    {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+
+    @When("^I enter a not valid number ([A-Za-z0-9]+)$")
+    public void enterInvalidNumber(String input) {
+        WebElement numberField =driver.findElement(By.id("numb"));
+        numberField.sendKeys(input);
+    }
+
+    @And ("^I click submit$")
+    public void iClickSubmit()
+    {
+        WebElement submitBtn =driver.findElement(By.xpath("//*[text()='Submit']"));
+        submitBtn.click();
+    }
+
+    @When("I see error message \"([^\"]*)\"$")
+    public void iValidateErrorMsg(String msg) {
+        WebElement errorMsg =driver.findElement(By.id("ch1_error"));
+        assertEquals(msg, errorMsg.getText());
+    }
+    @And("^I enter a number 60")
+    public void entervalidNumber() {
+        WebElement numberField =driver.findElement(By.id("numb"));
+        numberField.sendKeys("60");
+    }
+    @And("I see alert with correct SquareRoot")
+    public void validateSquareRoot() {
+        Alert alert = driver.switchTo().alert();
+        String alertMsg= alert.getText();
+        double result = Math.round(Math.sqrt(60) * 100.0) / 100.0;
+        assertEquals("Square root of "+60+" is "+ result, alertMsg);
+        alert.accept();
+    }
+    @Then("I should not see error msg")
+    public void iSeeNoError() {
+        WebElement errorMsg = driver.findElement(By.id("ch1_error"));
+        assertEquals("", errorMsg.getText());
     }
 }
 
