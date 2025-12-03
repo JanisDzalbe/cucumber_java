@@ -11,8 +11,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -121,9 +120,18 @@ public class SampleSteps {
         assertTrue(btn2.isEnabled());
     }
 
+    @And("^I see error: \"([^\"]*)\"")
+    public void validateErrorMsg(String errorMsg) {
+        WebElement errorMsgObj = driver.findElement(By.id("error"));
+        assertTrue(errorMsgObj.isDisplayed());
+        assertEquals(errorMsg, errorMsgObj.getText());
+    }
 
-
-
-
-
+    @And("^I am not navigated to age message page$")
+    public void validateNavigation()
+        {
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age",driver.getCurrentUrl());
+        assertFalse(driver.getCurrentUrl().contains("https://janisdzalbe.github.io/example-site/examples/age_2.html?name=fgg&age=99") );
+    }
 }
+
