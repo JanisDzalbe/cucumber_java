@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -99,7 +100,7 @@ public class SampleSteps {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
 
-    // Task 1
+    // Sample Task 1
 
     @When("^I am on the locators page$")
     public void iAmOnTheLocatorsPage() throws Throwable {
@@ -120,7 +121,7 @@ public class SampleSteps {
         assertTrue(driver.findElement(By.cssSelector("[name='randomButton2']")).isEnabled());
     }
 
-    // Task 2
+    // Sample Task 2
 
     @Then("^I see error: \"([^\"]*)\"$")
     public void notEnteredAge(String errorText) throws Throwable {
@@ -133,5 +134,44 @@ public class SampleSteps {
         assertFalse(driver.getCurrentUrl().contains("https://janisdzalbe.github.io/example-site/examples/age_2.html"));
         assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
     }
+
+    // Individual Task 1
+
+    @Given("^the user is on the Enter a number page$")
+    public void theUserIsOnEnterNumberPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+
+    @When("^the user enters \"([^\"]*)\" into the number field$")
+    public void theUserEntersIntoNumberField(String inputValue) {
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(inputValue);
+    }
+
+    @And("^the user clicks the Submit button$")
+    public void theUserClicksSubmitButton() {
+        driver.findElement(By.className("w3-orange")).click();
+    }
+
+    @Then("^the error message \"([^\"]*)\" should be displayed$")
+    public void theErrorMessageShouldBeDisplayed(String expectedError) {
+        String actualError = driver.findElement(By.id("ch1_error")).getText();
+        assertEquals(expectedError, actualError);
+    }
+
+    @Then("^the result \"([^\"]*)\" should be displayed$")
+    public void theResultShouldBeDisplayed(String expectedResult) {
+        Alert alert = driver.switchTo().alert();
+        String text = alert.getText();
+
+        // Extract last number
+        String[] numbers = text.replaceAll("[^0-9. ]", "").trim().split(" ");
+        String actualResult = numbers[numbers.length - 1];
+
+        assertEquals(expectedResult, actualResult);
+
+        alert.accept();
+    }
+
 
 }
