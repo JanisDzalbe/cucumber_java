@@ -41,8 +41,8 @@ public class Task1Steps {
         driver.findElement(By.tagName("button")).click();
     }
 
-    @Then("^I see the message: \"([^\"]*)\"$")
-    public void iSeeTheMessage(String message) {
+    @Then("^I see the error: \"([^\"]*)\"$")
+    public void iSeeTheError(String message) {
         assertEquals(message, driver.findElement(By.id("ch1_error")).getText());
     }
 
@@ -56,7 +56,7 @@ public class Task1Steps {
         assertEquals(alertAssertion, alert.getText());
     }
 
-    @And("^I check no error message is shown after closing the alert$")
+    @Then("^I check no error message is shown after closing the alert$")
     public void iCheckNoErrorMessageIsShownAfterClosingTheAlert() {
         driver.switchTo().alert().accept();
         assertFalse(driver.findElement(By.id("ch1_error")).isDisplayed());
