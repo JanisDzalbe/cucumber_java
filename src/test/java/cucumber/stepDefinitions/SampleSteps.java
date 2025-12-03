@@ -6,6 +6,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
@@ -99,4 +100,35 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+    //Sample 1 Task....................................................................
+
+    @When("^I am on the locators page$")
+    public void navigateToLocatorsPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void verifyLocatorsPageHeaders() throws Throwable {
+        assertTrue("Heading 1 is not visible",
+                driver.findElement(By.id("heading_1")).isDisplayed());
+
+        assertTrue("Heading 2 is not visible",
+                driver.findElement(By.id("heading_2")).isDisplayed());
+    }
+
+    @And("^Buttons in Locators page are clickable$")
+    public void verifyButtonsInLocatorsPage() throws Throwable {
+        List<WebElement> buttons =
+                driver.findElements(By.cssSelector("input[type='button']"));
+
+        assertTrue("Expected at least one button on the page", buttons.size() > 0);
+
+        for (WebElement btn : buttons) {
+            assertTrue("Button is not shown on the screen", btn.isDisplayed());
+            assertTrue("Button is disabled", btn.isEnabled());
+        }
+    }
+
+
 }
