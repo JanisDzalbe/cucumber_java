@@ -144,14 +144,14 @@ public class SampleSteps {
   }
 
   // sample 3
-  @And("I click send")
+  @And("^I click send$")
   public void iClickSend() {
     // Write code here that turns the phrase above into concrete actions
     driver.findElement(By.xpath("//*[@id=\"fb_form\"]/form/button")).click();
   }
 
 
-  @When("I enter fb name: {string}")
+  @When("^I enter fb name: \"([^\"]*)\"$")
   public void iEnterFbName(String arg0) {
     driver.findElement(By.xpath("//*[@id=\"fb_name\"]")).clear();
     driver.findElement(By.xpath("//*[@id=\"fb_name\"]")).sendKeys(arg0);
