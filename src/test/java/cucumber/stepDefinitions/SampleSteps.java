@@ -10,8 +10,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -22,7 +21,7 @@ public class SampleSteps {
 
     @Given("^I am on the home page$")
     public void iAmOnTheHomePage() throws Throwable {
-        driver.get("https://acctabootcamp.github.io/site");
+        driver.get("https://janisdzalbe.github.io/example-site");
     }
 
     @Then("^I should see home page header$")
@@ -98,5 +97,37 @@ public class SampleSteps {
     @Given("^I am on action page$")
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
+    }
+
+    // Sample1 Task
+    @When("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorsPageHeaders() throws Throwable {
+        assertTrue(driver.findElement(By.id("heading_1")).isDisplayed());
+        assertTrue(driver.findElement(By.id("heading_2")).isDisplayed());
+        assertEquals("Heading 1", driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text", driver.findElement(By.id("heading_2")).getText());
+    }
+
+    @And("^Buttons in Locators page are clickable$")
+    public void buttonsInLocatorsPageAreClickable() throws Throwable {
+        assertTrue(driver.findElement(By.cssSelector("[name='randomButton1']")).isEnabled());
+        assertTrue(driver.findElement(By.cssSelector("[name='randomButton2']")).isEnabled());
+    }
+
+    // Sample2 Task
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void errorMsg(String message) throws Throwable {
+        assertTrue(driver.findElement(By.id("error")).isDisplayed());
+        assertEquals(message, driver.findElement(By.id("error")).getText());
+    }
+    @And("^I am not navigated to age message page$")
+    public void msgPage() throws Throwable {
+        assertFalse(driver.getCurrentUrl().contains("https://janisdzalbe.github.io/example-site/examples/age_2"));
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
     }
 }
