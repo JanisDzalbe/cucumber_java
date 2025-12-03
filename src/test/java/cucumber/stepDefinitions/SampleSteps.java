@@ -66,7 +66,7 @@ public class SampleSteps {
         assertEquals(message, driver.findElement(By.id("message")).getText());
     }
 
-    /// Sample2 needed new methods
+    /// Sample2 implementation
     @Then("^I see error: \"([^\"]*)\"$")
     public void iSeeError(String expectedError) throws Throwable {
         assertTrue(driver.findElement(By.id("error")).isDisplayed());

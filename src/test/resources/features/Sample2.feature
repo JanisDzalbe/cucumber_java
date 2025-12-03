@@ -18,7 +18,7 @@ Feature: Introduction to cucumber part 2
     Then I see message: "Hello, Bob, you are an adult"
 
 #  TODO - Add implementation for missing steps
-   @test @anotherExample
+   @test @anotherexample
   Scenario: a new scenario error
     When I enter name: "John"
     And I click submit age
