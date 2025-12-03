@@ -238,4 +238,78 @@ public class SampleSteps {
     assertEquals(job, Person.findElement(By.className("job")).getText());
   }
 
+  @When("I click EditPerson {string}")
+  public void iClickEditPerson(String arg0) {
+    List<WebElement> Personlist = driver.findElements(By.xpath("//*[@id=\"listOfPeople\"]/div"));
+    WebElement Person = null;
+    for (WebElement element : Personlist) {
+      String inputVal = element.findElement(By.className("name")).getText();
+      if (inputVal.equals(arg0)) {
+        Person = element;
+        break;
+      }
+    }
+    WebElement Pencil = Person.findElement(By.xpath(".//i[@class='fa fa-pencil']"));
+    Pencil.click();
+  }
+  @And("I Change job: {string}")
+  public void iChangeJob(String arg0) {
+    driver.findElement(By.id("job")).clear();
+    driver.findElement(By.id("job")).sendKeys(arg0);
+  }
+
+
+  @And("i Click Edit")
+  public void iClickEdit() {
+    driver.findElement(By.xpath("//button[text()=\"Edit\"]")).click();
+  }
+
+  @When("I click RemovePerson name: {string} and job: {string}")
+  public void iClickRemovePersonNameAndJob(String name, String job) {
+    List<WebElement> Personlist = driver.findElements(By.xpath("//*[@id=\"listOfPeople\"]/div"));
+    WebElement Person = null;
+    for (WebElement element : Personlist) {
+      String inputVal = element.findElement(By.className("name")).getText();
+      String Jobval = element.findElement(By.className("job")).getText();
+      if (inputVal.equals(name) && Jobval.equals(job)) {
+        Person = element;
+
+        break;
+      }
+    }
+    WebElement removebtn = Person.findElement(By.xpath(".//*[contains(@class,'closebtn')]"));
+    removebtn.click();
+  }
+
+  @Then("I do not see name: {string} and job {string}")
+  public void iDoNotSeeNameAndJob(String name, String job) {
+    List<WebElement> allElements = driver.findElements(By.xpath("//*[@id=\"listOfPeople\"]/div"));
+    WebElement Person = null;
+    for (WebElement element : allElements) {
+      String inputVal = element.findElement(By.className("name")).getText();
+      String Jobval = element.findElement(By.className("job")).getText();
+      if (inputVal.equals(name) && Jobval.equals(job)) {
+        Person = element;
+        break;
+      }
+    }
+    assertNull(Person);
+  }
+
+  @And("I click ResetPersonList")
+  public void iClickResetPersonList() {
+    WebElement ResetList = driver.findElement(By.xpath("//button[text()=\"Reset List\"]"));
+    ResetList.click();
+  }
+
+  @And("I see Person Amount in List")
+  public void iSeePersonAmountInList() {
+    List<WebElement> allElements = driver.findElements(By.xpath("//*[@id=\"listOfPeople\"]/div"));
+    int count =0;
+    for (WebElement element : allElements) {
+      count++;
+    }
+  assertEquals(10,count);
+  }
+
 }
