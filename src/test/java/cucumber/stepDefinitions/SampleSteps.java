@@ -137,40 +137,37 @@ public class SampleSteps {
     }
 
 
-    // sample 3
-    @And("^I click send$")
-    public void iClickSend() {
-        // Write code here that turns the phrase above into concrete actions
-        driver.findElement(By.xpath("//*[@id=\"fb_form\"]/form/button")).click();
+    //sample 3 Task
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
     }
 
-
-    @When("^I enter fb name: \"([^\"]*)\"$")
-    public void iEnterFbName(String arg0) {
-        driver.findElement(By.xpath("//*[@id=\"fb_name\"]")).clear();
-        driver.findElement(By.xpath("//*[@id=\"fb_name\"]")).sendKeys(arg0);
+    @When("^I enter name in Feedback page: \"([^\"]*)\"$")
+    public void iEnterNameInFeedbackPage(String name) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
     }
 
-    @And("^I enter fb-age: (\\d+)$")
-    public void iEnterFbAgeFbAge(int age) {
-        driver.findElement(By.xpath("//*[@id=\"fb_age\"]")).sendKeys(String.valueOf(age));
+    @And("^I enter age in Feedback page: (\\d+)$")
+    public void iEnterAgeInFeedbackPage(int age) throws Throwable {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
     }
 
-
-    @Then("^I see feedback fields$")
-    public void iSeeFeedbackFields() {
-        assertNotEquals("https://janisdzalbe.github.io/example-site/tasks/provide_feedback",driver.getCurrentUrl());
+    @And("^I click send button$")
+    public void iClickSendButton() throws Throwable {
+        driver.findElement(By.cssSelector("[type=\"submit\"]")).click();
     }
-
-    @And("^I check field fb name: \"([^\"]*)\"$")
-    public void iCheckFieldFbName(String name) {
+    @And("^I see name \"([^\"]*)\" in check Feedback page$")
+    public void iSeeNameInFeedbackPage(String name) throws Throwable {
         assertEquals(name, driver.findElement(By.id("name")).getText());
     }
 
-
-    @And("^I check field fb-age: (\\d+)$")
-    public void iCheckFieldFbAgeFbAge(int age) {
-        assertEquals(age, Integer.parseInt(driver.findElement(By.id("age")).getText()));
+    @And("^I see age (\\d+) in check Feedback page$")
+    public void iSeeAgeInCheckFeedbackPage(int age) throws Throwable{
+        assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
     }
 
 
