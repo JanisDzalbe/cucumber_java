@@ -146,6 +146,42 @@ public class SampleSteps {
                 messageElements.size() == 0);
     }
 
+    //Sample 3 Task..................................................................
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+    @When("^I type feedback name: \"([^\"]*)\"$")
+    public void iTypeFeedbackName(String name) throws Throwable {
+        driver.findElement(By.cssSelector("input[placeholder='Name']")).clear();
+        driver.findElement(By.cssSelector("input[placeholder='Name']")).sendKeys(name);
+    }
+    @When("^I type feedback age: (\\d+)$")
+    public void iTypeFeedbackAge(int age) throws Throwable {
+        driver.findElement(By.cssSelector("input[placeholder='Age']")).clear();
+        driver.findElement(By.cssSelector("input[placeholder='Age']"))
+                .sendKeys(String.valueOf(age));
+    }
+
+    @When("^I press the Send button$")
+    public void iPressTheSendButton() throws Throwable {
+        driver.findElement(By.xpath("//button[normalize-space()='Send']")).click();
+    }
+
+    @Then("^I should see feedback name: \"([^\"]*)\"$")
+    public void iShouldSeeFeedbackName(String name) throws Throwable {
+        String pageText = driver.findElement(By.tagName("body")).getText();
+        assertTrue("Expected feedback name to be shown",
+                pageText.contains("Your name: " + name));
+    }
+
+    @Then("I should see feedback age: {string}")
+    public void iShouldSeeFeedbackAge(String age) {
+        String pageText = driver.findElement(By.tagName("body")).getText();
+        assertTrue("Expected feedback age to be shown",
+                pageText.contains("Your age: " + age));
+    }
 
 
 }
