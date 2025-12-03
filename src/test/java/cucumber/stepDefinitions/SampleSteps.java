@@ -10,7 +10,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*
+import static org.junit.Assert.*;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -130,6 +130,39 @@ public class SampleSteps {
     public void assertUrlNotAgeMessagePage(String errorText) throws Throwable {
         assertFalse(driver.getCurrentUrl().contains("https://janisdzalbe.github.io/example-site/examples/age_2"));
         assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
+    }
+
+    //Sample Task 3
+    @Given("^I am on Feedback page$")
+    public void iAmOnTheFeedbackPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter name in Feedback page: \"([^\"]*)\"$")
+    public void iEnterNameInFeedback(String name) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @When("^I enter age in Feedback page: (\\d+)$")
+    public void iEnterAgeInFeedback(int age) throws Throwable {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @When("^I press Send feedback button$")
+    public void iSendFeedback() throws Throwable {
+        driver.findElement(By.cssSelector("[type=\"submit\"]")).click();
+    }
+
+    @Then("^I see name \"([^\"]*)\" in check Feedback page$")
+    public void iSeeNameInFeedbackCheck(String name) throws Throwable {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @Then("^I see age (\\d+) in check Feedback page$")
+    public void iSeeAgeInFeedbackCheck(int age) throws Throwable {
+        assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
     }
 }
 
