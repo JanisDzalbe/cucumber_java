@@ -5,14 +5,19 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -149,5 +154,53 @@ public class SampleSteps {
     @And("^I see age (\\d+) in check Feedback page$")
     public void iSeeAgeInCheckFeedbackPage(int age) throws Throwable{
         assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
+    }
+    
+    //Task 1
+    @Given("^I am on EnterNumber page$")
+    public void iAmOnEnterNumberPage() throws Throwable{
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+
+
+    @When("I enter value: \"([^\"]*)\"$")
+    public void iEnterNumberValue(String value) throws Throwable {
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(value);
+    }
+
+
+    @And("I click submit button")
+    public void iClickSubmitButton() throws Throwable {
+        driver.findElement(By.className("w3-btn")).click();
+    }
+
+    @Then("^I see an error: \"([^\"]*)\"$")
+    public void iSeeAnError(String message) throws Throwable {
+        assertEquals(message, driver.findElement(By.id("ch1_error")).getText());
+    }
+
+    @When("^I enter number: \"([^\"]*)\"$")
+    public void iEnterNumber(String value) throws Throwable{
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(String.valueOf(value));
+    }
+
+    @Then("^I see success alert for number \"([^\"]*)\"$")
+    public void iSeeSuccessAlert(String inputValue) throws Throwable{
+        double number = Double.parseDouble(inputValue);
+        double sqrt = Math.sqrt(number);
+        String sqrtRounded = String.format("%.2f", sqrt);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+        String expected = "Square root of " + inputValue + " is " + sqrtRounded;
+        assertEquals(expected, alert.getText());
+        alert.accept();
+    }
+
+    @And("I do not see an error message")
+    public void iDoNotSeeAnErrorMessage() throws Throwable{
+        WebElement error = driver.findElement(By.id("ch1_error"));
+        assertFalse("Error message should not be visible", error.isDisplayed());
     }
 }
