@@ -8,6 +8,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -22,8 +23,8 @@ public class Hooks {
         if (System.getProperty("os.name").contains("Mac") || System.getProperty("os.name").contains("mac"))
             System.setProperty("webdriver.chrome.driver", libWithDriversLocation + "chromedriver");
         else
-            System.setProperty("webdriver.chrome.driver", libWithDriversLocation + "chromedriver.exe");
-        driver = new ChromeDriver();
+            System.setProperty("webdriver.edge.driver", libWithDriversLocation + "msedgedriver.exe");
+        driver = new EdgeDriver();
         driver.manage().deleteAllCookies();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
