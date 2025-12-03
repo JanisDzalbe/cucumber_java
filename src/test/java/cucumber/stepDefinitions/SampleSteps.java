@@ -247,10 +247,11 @@ public class SampleSteps {
         double sqrtResult = Math.sqrt(Double.parseDouble(suitableValue));
         sqrtResult = Math.round(sqrtResult * 100 ) / 100.0;
 
-
         String checkResultFormatted =
                 "Square root of "  + suitableValue + " is "  +  String.format(Locale.US,"%.2f", sqrtResult);
-    //    System.out.println("------------" + checkResultFormatted);
+
+        // debug visual formatting
+        //    System.out.println("------------" + checkResultFormatted);
 
         Alert alert1 = driver.switchTo().alert();
         assertTrue(checkResultFormatted.equals(alert1.getText()));

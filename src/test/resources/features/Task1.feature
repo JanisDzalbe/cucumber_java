@@ -31,14 +31,14 @@ Feature: Task1
 
     @working_a
     Examples:
-      | suitableValue | result     | textResult |
-      | 81            |    9.00    |    Square root of 81 is 9.00   |
-      | 59            |    7.68    |    Square root of 59 is 7.68   |
-      | 94            |    9.70    |   Square root of 94 is 9.70    |
-      | 50            |    7.07    |   Square root of 50 is 7.07    |
-      | 51            |    7.14    |    Square root of 51 is 7.14   |
-      | 99            |    9.95    |    Square root of 99 is 9.95   |
-      | 100           |    10.00    |    Square root of 100 is 10.00 |
+      | suitableValue | result     |
+      | 81            |    9.00    |
+      | 59            |    7.68    |
+      | 94            |    9.70    |
+      | 50            |    7.07    |
+      | 51            |    7.14    |
+      | 99            |    9.95    |
+      | 100           |    10.00   |
 
   @part2.b_without_calculation
   Scenario Outline:  Fill the with correct numbers
@@ -50,14 +50,14 @@ Feature: Task1
 
     @working_b
     Examples:
-      | suitableValue | result     | textResult |
-      | 81            |    9.00    |    Square root of 81 is 9.00   |
-      | 59            |    7.68    |    Square root of 59 is 7.68   |
-      | 94            |    9.70    |   Square root of 94 is 9.70    |
-      | 50            |    7.07    |   Square root of 50 is 7.07    |
-      | 51            |    7.14    |    Square root of 51 is 7.14   |
-      | 99            |    9.95    |    Square root of 99 is 9.95   |
-      | 100           |    10.00    |    Square root of 100 is 10.00 |
+      | suitableValue |  textResult |
+      | 81            | Square root of 81 is 9.00   |
+      | 59            | Square root of 59 is 7.68   |
+      | 94            | Square root of 94 is 9.70   |
+      | 50            | Square root of 50 is 7.07   |
+      | 51            | Square root of 51 is 7.14   |
+      | 99            | Square root of 99 is 9.95   |
+      | 100           | Square root of 100 is 10.00 |
 
 
 
