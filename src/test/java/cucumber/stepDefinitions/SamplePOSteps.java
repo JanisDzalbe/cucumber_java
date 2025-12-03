@@ -1,16 +1,18 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import cucumber.pages_sample.*;
 
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class SamplePOSteps {
     private WebDriver driver;
@@ -52,5 +54,18 @@ public class SamplePOSteps {
     public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
         agePage.enterName(valuesToEnter.get("name"));
         agePage.enterAge(valuesToEnter.get("age"));
+    }
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeError(String errorTxt) throws Throwable {
+        assertTrue(errorTxt, driver.findElement(By.id("error")).isDisplayed());
+        assertEquals(errorTxt, driver.findElement(By.id("error")).getText());
+
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() throws Throwable{
+        assertFalse(driver.getCurrentUrl().contains("https://janisdzalbe.github.io/example-site/examples/age_2"));
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
     }
 }
