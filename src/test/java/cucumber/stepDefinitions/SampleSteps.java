@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -12,6 +13,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class SampleSteps {
@@ -170,5 +172,47 @@ public class SampleSteps {
         assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
     }
 
+
+
+    //Task 1
+
+    @Given("^I am on Number page$")
+    public void iAmOnNumberPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+
+    @When("^I enter a \"([^\"]*)\" in the number field$")
+    public void iEnterAValue(String number) throws Throwable {
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(number);
+    }
+
+    @And("^I click submit button$")
+    public void iClickSubmitButton() throws Throwable {
+        driver.findElement(By.className("w3-orange")).click();
+    }
+
+    @Then("^I see the error message \"([^\"]*)\"$")
+    public void iSeeErrorMessage(String expectedError) throws Throwable {
+        assertEquals(expectedError,
+                driver.findElement(By.id("ch1_error")).getText());
+    }
+    @When("^I enter a number: (\\d+)$")
+    public void iEnterANumber(int number) throws Throwable {
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(String.valueOf(number));
+    }
+
+    @Then("^I see message \"([^\"]*)\" in the popup window$")
+    public void iSeeMessageInPopup(String expectedMessage) throws Throwable {
+        Alert alert = driver.switchTo().alert();
+        assertEquals(expectedMessage, alert.getText());
+        alert.accept();
+    }
+
+    @And("^I do not see error message$")
+    public void iDoNotSeeErrorMessage() throws Throwable {
+        assertFalse(driver.findElement(By.id("ch1_error")).isDisplayed());
+    }
 
 }
