@@ -6,15 +6,21 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-
+import io.cucumber.java.en.*;
+import org.openqa.selenium.*;
 import java.util.List;
 import java.util.Map;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class SampleSteps {
     private WebDriver driver;
+
+    By feedbackNameInput = By.id("feedback-name");
+    By feedbackAgeInput = By.id("feedback-age");
+    By sendButton = By.id("submit-feedback");
+    By resultName = By.id("result-name");
+    By resultAge = By.id("result-age");
 
     public SampleSteps() {
         this.driver = Hooks.driver;
@@ -99,4 +105,98 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+
+    //Sample 1 task
+
+    @When("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() {driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothHeaders() {
+        WebElement h1 = driver.findElement(By.id("heading_1"));
+        WebElement h2 = driver.findElement(By.id("heading_2"));
+
+        assertTrue("Heading 1 is not visible!", h1.isDisplayed());
+        assertTrue("Heading 2 is not visible!", h2.isDisplayed());
+
+    }
+
+    @Then("^Buttons in Locators page are clickable$")
+    public void buttonsAreClickable() {
+
+        WebElement btn1 = driver.findElement(By.xpath("//input[@type='button' and @value='This is a button']"));
+        WebElement btn2 = driver.findElement(By.id("buttonId"));
+
+        assertTrue("Button 1 is not clickable", btn1.isDisplayed() && btn1.isEnabled());
+        assertTrue("Button 2 is not clickable", btn2.isDisplayed() && btn2.isEnabled());
+
+        btn1.click();
+        btn2.click();
+    }
+
+    //Sample 2 task
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeError(String expectedError) {
+        WebElement error = driver.findElement(By.id("error"));
+        assertEquals(expectedError, error.getText());
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() {
+
+        List<WebElement> message = driver.findElements(By.id("message"));
+
+        assertTrue("User was incorrectly navigated to age message page!", message.isEmpty());
+
+        assertTrue(driver.findElement(By.tagName("h2")).getText().contains("Name"));
+    }
+
+    //Sample 3 task
+
+    @Given("I am on the feedback page")
+    public void iAmOnTheFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("I enter feedback name {string}")
+    public void iEnterFeedbackName(String name) {
+        WebElement nameField = driver.findElement(By.name("name"));
+        nameField.clear();
+        nameField.sendKeys(name);
+    }
+
+    @And("^I enter feedback age (.*)$")
+    public void iEnterFeedbackAge(String age) {
+        WebElement ageInput = driver.findElement(By.id("fb_age"));
+        ageInput.clear();
+        ageInput.sendKeys(age);
+    }
+
+    @And("I click send feedback")
+    public void i_click_send_feedback() {
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+    }
+
+    @Then("^I should see feedback name \"([^\"]*)\"$")
+    public void iShouldSeeFeedbackName(String expectedName) {
+        WebElement nameSpan = driver.findElement(By.id("name"));
+        assertEquals(expectedName, nameSpan.getText());
+    }
+
+    @And("^I should see feedback age \"([^\"]*)\"$")
+    public void iShouldSeeFeedbackAge(String expectedAge) {
+        WebElement ageSpan = driver.findElement(By.id("age"));
+        assertEquals(expectedAge, ageSpan.getText());
+    }
+
+
+
+
+
+
+
 }
+
