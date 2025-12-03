@@ -120,4 +120,14 @@ public class SampleSteps {
         assertTrue(driver.findElement(By.cssSelector("[name='randomButton1']")).isEnabled());
         assertTrue(driver.findElement(By.cssSelector("[name='randomButton2']")).isEnabled());
     }
+    // Sample 2
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeError(String error) {
+        assertEquals(error, driver.findElement(By.id("error")).getText());;
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() {
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
+    }
 }
