@@ -19,8 +19,3 @@ Feature: Provide feedback page
       | Ann   | 5   |
       | Marry | 50  |
       | Bob   | 61  |
-
-    @not_working
-    Examples:
-      | name | age |
-      | Tom  | 15  |
