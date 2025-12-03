@@ -6,12 +6,14 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -19,6 +21,7 @@ public class SampleSteps {
     public SampleSteps() {
         this.driver = Hooks.driver;
     }
+
 
     @Given("^I am on the home page$")
     public void iAmOnTheHomePage() throws Throwable {
@@ -63,6 +66,22 @@ public class SampleSteps {
         assertEquals(message, driver.findElement(By.id("message")).getText());
     }
 
+    /// Sample2 needed new methods
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeError(String expectedError) throws Throwable {
+        assertTrue(driver.findElement(By.id("error")).isDisplayed());
+        assertEquals(expectedError, driver.findElement(By.id("error")).getText());
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() throws Throwable {
+        assertFalse(driver.getCurrentUrl().contains("https://janisdzalbe.github.io/example-site/examples/age_2"));
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
+
+    }
+    /// End of Sample2 implementation
+
+
     @When("^I enter values:$")
     public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
         for (Map.Entry<String, String> e : valuesToEnter.entrySet()) {
@@ -98,5 +117,28 @@ public class SampleSteps {
     @Given("^I am on action page$")
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
+    }
+
+    /// Sample1
+    ///When, Then and And for Sample1.feature TODO task
+    @When("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorsPageHeaders() throws Throwable {
+        assertTrue(driver.findElement(By.xpath("(//h2)[1]")).isDisplayed());
+        assertTrue(driver.findElement(By.xpath("(//h2)[2]")).isDisplayed());
+    }
+
+    @And("^Buttons in Locators page are clickable$")
+    public void buttonsInLocatorsPageAreClickable() throws Throwable {
+        List<WebElement> buttons = driver.findElements(By.cssSelector("button, input[type='button']"));
+
+        for (WebElement button : buttons) {
+            assertTrue(button.isDisplayed());
+            assertTrue(button.isEnabled());
+        }
     }
 }
