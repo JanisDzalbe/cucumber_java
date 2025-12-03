@@ -27,3 +27,16 @@ Feature: Introduction to cucumber part 3
 #   Navigate to page
 #   Set name and age based on test Examples
 #   Click "Send" button and verify that previous input is displayed in correct fields
+  Scenario Outline: a new scenario for feedback
+    Given I am on feedback page
+    When I enter fb name: "<name>"
+    And I enter fb-age: <fb-age>
+    And I click send
+    Then I see feedback fields
+    And I check field fb name: "<name>"
+    And I check field fb-age: <fb-age>
+    Examples:
+      | name | fb-age |
+      | a    | 4   |
+      | b    | 15  |
+      | c    | 50   |

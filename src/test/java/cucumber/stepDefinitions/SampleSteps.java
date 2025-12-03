@@ -12,6 +12,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -134,5 +135,43 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+
+    // sample 3
+    @And("^I click send$")
+    public void iClickSend() {
+        // Write code here that turns the phrase above into concrete actions
+        driver.findElement(By.xpath("//*[@id=\"fb_form\"]/form/button")).click();
+    }
+
+
+    @When("^I enter fb name: \"([^\"]*)\"$")
+    public void iEnterFbName(String arg0) {
+        driver.findElement(By.xpath("//*[@id=\"fb_name\"]")).clear();
+        driver.findElement(By.xpath("//*[@id=\"fb_name\"]")).sendKeys(arg0);
+    }
+
+    @And("^I enter fb-age: (\\d+)$")
+    public void iEnterFbAgeFbAge(int age) {
+        driver.findElement(By.xpath("//*[@id=\"fb_age\"]")).sendKeys(String.valueOf(age));
+    }
+
+
+    @Then("^I see feedback fields$")
+    public void iSeeFeedbackFields() {
+        assertNotEquals("https://janisdzalbe.github.io/example-site/tasks/provide_feedback",driver.getCurrentUrl());
+    }
+
+    @And("^I check field fb name: \"([^\"]*)\"$")
+    public void iCheckFieldFbName(String name) {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+
+    @And("^I check field fb-age: (\\d+)$")
+    public void iCheckFieldFbAgeFbAge(int age) {
+        assertEquals(age, Integer.parseInt(driver.findElement(By.id("age")).getText()));
+    }
+
 
 }
