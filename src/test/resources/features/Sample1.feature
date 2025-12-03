@@ -6,7 +6,7 @@ Feature: Introduction to cucumber part 1
     When I am on the home page
     Then I should see home page header
     And I should see home page description
-    And I should see menu
+    And I should see menu!
 
 #  TODO - Add implementation for missing steps
 #  @test
