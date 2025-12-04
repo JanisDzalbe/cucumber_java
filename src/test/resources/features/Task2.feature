@@ -10,7 +10,7 @@ Feature:
   I can Add a person, Edit a person, Remove a person and Reset the list
   Background:
    Given I am on ListOfPeople page
-#day 1 implementation dosent have data implementasations
+#day 1 implementation dosent have data implementations
   Scenario Outline: Adding a person
     When I click Add Person
     And  I enter name: "<name>"
@@ -55,7 +55,7 @@ Feature:
 
 
 
-#day 2 implementatio has data table implementation
+#day 2 implementations have data table implementation
   Scenario Outline: Adding a person
     When I click Add Person
     And I enter values:
