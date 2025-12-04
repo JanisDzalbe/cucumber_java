@@ -7,6 +7,8 @@ import io.cucumber.java.en.When;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 import java.util.Map;
@@ -166,6 +168,105 @@ public class SampleSteps {
     @And("^I see age (\\d+) in check feedback page$")
     public void iSeeAgeInCheckFeedbackPage(int age) throws Throwable {
         assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
+    }
+
+    // Sample Task 4
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPageTask() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        // Each language corresponds to checkbox with value="English", "Spanish", etc.
+        for (String lang : languages) {
+            driver.findElement(By.cssSelector("input[value='" + lang + "']")).click();
+        }
+    }
+
+    @And("^I click send feedback$")
+    public void iClickSendFeedback() {
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String expectedLanguages) {
+        String actualLanguages = driver.findElement(By.id("language")).getText();
+        assertEquals(expectedLanguages, actualLanguages);
+    }
+
+    // Sample 5
+
+    @When("^I fill feedback form with data$")
+    public void iFillFeedbackFormWithData(Map<String, String> data) {
+
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(data.get("name"));
+
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(data.get("age"));
+
+        String langInput = data.get("language");
+        if (langInput != null && !langInput.isEmpty()) {
+            List<WebElement> languages = driver.findElements(By.name("language"));
+            for (WebElement lang : languages) {
+                if (langInput.contains(lang.getAttribute("value"))) {
+                    lang.click();
+                }
+            }
+        }
+
+        String genderInput = data.get("gender");
+        if (genderInput != null && !genderInput.isEmpty()) {
+            List<WebElement> genders = driver.findElements(By.name("gender"));
+            for (WebElement g : genders) {
+                if (g.getAttribute("value").equalsIgnoreCase(genderInput)) {
+                    g.click();
+                    break;
+                }
+            }
+        }
+
+        if (data.get("option") != null && !data.get("option").isEmpty()) {
+            Select likeUsDropdown = new Select(driver.findElement(By.id("like_us")));
+            likeUsDropdown.selectByVisibleText(data.get("option"));
+        }
+
+        if (data.get("comment") != null) {
+            driver.findElement(By.name("comment")).clear();
+            driver.findElement(By.name("comment")).sendKeys(data.get("comment"));
+        }
+    }
+
+    @Then("^I should see submitted name \"([^\"]*)\"$")
+    public void iShouldSeeSubmittedName(String expectedName) {
+        String actual = driver.findElement(By.id("name")).getText();
+        assertEquals(expectedName, actual);
+    }
+
+    @Then("^I should see submitted age \"([^\"]*)\"$")
+    public void iShouldSeeSubmittedAge(String expectedAge) {
+        String actual = driver.findElement(By.id("age")).getText();
+        assertEquals(expectedAge, actual);
+    }
+
+    @Then("^I should see submitted gender \"([^\"]*)\"$")
+    public void iShouldSeeSubmittedGender(String expectedGender) {
+        String actual = driver.findElement(By.id("gender")).getText();
+        assertEquals(expectedGender, actual);
+    }
+
+    @Then("^I should see submitted option \"([^\"]*)\"$")
+    public void iShouldSeeSubmittedOption(String expectedOption) {
+        String actual = driver.findElement(By.id("option")).getText();
+        assertEquals(expectedOption, actual);
+    }
+
+    @Then("^I should see submitted comment \"([^\"]*)\"$")
+    public void iShouldSeeSubmittedComment(String expectedComment) {
+        String actual = driver.findElement(By.id("comment")).getText();
+        assertEquals(expectedComment, actual);
     }
 
 
