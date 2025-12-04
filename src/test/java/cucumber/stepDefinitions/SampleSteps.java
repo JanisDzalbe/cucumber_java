@@ -7,15 +7,17 @@ import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class SampleSteps {
-    private WebDriver driver;
+    private static WebDriver driver;
 
     public SampleSteps() {
         this.driver = Hooks.driver;
@@ -172,7 +174,6 @@ public class SampleSteps {
     }
 
 
-
     //Task 1
 
     @Given("^I (?:am on|open) Number page$")
@@ -203,7 +204,6 @@ public class SampleSteps {
 
         assertEquals(error, actualError);
     }
-
 
 
     @When("^I enter number: (\\d+)$")
@@ -250,7 +250,7 @@ public class SampleSteps {
         iSetName(inputMap.get("name"));
         driver.findElement(By.id("fb_age")).clear();
         driver.findElement(By.id("fb_age")).sendKeys(inputMap.get("age"));
-        driver.findElement(By.cssSelector("[type='radio'][value='"+inputMap.get("gender")+"']")).click();
+        driver.findElement(By.cssSelector("[type='radio'][value='" + inputMap.get("gender") + "']")).click();
     }
 
     @When("^I can see values in feedback check$")
@@ -260,5 +260,235 @@ public class SampleSteps {
         assertEquals(inputMap.get("gender"), driver.findElement(By.id("gender")).getText());
     }
 
+    //TASK 2
 
+    @Given("^I am on List of People With Jobs page$")
+    public void iAmOnPeopleJobsPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+    }
+
+    int initialCount;
+    List<String> originalList = new ArrayList<>();
+    WebElement removedPerson;
+    WebElement firstPerson;
+    String originalFirstPersonName;
+    String removedPersonIdentifier;
+
+    //Adding a person
+    @When("^I click on add person button$")
+    public void clickAddPersonButton() throws Throwable {
+        List<WebElement> people = driver.findElements(By.className("w3-padding-16"));
+        initialCount = people.size();
+
+        WebElement addPersonButton = driver.findElement(By.xpath("(//button[text()='Add person'])"));
+        assertTrue(addPersonButton.isDisplayed());
+        assertTrue(addPersonButton.isEnabled());
+        addPersonButton.click();
+    }
+
+    @Then("^I am redirected to Enter a New Person page$")
+    public void assertRedirectionToAddPersonPage() throws Throwable {
+        assertTrue(driver.getCurrentUrl().contains("https://janisdzalbe.github.io/example-site/tasks/enter_a_new_person_with_a_job.html"));
+    }
+
+    @When("^I enter name and job$")
+    public void enterNameAndJob(Map<String, String> inputMap) throws Throwable {
+        WebElement nameInput = driver.findElement(By.cssSelector("#name"));
+        WebElement jobInput = driver.findElement(By.cssSelector("#job"));
+
+        assertTrue(nameInput.isDisplayed());
+        assertTrue(jobInput.isDisplayed());
+
+        nameInput.clear();
+        nameInput.sendKeys(inputMap.get("name"));
+
+        jobInput.clear();
+        jobInput.sendKeys(inputMap.get("job"));
+
+        Thread.sleep(2000);
+    }
+
+    @And("^I click Add button$")
+    public void clickModalAddButon() throws Throwable {
+        WebElement addModalButton = driver.findElement(By.xpath("//button[@id='modal_button' and text()='Add']"));
+        assertTrue(addModalButton.isDisplayed());
+        assertTrue(addModalButton.isEnabled());
+        addModalButton.click();
+    }
+
+    @Then("^I see added person in the end of the list$")
+    public void assertNewPersonIsAdded(Map<String, String> inputMap) throws Throwable {
+        List<WebElement> peopleUpdated = driver.findElements(By.className("w3-padding-16"));
+
+        WebElement addedPerson = peopleUpdated.get(peopleUpdated.size() - 1);
+
+        assertTrue(addedPerson.isDisplayed());
+
+        String actualName = addedPerson.findElement(By.className("name")).getText();
+        String actualJob = addedPerson.findElement(By.className("job")).getText();
+
+        assertEquals(inputMap.get("name"), actualName);
+        assertEquals(inputMap.get("job"), actualJob);
+
+        int actualListSize = peopleUpdated.size();
+        assertNotEquals(initialCount, actualListSize);
+
+        Thread.sleep(3000);
+    }
+
+    //Editing a person
+    @When("^I click on edit button for person with index: (\\d+)$")
+    public void clickEditPersonButton(int index) throws Throwable {
+        List<WebElement> people = driver.findElements(By.className("w3-padding-16"));
+        initialCount = people.size();
+
+        assertTrue(index >= 0 && index < people.size());
+
+        WebElement editedPerson = people.get(index);
+        assertTrue(editedPerson.isDisplayed());
+
+        WebElement editedPersonEditButton = editedPerson.findElement(By.className("editbtn"));
+        assertTrue(editedPersonEditButton.isDisplayed());
+        assertTrue(editedPersonEditButton.isEnabled());
+        editedPersonEditButton.click();
+    }
+
+    @And("^I click Edit button$")
+    public void clickModalEditButon() throws Throwable {
+        WebElement editModalButton = driver.findElement(By.xpath("//button[@id='modal_button' and text()='Edit']"));
+        assertTrue(editModalButton.isDisplayed());
+        assertTrue(editModalButton.isEnabled());
+        editModalButton.click();
+
+        Thread.sleep(2000);
+    }
+
+    @Then("^I see edited person with (\\d+) on the list$")
+    public void assertPersonEdited(int index, Map<String, String> inputMap) throws Throwable {
+        List<WebElement> people = driver.findElements(By.className("w3-padding-16"));
+        WebElement addedPerson = people.get(index);
+
+        String actualName = addedPerson.findElement(By.className("name")).getText();
+        String actualJob = addedPerson.findElement(By.className("job")).getText();
+
+        assertEquals(inputMap.get("name"), actualName);
+        assertEquals(inputMap.get("job"), actualJob);
+
+        assertEquals(initialCount, people.size());
+    }
+
+    //Removing a person
+    @When("^I click on remove button for person with index (\\d+)$")
+    public void clickRemovePersonButton(int index) throws Throwable {
+        List<WebElement> people = driver.findElements(By.className("w3-padding-16"));
+        initialCount = people.size();
+        originalList.clear();
+
+        for (WebElement person : people) {
+            String name = person.findElement(By.className("name")).getText().trim();
+            String job = person.findElement(By.className("job")).getText().trim();
+            originalList.add(name + " | " + job);
+        }
+
+        WebElement personToRemove = people.get(index);
+        assertTrue(personToRemove.isDisplayed());
+
+        String name = personToRemove.findElement(By.className("name")).getText().trim();
+        String job  = personToRemove.findElement(By.className("job")).getText().trim();
+        removedPersonIdentifier = name + " | " + job;
+
+        WebElement removedPersonRemoveButton =
+                personToRemove.findElement(By.className("closebtn"));
+        assertTrue(removedPersonRemoveButton.isDisplayed());
+        assertTrue(removedPersonRemoveButton.isEnabled());
+        removedPersonRemoveButton.click();
+    }
+
+    @Then("^The removed person is not on the list$")
+    public void assertRemovePersonNotOnList() throws Throwable {
+        List<WebElement> peopleUpdated = driver.findElements(By.className("w3-padding-16"));
+        List<String> actualList = new ArrayList<>();
+
+        for (WebElement person : peopleUpdated) {
+            String name = person.findElement(By.className("name")).getText().trim();
+            String job = person.findElement(By.className("job")).getText().trim();
+            actualList.add(name + " | " + job);
+        }
+
+        assertNotEquals(originalList, actualList);
+        assertNotEquals(originalList.size(), actualList.size());
+
+        assertFalse(actualList.contains(removedPersonIdentifier));
+
+        Thread.sleep(5000);
+    }
+
+    //Resetting the list
+
+    @When("^I click on first person's edit button$")
+    public void editFirstPersonName() throws Throwable {
+        List<WebElement> people = driver.findElements(By.className("w3-padding-16"));
+
+        originalList.clear();
+
+        for (WebElement person : people) {
+            String name = person.findElement(By.className("name")).getText().trim();
+            String job  = person.findElement(By.className("job")).getText().trim();
+            originalList.add(name + " | " + job);
+        }
+
+        firstPerson = people.get(0);
+        originalFirstPersonName = firstPerson.findElement(By.className("name")).getText().trim();
+
+        WebElement firstPersonEditButton = firstPerson.findElement(By.className("editbtn"));
+        assertTrue(firstPersonEditButton.isDisplayed());
+        assertTrue(firstPersonEditButton.isEnabled());
+        firstPersonEditButton.click();
+    }
+
+    @When("^I enter a different name$")
+    public void enterNameAndJob() throws Throwable {
+        WebElement nameInput = driver.findElement(By.cssSelector("#name"));
+
+        assertTrue(nameInput.isDisplayed());
+
+        nameInput.clear();
+        nameInput.sendKeys(("Alice"));
+
+        Thread.sleep(2000);
+    }
+
+    @Then("^I see first person's edited name$")
+    public void assertFirstNameChanged() throws Throwable {
+        List<WebElement> peopleUpdated = driver.findElements(By.className("w3-padding-16"));
+
+        WebElement updatedFirstPerson = peopleUpdated.get(0);
+
+        String updatedName = updatedFirstPerson.findElement(By.className("name")).getText().trim();
+
+        assertNotEquals(originalFirstPersonName, updatedName);
+    }
+
+
+    @When("^I click on Reset List button$")
+    public void clickResetListButton() throws Throwable {
+        WebElement resetButton = driver.findElement(By.xpath("//button[text()='Reset List']"));
+        assertTrue(resetButton.isDisplayed());
+        assertTrue(resetButton.isEnabled());
+        resetButton.click();
+    }
+
+    @Then("^I see that the list is reset$")
+    public void assertListReset() throws Throwable {
+        List<WebElement> peopleUpdated = driver.findElements(By.className("w3-padding-16"));
+        List<String> actualList = new ArrayList<>();
+
+        for (WebElement person : peopleUpdated) {
+            String name = person.findElement(By.className("name")).getText().trim();
+            String job = person.findElement(By.className("job")).getText().trim();
+            actualList.add(name + " | " + job);
+        }
+
+        assertEquals(originalList, actualList);
+    }
 }
