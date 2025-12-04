@@ -121,7 +121,7 @@ public class SampleSteps {
         assertTrue(btn2.isEnabled());
     }
 
-    @And("^I see error: \"([^\"]*)\"")
+    @And("^I see error: \"([^\"]*)\"$")
     public void validateErrorMsg(String errorMsg) {
         WebElement errorMsgObj = driver.findElement(By.id("error"));
         assertTrue(errorMsgObj.isDisplayed());

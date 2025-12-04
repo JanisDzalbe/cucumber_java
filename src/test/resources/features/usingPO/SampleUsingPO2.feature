@@ -17,9 +17,16 @@ Feature: Introduction to cucumber part 2
     And I click submit age using PO
     Then I see message: "Hello, Bob, you are an adult" using PO
 
+@test
 #  TODO - Add implementation for missing steps
 #  Scenario: a new scenario error
 #    When I enter name: "John" using PO
 #    And I click submit age using PO
 #    Then I see error: "You haven't entered anything in age field" using PO
 #    And I remain in age page using PO
+  Scenario: a new scenario error
+    Given I open age page using PO
+    When I enter name: "John" using PO
+    And I click submit age using PO
+    Then I see error: "You haven't entered anything in age field" using PO
+    Then I remain in age page using PO
