@@ -281,6 +281,100 @@ public class SampleSteps {
 
     // Task 2
 
+    @Given("I am on people with jobs page")
+    public void iAmOnPeopleWithJobsPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+    }
+
+    @When("I click add person button")
+    public void iClickAddPersonButton() {
+        driver.findElement(By.id("addPersonBtn")).click();
+    }
+
+    @When("I enter person name {string}")
+    public void iEnterPersonName(String name) {
+        WebElement nameInput = driver.findElement(By.id("name"));
+        nameInput.clear();
+        nameInput.sendKeys(name);
+    }
+
+    @When("I enter person job {string}")
+    public void iEnterPersonJob(String job) {
+        WebElement jobInput = driver.findElement(By.id("job"));
+        jobInput.clear();
+        jobInput.sendKeys(job);
+    }
+
+    @When("I confirm add person")
+    public void iConfirmAddPerson() {
+        driver.findElement(By.id("modal_button")).click();
+    }
+
+    @Then("I should see person {string} with job {string}")
+    public void iShouldSeePersonWithJob(String name, String job) {
+        WebElement list = driver.findElement(By.id("listOfPeople"));
+        String listText = list.getText();
+        assertTrue(listText.contains(name));
+        assertTrue(listText.contains(job));
+    }
+
+    @When("I click edit button for person {int}")
+    public void iClickEditButtonForPerson(int index) {
+        List<WebElement> editButtons = driver.findElements(By.cssSelector(".editbtn"));
+        editButtons.get(index - 1).click();
+    }
+
+    @When("I update person name {string}")
+    public void iUpdatePersonName(String newName) {
+        WebElement nameInput = driver.findElement(By.id("name"));
+        nameInput.clear();
+        nameInput.sendKeys(newName);
+    }
+
+    @When("I update person job {string}")
+    public void iUpdatePersonJob(String newJob) {
+        WebElement jobInput = driver.findElement(By.id("job"));
+        jobInput.clear();
+        jobInput.sendKeys(newJob);
+    }
+
+    @When("I confirm edit person")
+    public void iConfirmEditPerson() {
+        driver.findElement(By.id("modal_button")).click();
+    }
+
+    @When("I click delete button for person {int}")
+    public void iClickDeleteButtonForPerson(int index) {
+
+        int zeroBased = index - 1;
+
+        WebElement deleteBtn = driver.findElement(By.xpath("//span[contains(@onclick,'deletePerson(" + zeroBased + ")')]"));
+
+        deleteBtn.click();
+    }
+
+    @Then("person {int} should not exist")
+    public void personShouldNotExist(int index) {
+
+        int zeroBased = index - 1;
+
+        List<WebElement> person = driver.findElements(By.id("person" + zeroBased));
+
+        assertTrue("Person was NOT deleted!", person.isEmpty());
+    }
+
+    @When("I click reset list button")
+    public void iClickResetListButton() {
+        WebElement resetBtn = driver.findElement(By.xpath("//button[contains(text(),'Reset List')]"));
+        resetBtn.click();
+    }
+
+
+    @Then("original people list is restored")
+    public void originalPeopleListIsRestored() {
+        List<WebElement> names = driver.findElements(By.cssSelector(".name"));
+        assertEquals("Original list was not restored!", 10, names.size());
+    }
 
 }
 
