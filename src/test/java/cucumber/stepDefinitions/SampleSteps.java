@@ -204,4 +204,34 @@ public class SampleSteps {
     public void noErrorIsShown() throws Throwable {
         assertTrue(driver.findElements(By.id("ch1_error")).isEmpty());
     }
-}
+
+    // Sample4 task
+    @When("^I select Feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) throws Throwable {
+        for (String lang : languages) {
+            driver.findElement(By.xpath("//*[@type='checkbox' and @value='"+lang+"']")).click();
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iSeeLanguages(String languages) throws Throwable {
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+
+    // Sample5 task
+    @When("^I enter new values$")
+    public void iEnterNewValues(Map<String, String> inputMap) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(inputMap.get("Name"));
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(inputMap.get("Age"));
+        driver.findElement(By.cssSelector("[type='radio'][value='"+inputMap.get("Genre").toLowerCase()+"']")).click();
+    }
+
+    @Then("^I can see new values in feedback check$")
+    public void iCanSeeNewValues(Map<String, String> inputMap) throws Throwable {
+            assertEquals(inputMap.get("Name"), driver.findElement(By.id("name")).getText());
+            assertEquals(inputMap.get("Age"), driver.findElement(By.id("age")).getText());
+            assertEquals(inputMap.get("Genre").toLowerCase(), driver.findElement(By.id("gender")).getText());
+        }
+    }
