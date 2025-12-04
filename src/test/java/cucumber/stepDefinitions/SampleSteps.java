@@ -12,10 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SampleSteps {
     private WebDriver driver;
-
+    int originalAmountOfPeople;
     public SampleSteps() {
         this.driver = Hooks.driver;
     }
@@ -234,4 +235,81 @@ public class SampleSteps {
             assertEquals(inputMap.get("Age"), driver.findElement(By.id("age")).getText());
             assertEquals(inputMap.get("Genre").toLowerCase(), driver.findElement(By.id("gender")).getText());
         }
+
+    // Task 2
+    @Given("^I am on People with jobs page$")
+    public void iAmOnPeopleWithJobsPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
     }
+
+    @When("^I click Add person button$")
+    public void iClickAddPersonButton() throws Throwable {
+        driver.findElement(By.xpath("//*[@id='addPersonBtn' and text()='Add person']")).click();
+    }
+
+    @And("^I add a new person$")
+    public void iAddNewPerson(Map<String, String> inputMap) throws Throwable {
+        driver.findElement(By.id("name")).clear();
+        driver.findElement(By.id("name")).sendKeys(inputMap.get("name"));
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("job")).sendKeys(inputMap.get("job"));
+    }
+
+    @When("^I click Add button$")
+    public void iClickAddButton() throws Throwable {
+        driver.findElement(By.xpath("//*[@id='modal_button' and text()='Add']")).click();
+    }
+
+    @Then("^I can see added person in People with jobs list$")
+    public void iCanSeeAddedPersonInPeopleWithJobsList(Map<String, String> inputMap) throws Throwable {
+        assertEquals(inputMap.get("name"), driver.findElement(By.cssSelector("#person10 .name")).getText());
+        assertEquals(inputMap.get("job"), driver.findElement(By.cssSelector("#person10 .job")).getText());
+        assertTrue(driver.findElement(By.cssSelector("#person10 .name")).isDisplayed());
+        assertTrue(driver.findElement(By.cssSelector("#person10 .job")).isDisplayed());
+    }
+
+    @When("^I click Edit person button$")
+    public void iClickEditPersonButton() throws Throwable {
+        driver.findElement(By.cssSelector("#person5 .editbtn")).click();
+    }
+
+    @And("^I change Job field$")
+    public void iChangeJobField(Map<String, String> inputMap) throws Throwable {
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("job")).sendKeys(inputMap.get("job"));
+    }
+
+    @And("^I click Edit button$")
+    public void iClickEditButton() throws Throwable {
+        driver.findElement(By.xpath("//*[@id='modal_button' and text()='Edit']")).click();
+    }
+
+    @Then("^I can see persons new job$")
+    public void iCanSeePersonsNewJob(Map<String, String> inputMap) throws Throwable {
+        assertEquals(inputMap.get("job"), driver.findElement(By.cssSelector("#person5 .job")).getText());
+        assertTrue(driver.findElement(By.cssSelector("#person5 .job")).isDisplayed());
+    }
+
+    @And("^I click Remove person button$")
+    public void iClickRemovePersonButton() throws Throwable {
+        driver.findElement(By.cssSelector("#person8 .closebtn")).click();
+    }
+
+    @Then("^I can see person is removed from the list$")
+    public void iCanSeePersonIsRemovedFromTheList() throws Throwable {
+        assertTrue(driver.findElements(By.cssSelector("#person8")).isEmpty());
+        originalAmountOfPeople = driver.findElements(By.cssSelector(".person")).size() + 1;
+        assertEquals(originalAmountOfPeople - 1, driver.findElements(By.cssSelector(".person")).size());
+    }
+
+    @When("^I click Reset List button$")
+    public void iClickResetListButton() throws Throwable {
+        driver.findElement(By.xpath("//*[@id='addPersonBtn' and text()='Reset List']")).click();
+    }
+
+    @Then("^I can see original list$")
+    public void iCanSeeOriginalList() throws Throwable {
+        originalAmountOfPeople = driver.findElements(By.cssSelector(".person")).size();
+        assertEquals(originalAmountOfPeople, driver.findElements(By.cssSelector(".person")).size());
+    }
+}
