@@ -7,6 +7,7 @@ import io.cucumber.java.en.When;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -234,5 +236,99 @@ public class SampleSteps {
         assertEquals(inputMap.get("age"), driver.findElement(By.id("age")).getText());
         assertEquals(inputMap.get("gender").toLowerCase(), driver.findElement(By.id("gender")).getText());
     }
+
+    //Task 2
+    @Given("^I am on people with jobs page$")
+    public void iAmOnPeopleWithJobsPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+    }
+
+    @When("^I click add person button$")
+    public void iClickAddPersonButton() {
+        driver.findElement(By.cssSelector("button[onclick*='openModalForAddPersonWithJob']")).click();
+    }
+
+    @When("^I click reset list button$")
+    public void iClickResetListButton() {
+        driver.findElement(By.cssSelector("button[onclick*='resetListOfPeople']")).click();
+    }
+
+    @When("^I click remove button for \"([^\"]*)\"$$")
+    public void iClickRemovePersonButton(String name) {
+        WebElement person = driver.findElement(By.xpath("//div[@class='w3-padding-16'][.//*[@class='w3-xlarge name' and  text()='"+name+"']]"));
+        person.findElement(By.cssSelector(".closebtn")).click();
+    }
+
+    @And("^I click add button$")
+    public void iClickAddButton() {
+        driver.findElement(By.xpath("//*[@id='modal_button' and text()='Add']")).click();
+    }
+
+    @When("^I click edit button for \"([^\"]*)\"$")
+    public void iClickEditButton(String name) throws Exception {
+        WebElement person = driver.findElement(By.xpath("//div[@class='w3-padding-16'][.//*[@class='w3-xlarge name' and  text()='"+name+"']]"));
+        person.findElement(By.cssSelector(".editbtn")).click();
+    }
+
+    @And("^I click save edit button$")
+    public void iClickSaveEditButton() {
+        driver.findElement(By.xpath("//*[@id='modal_button' and text()='Edit']")).click();
+    }
+
+    @And("^I input name \"([^\"]*)\" and job \"([^\"]*)\"$")
+    public void iInputNameAndJob(String name, String job) throws Exception {
+        WebElement nameField = driver.findElement(By.xpath("//div[@id='addEditPerson']//input[@id='name']"));
+        WebElement jobField = driver.findElement(By.xpath("//div[@id='addEditPerson']//input[@id='job']"));
+        nameField.clear();
+        jobField.clear();
+        nameField.sendKeys(name);
+        jobField.sendKeys(job);
+        assertEquals(name, nameField.getDomProperty("value"));
+        assertEquals(job, jobField.getDomProperty("value"));
+    }
+
+    @Then("^List contains person with name \"([^\"]*)\" and job \"([^\"]*)\"$")
+    public void listContainsPersonNameJob(String name, String job) {
+        WebElement newPerson = driver.findElement(By.xpath(
+                "//*[@class=\"w3-padding-16\" and .//*[text()='"+name+"']]")); // Finds and checks name
+        assertEquals(job, newPerson.findElement(By.xpath(".//*[@class=\"job\"]")).getText());
+    }
+
+    @And("^I change job to \"([^\"]*)\"$")
+    public void changeJobTo(String newJob) throws Exception {
+        WebElement jobField = driver.findElement(By.xpath("//div[@id='addEditPerson']//input[@id='job']"));
+        jobField.clear();
+        jobField.sendKeys(newJob);
+    }
+
+    @Then("^List doesn't contain person with name \"([^\"]*)\"$")
+    public void listDoesntContainPerson(String name) {
+        List<WebElement> allPeople = driver.findElements(By.className("w3-padding-16"));
+        for (WebElement person : allPeople) {
+            String personName = person.findElement(By.className("name")).getText();
+            if (name.equals(personName)){
+                fail(personName);
+            }
+        }
+    }
+
+    @Then("^List contains person with name \"([^\"]*)\"$")
+    public void listContainsPersonName(String name) {
+        List<WebElement> allPeople = driver.findElements(By.className("w3-padding-16"));
+        boolean nameExists = false;
+
+        for (WebElement person : allPeople) {
+            String personName = person.findElement(By.className("name")).getText();
+            if (name.equals(personName)) {
+                nameExists = true;
+                break;
+            }
+        }
+
+        if (!nameExists) {
+            fail("Person not found");
+        }
+    }
+
 }
 
