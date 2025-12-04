@@ -7,6 +7,9 @@ import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 
 import java.util.List;
 import java.util.Map;
@@ -170,18 +173,38 @@ public class SampleSteps {
     }
 
     @Then("^I should see feedback name: \"([^\"]*)\"$")
-    public void iShouldSeeFeedbackName(String name) throws Throwable {
-        String pageText = driver.findElement(By.tagName("body")).getText();
-        assertTrue("Expected feedback name to be shown",
-                pageText.contains("Your name: " + name));
+    public void iShouldSeeFeedbackName(String name) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
+        boolean found = wait.until(d -> {
+            try {
+                String pageText = d.findElement(By.tagName("body")).getText();
+                return pageText.contains("Your name: " + name);
+            } catch (StaleElementReferenceException e) {
+                return false;
+            }
+        });
+
+        assertTrue("Expected feedback name to be shown", found);
     }
+
 
     @Then("I should see feedback age: {string}")
     public void iShouldSeeFeedbackAge(String age) {
-        String pageText = driver.findElement(By.tagName("body")).getText();
-        assertTrue("Expected feedback age to be shown",
-                pageText.contains("Your age: " + age));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
+        boolean found = wait.until(d -> {
+            try {
+                String pageText = d.findElement(By.tagName("body")).getText();
+                return pageText.contains("Your age: " + age);
+            } catch (StaleElementReferenceException e) {
+                return false;
+            }
+        });
+
+        assertTrue("Expected feedback age to be shown", found);
     }
+
 
     //Sample 4 Task..........................................................
 
@@ -204,5 +227,37 @@ public class SampleSteps {
                 pageText.contains(expectedLanguages));
     }
 
+    //Sample 5 Task..........................................................
+
+    @When("^I enter feedback details:$")
+    public void iEnterFeedbackDetails(Map<String, String> feedbackData) throws Throwable {
+        String name = feedbackData.get("name");
+        String age = feedbackData.get("age");
+        String genre = feedbackData.get("genre");
+
+        WebElement nameInput = driver.findElement(By.cssSelector("input[placeholder='Name']"));
+        nameInput.clear();
+        nameInput.sendKeys(name);
+
+        WebElement ageInput = driver.findElement(By.cssSelector("input[placeholder='Age']"));
+        ageInput.clear();
+        ageInput.sendKeys(age);
+
+        String genreValue = genre.toLowerCase();
+        WebElement genreRadio = driver.findElement(
+                By.cssSelector("input[type='radio'][value='" + genreValue + "']"));
+        genreRadio.click();
+    }
+
+    @Then("^selected genre is \"([^\"]*)\"$")
+    public void selectedGenreIs(String expectedGenre) {
+        String expectedValue = expectedGenre.toLowerCase();
+
+        String pageText = driver.findElement(By.tagName("body")).getText();
+        assertTrue(
+                "Expected genre '" + expectedGenre + "' in result page",
+                pageText.contains("Your genre: " + expectedValue)
+        );
+    }
 
 }
