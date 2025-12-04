@@ -221,12 +221,25 @@ public class SampleSteps {
         assertEquals(expected, actual);
     }
 
-
-
-
     //Sample 5 task
 
+    @When("I enter feedback {string}, {int}, {string}")
+    public void iEnterFeedback(String name, int age, String genre) {
 
+        WebElement nameField = driver.findElement(By.id("fb_name"));
+        nameField.clear();
+        nameField.sendKeys(name);
+
+        WebElement ageField = driver.findElement(By.id("fb_age"));
+        ageField.clear();
+        ageField.sendKeys(String.valueOf(age));
+
+        String genreValue = genre.toLowerCase();
+        WebElement genreRadio = driver.findElement(By.cssSelector("input[name='gender'][value='" + genreValue + "']"));
+        if (!genreRadio.isSelected()) {
+            genreRadio.click();
+        }
+    }
 
     // Task 1
 
@@ -266,9 +279,7 @@ public class SampleSteps {
         alert.accept();
     }
 
-
     // Task 2
-
 
 
 }
