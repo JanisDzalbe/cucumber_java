@@ -333,4 +333,170 @@ public class SampleSteps {
 
 
 
+
+                            //Task 2
+
+
+    @Given("^I am on the list of people with jobs page$")
+    public void iAmOnTheListOfPeopleWithJobsPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+    }
+
+    @When("^I click add person button$")
+    public void iClickAddPersonButton() throws Throwable {
+        WebElement addButton = driver.findElement(By.id("addPersonBtn"));
+        addButton.click();
+    }
+
+    @And("^I enter person name: \"([^\"]*)\"$")
+    public void iEnterPersonName(String name) throws Throwable {
+        driver.findElement(By.id("name")).clear();
+        driver.findElement(By.id("name")).sendKeys(name);
+    }
+
+    @And("^I enter person job: \"([^\"]*)\"$")
+    public void iEnterPersonJob(String job) throws Throwable {
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("job")).sendKeys(job);
+    }
+
+    @And("^I click add button$")
+    public void iClickAddButton() throws Throwable {
+        WebElement addButton = driver.findElement(By.id("modal_button"));
+        addButton.click();
+    }
+
+    @Then("^I should see person \"([^\"]*)\" with job \"([^\"]*)\" in the list$")
+    public void iShouldSeePersonInList(String name, String job) throws Throwable {
+        WebElement list = driver.findElement(By.id("listOfPeople"));        //list of people
+
+        //looking for li with name and job
+        boolean found = list.findElements(By.tagName("li")).stream().anyMatch(li -> {
+            String liName = li.findElement(By.className("name")).getText();
+            String liJob = li.findElement(By.className("job")).getText();
+            return liName.equalsIgnoreCase(name) && liJob.equalsIgnoreCase(job);
+        });
+
+        if (!found) {
+            throw new AssertionError("Person " + name + " with job " + job + " not found in the list");
+        }
+    }
+
+    @Given("^I see person \"([^\"]*)\" with job \"([^\"]*)\" in the list$")
+    public void iSeePersonInList(String name, String job) throws Throwable {
+        WebElement list = driver.findElement(By.id("listOfPeople"));
+
+        boolean found = list.findElements(By.tagName("li")).stream().anyMatch(li -> {
+            String liName = li.findElement(By.className("name")).getText();
+            String liJob = li.findElement(By.className("job")).getText();
+            return liName.equalsIgnoreCase(name) && liJob.equalsIgnoreCase(job);
+        });
+
+        if (!found) {
+            throw new AssertionError("Person " + name + " with job " + job + " not found in the list");
+        }
+    }
+
+    @When("^I click edit button for person \"([^\"]*)\"$")
+    public void iClickEditButtonForPerson(String name) throws Throwable {
+        WebElement list = driver.findElement(By.id("listOfPeople"));
+        for (WebElement li : list.findElements(By.tagName("li"))) {
+            String liName = li.findElement(By.className("name")).getText();
+            if (liName.equalsIgnoreCase(name)) {
+                // Click the edit span (has class "editbtn")
+                li.findElement(By.className("editbtn")).click();
+                break;
+            }
+        }
+    }
+
+    @And("^I click update edit button$")
+    public void iClickUpdateButton() throws Throwable {
+        driver.findElement(By.id("modal_button")).click();
+    }
+
+    @When("^I click remove button for person \"([^\"]*)\"$")
+    public void iClickRemoveButtonForPerson(String name) throws Throwable {
+        WebElement list = driver.findElement(By.id("listOfPeople"));
+        List<WebElement> items = list.findElements(By.tagName("li"));
+
+        for (WebElement li : items) {
+            String liName = li.findElement(By.className("name")).getText();     //save name we found in html
+            if (liName.equalsIgnoreCase(name)) {
+                li.findElement(By.className("closebtn")).click(); // click the x button if we find in html name we input
+                break;
+            }
+        }
+    }
+
+    @Then("^I should not see person \"([^\"]*)\" in the list$")
+    public void iShouldNotSeePersonInList(String name) throws Throwable {
+        WebElement list = driver.findElement(By.id("listOfPeople"));
+        // .anyMatch will return true if we find matching name to our input
+        boolean found = list.findElements(By.tagName("li")).stream().anyMatch(li -> {
+            //get name of the li with matching class
+            String liName = li.findElement(By.className("name")).getText();
+            //compare found name with expected, case insensitive
+            return liName.equalsIgnoreCase(name);   //we search just name, can also add job but I'd assume here that if name isn't seen then job also isn't
+        });
+
+        if (found) {                //if we found this person, fail the test
+            throw new AssertionError("Person " + name + " should be deleted and not appear in the list");
+        }
+
+
+    }
+
+    @When("^I click the reset list button$")
+    public void iClickResetListButton() throws Throwable {
+        WebElement resetButton = driver.findElement(By.xpath("//button[text()='Reset List']")); //locate button by text using xpath
+        resetButton.click();
+    }
+
+    @Then("^I should see the original people in the list$")
+    public void iShouldSeeOriginalPeopleInTheList() throws Throwable {
+        WebElement list = driver.findElement(By.id("listOfPeople"));
+
+        String[][] originalPeople = {       //array with original people and their jobs
+                {"Mike", "Web Designer"},   //[0] is name, [1] is job
+                {"Jill", "Support"},
+                {"Jane", "Accountant"},
+                {"John", "Software Engineer"},
+                {"Sarah", "Product Manager"},
+                {"Carlos", "Data Analyst"},
+                {"Emily", "UX Designer"},
+                {"David", "Project Manager"},
+                {"Maria", "QA Engineer"},
+                {"Alex", "DevOps Engineer"}
+        };
+
+        List<WebElement> items = list.findElements(By.tagName("li"));       //people in html
+
+        if (items.size() != originalPeople.length) {    //If more than 10 people = didn't reset properly
+            throw new AssertionError(
+                    "Expected " + originalPeople.length + " people, but found " + items.size()
+            );
+        }
+
+        for (String[] person : originalPeople) {        //check that everyone has original job, if not, it didn't reset properly
+            String expectedName = person[0];
+            String expectedJob = person[1];
+
+            boolean found = items.stream().anyMatch(li -> {
+                String liName = li.findElement(By.className("name")).getText();
+                String liJob = li.findElement(By.className("job")).getText();
+                return liName.equalsIgnoreCase(expectedName) && liJob.equalsIgnoreCase(expectedJob);    //true until something doesn't match
+            });
+
+            if (!found) {                   //we check for false,
+                throw new AssertionError(
+                        "Person " + expectedName + " with job " + expectedJob + "has incorrect information after reset"
+                );
+            }
+        }
+    }
+
 }
+
+
+
