@@ -30,7 +30,7 @@ Feature: Introduction to cucumber part 4
       | name | age | message                      |
       | Ann  | 5   | Hello, Ann, you are a kid    |
       | Bob  | 61  | Hello, Bob, you are an adult |
-
+@test
  # TODO - create Scenario Outline for 'Give us your feedback!' page
   # URL: https://janisdzalbe.github.io/example-site/tasks/provide_feedback
   # Navigate to page
@@ -39,3 +39,19 @@ Feature: Introduction to cucumber part 4
   # - All input MUST use Examples for data
   # - Step can use Map or Domain object
   # Click "Send" button and verify that previous input is displayed in correct fields
+  Scenario Outline: Give us your feedback!' page
+    Given I am on feedback page
+    When I set values for feedback page:
+      | name | <name> |
+      | age  | <age>  |
+      | genre  | <genre>  |
+    And I click send
+    Then I should see values in feedback check:
+      | name | <name> |
+      | age  | <age>  |
+      | genre  | <genre> |
+    Examples:
+      | name | age | genre |
+      | Ann  | 5   | Female |
+      | Bob  | 61  | Male |
+

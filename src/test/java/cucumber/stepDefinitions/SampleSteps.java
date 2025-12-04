@@ -229,6 +229,20 @@ public class SampleSteps {
         assertEquals(languages, languageText.getText());
     }
 
+    @When("^I set values for feedback page:$")
+    public void iSetValuesForFeedbackPage(Map<String, String> valuesToEnter) throws Throwable {
+            enterNameInFeedbackPage (valuesToEnter.get("name"));
+            int age = Integer.parseInt(valuesToEnter.get("age"));
+            enterAgeInFeedbackPage(age);
+            driver.findElement(By.cssSelector("[type='radio'][value='" + valuesToEnter.get("genre").toLowerCase() + "']")).click();
+    }
+    @When("^I should see values in feedback check:$")
+    public void iAssertValuesOnFeedbackPage(Map<String, String> valuesToEnter) throws Throwable {
+        int age = Integer.parseInt(valuesToEnter.get("age"));
+        validateFields(valuesToEnter.get("name"), age);
+        assertEquals(valuesToEnter.get("genre").toLowerCase(),  driver.findElement(By.id("gender")).getText());
+    }
+
 }
 
 
