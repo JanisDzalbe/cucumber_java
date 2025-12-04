@@ -5,10 +5,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 import java.util.List;
 import java.util.Map;
@@ -230,4 +227,38 @@ public class SampleSteps {
         WebElement error = driver.findElement(By.id("ch1_error"));
         assertFalse(error.isDisplayed());
     }
+
+    //Sample 4 Task
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) throws Throwable {
+        for (String language : languages) {
+            driver.findElement(
+                    By.cssSelector("input[type='checkbox'][name='language'][value='" + language + "']")).click();
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iAssertFeedbackLanguages(String languages) throws Throwable {
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+
+
+    //Sample 5 Task
+    @When("^I input values on feedback page$")
+    public void iInputValuesOnFeedbackPage(Map<String, String> inputMap) throws Throwable {
+        iSetName(inputMap.get("name"));
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(inputMap.get("age"));
+        driver.findElement(By.cssSelector("[type='radio'][value='"+inputMap.get("gender")+"']")).click();
+    }
+
+    @When("^I can see values in feedback check$")
+    public void iAssertValuesOnFeedbackPage(Map<String, String> inputMap) throws Throwable {
+        assertEquals(inputMap.get("name"), driver.findElement(By.id("name")).getText());
+        assertEquals(inputMap.get("age"), driver.findElement(By.id("age")).getText());
+        assertEquals(inputMap.get("gender"), driver.findElement(By.id("gender")).getText());
+    }
+
+
 }
