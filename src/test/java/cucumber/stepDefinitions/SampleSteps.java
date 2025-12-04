@@ -214,6 +214,21 @@ public class SampleSteps {
         WebElement errorMsg = driver.findElement(By.id("ch1_error"));
         assertEquals("", errorMsg.getText());
     }
+
+
+    @When("^I select feedback languages:$")
+    public void iSelectFeedbackLanguages(List<String> languages) throws Throwable {
+        for (String language : languages) {
+            driver.findElement(By.xpath("//*[@type='checkbox' and @value='" + language + "']")).click();
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iAssertLanguagesForFeedbackPage(String languages) {
+        WebElement languageText = driver.findElement(By.id("language"));
+        assertEquals(languages, languageText.getText());
+    }
+
 }
 
 
