@@ -350,4 +350,25 @@ public class SampleSteps {
           driver.findElement(By.cssSelector("[value='" + e.getValue().toLowerCase() + "']")).click();}
       }
   }
+
+  @Then("I check for fields ofListOfPeople:")
+  public void iCheckForFieldsOfListOfPeople(Map<String, String> valuesToEnter) {
+    String name = valuesToEnter.get("name");
+    String job= valuesToEnter.get("job");
+
+
+    List<WebElement> allElements = driver.findElements(By.xpath("//*[@id=\"listOfPeople\"]/div"));
+    WebElement Person = null;
+    for (WebElement element : allElements) {
+      String inputVal = element.findElement(By.className("name")).getText();
+      String Jobval = element.findElement(By.className("job")).getText();
+      if (inputVal.equals(name) && Jobval.equals(job)) {
+        Person = element;
+        break;
+      }
+    }
+    assertEquals(name, Person.findElement(By.className("name")).getText());
+    assertEquals(job, Person.findElement(By.className("job")).getText());
+
+  }
 }

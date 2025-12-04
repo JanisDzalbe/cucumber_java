@@ -10,7 +10,7 @@ Feature:
   I can Add a person, Edit a person, Remove a person and Reset the list
   Background:
    Given I am on ListOfPeople page
-
+#day 1 implementation
   Scenario Outline: Adding a person
     When I click Add Person
     And  I enter name: "<name>"
@@ -46,6 +46,50 @@ Feature:
     And I do not see name: "<name>" and job "<job>"
     And I click ResetPersonList
     Then I see name: "<name>" and job "<job>"
+    And  I see Person Amount in List
+
+    Examples:
+      |name         | job                   |
+      | Jane        | Accountant            |
+      | John        | Software Engineer     |
+
+
+
+#day 2 implementatio
+  Scenario Outline: Adding a person
+    When I click Add Person
+    And I enter values:
+    |name|"<name>" |
+    |job |"<job>"  |
+    And  I click Add
+    Then I check for fields ofListOfPeople:
+      |name|"<name>" |
+      |job |"<job>"  |
+
+    Examples:
+      | name   | job            |
+      | aaa    | bbb            |
+      | bbb    | ccc            |
+
+  Scenario Outline: Edit a Person
+    When I click EditPerson "<name>"
+    And I Change job: "<job>"
+    And i Click Edit
+    Then I check for fields ofListOfPeople:
+      |name|"<name>" |
+      |job |"<job>"  |
+    Examples:
+      |name         | job            |
+      | Jane        | bbb            |
+      | John        | ccc            |
+
+  Scenario Outline: Reset list after removing person
+    When I click RemovePerson name: "<name>" and job: "<job>"
+    And I do not see name: "<name>" and job "<job>"
+    And I click ResetPersonList
+    Then I check for fields ofListOfPeople:
+      |name|"<name>" |
+      |job |"<job>"  |
     And  I see Person Amount in List
 
     Examples:
