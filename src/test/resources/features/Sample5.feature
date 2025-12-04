@@ -39,3 +39,18 @@ Feature: Introduction to cucumber part 4
   # - All input MUST use Examples for data
   # - Step can use Map or Domain object
   # Click "Send" button and verify that previous input is displayed in correct fields
+
+  Scenario Outline: Give us your feedback
+    Given I am on feedback page
+    When I enter values for feedback:
+      | Name  | <Name>  |
+      | Age   | <Age>   |
+      | Genre | <Genre> |
+    And I click send feedback
+    Then I can see values in feedback check
+      | Name  | <Name>  |
+      | Age   | <Age>   |
+      | Genre | <Genre> |
+    Examples:
+      | Name | Age | Genre    |
+      | Ann  | 18  | Female   |
