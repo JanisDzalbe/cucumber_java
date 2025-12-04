@@ -53,4 +53,9 @@ public class SamplePOSteps {
         agePage.enterName(valuesToEnter.get("name"));
         agePage.enterAge(valuesToEnter.get("age"));
     }
+
+    @Then("^ I see error: \"([^\"].*)\" using PO$")
+    public void iSeeErrorMessage(String message) throws Throwable {
+        ageSubmittedPage.checkMessageText(message);
+    }
 }
