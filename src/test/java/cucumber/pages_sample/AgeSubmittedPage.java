@@ -12,6 +12,10 @@ public class AgeSubmittedPage {
     @FindBy(how = How.TAG_NAME, using = "button")
     private WebElement backButton;
 
+    public String getPageBaseUrl() {
+        return "https://janisdzalbe.github.io/example-site/examples/age_2";
+    }
+
     public void clickBackButton() {
         backButton.click();
     }

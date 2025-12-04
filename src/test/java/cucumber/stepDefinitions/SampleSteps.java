@@ -308,5 +308,135 @@ public class SampleSteps {
         alert.accept();
     }
 
+    // Individual Task 2
+
+    @Given("^the user is on the People with jobs list page$")
+    public void openPeopleWithJobsPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+    }
+
+    @When("^the user clicks the Add person button$")
+    public void clickAddPersonButton() {
+        driver.findElement(By.id("addPersonBtn")).click();
+    }
+
+    @When("^the user fills the Add Person form with name \"([^\"]*)\" and job \"([^\"]*)\"$")
+    public void fillAddPersonForm(String name, String job) {
+        WebElement nameInput = driver.findElement(By.id("name"));
+        nameInput.clear();
+        nameInput.sendKeys(name);
+
+        WebElement jobInput = driver.findElement(By.id("job"));
+        jobInput.clear();
+        jobInput.sendKeys(job);
+    }
+
+    @When("^the user submits the Add Person form$")
+    public void submitAddPersonForm() {
+        driver.findElement(By.id("modal_button")).click();
+    }
+
+    @Then("^the list should contain a person with name \"([^\"]*)\" and job \"([^\"]*)\"$")
+    public void listShouldContainPerson(String name, String job) {
+        List<WebElement> people = driver.findElements(By.cssSelector("#listOfPeople li"));
+        boolean found = false;
+        for (WebElement person : people) {
+            String personName = person.findElement(By.className("name")).getText();
+            String personJob = person.findElement(By.className("job")).getText();
+            if (personName.equals(name) && personJob.equals(job)) {
+                found = true;
+                break;
+            }
+        }
+        assertTrue("Person " + name + " with job " + job + " not found!", found);
+    }
+
+    @When("^the user clicks the Edit button for person \"([^\"]*)\"$")
+    public void clickEditButton(String name) {
+        List<WebElement> people = driver.findElements(By.cssSelector("#listOfPeople li"));
+        for (WebElement person : people) {
+            String personName = person.findElement(By.className("name")).getText();
+            if (personName.equals(name)) {
+                person.findElement(By.className("editbtn")).click();
+                break;
+            }
+        }
+    }
+
+    @When("^the user changes the name to \"([^\"]*)\" and job to \"([^\"]*)\"$")
+    public void editPersonForm(String newName, String newJob) {
+        WebElement nameInput = driver.findElement(By.id("name"));
+        nameInput.clear();
+        nameInput.sendKeys(newName);
+
+        WebElement jobInput = driver.findElement(By.id("job"));
+        jobInput.clear();
+        jobInput.sendKeys(newJob);
+
+        driver.findElement(By.id("modal_button")).click();
+    }
+
+    @And("^the user submits the form$")
+    public void userSubmitsTheForm() {
+        driver.findElement(By.id("modal_button")).click();
+    }
+
+    @And("^the user submits the form to save$")
+    public void userSubmitsTheFormToSave() {
+        driver.findElement(By.xpath("//button[text()='Add']"));
+    }
+
+    @And("^the user fills the form with name \"([^\"]*)\" and job \"([^\"]*)\"$")
+    public void userFillsFormWithNameAndJob(String name, String job) {
+        driver.findElement(By.id("name")).clear();
+        driver.findElement(By.id("name")).sendKeys(name);
+
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("job")).sendKeys(job);
+    }
+
+    @Then("^the list should not contain (?:a person with name |the person )\"([^\"]*)\"$")
+    public void listShouldNotContainPerson(String name) {
+        List<WebElement> people = driver.findElements(By.cssSelector("#listOfPeople li"));
+        for (WebElement person : people) {
+            String personName = person.findElement(By.className("name")).getText();
+            assertNotEquals("Person " + name + " should not be present!", name, personName);
+        }
+    }
+
+    @When("^the user clicks the Delete button for person \"([^\"]*)\"$")
+    public void clickDeleteButton(String name) {
+        List<WebElement> people = driver.findElements(By.cssSelector("#listOfPeople li"));
+        for (WebElement person : people) {
+            String personName = person.findElement(By.className("name")).getText();
+            if (personName.equals(name)) {
+                person.findElement(By.className("closebtn")).click();
+                break;
+            }
+        }
+    }
+
+    @When("^the user clicks the Reset List button$")
+    public void clickResetListButton() {
+        List<WebElement> buttons = driver.findElements(By.id("addPersonBtn"));
+        buttons.get(1).click();
+    }
+
+    @Then("^the list should contain the original person \"([^\"]*)\" with job \"([^\"]*)\"$")
+    public void listShouldContainOriginalPerson(String name, String job) {
+        listShouldContainPerson(name, job);
+    }
+
+    @Then("^the list should not contain the person \"([^\"]*)\"$")
+    public void listShouldNotContainThePerson(String name) {
+        List<WebElement> people = driver.findElements(By.cssSelector("#listOfPeople li"));
+        for (WebElement person : people) {
+            String personName = person.findElement(By.className("name")).getText();
+            assertNotEquals("Person " + name + " should not be present!", name, personName);
+        }
+    }
+
+
+
 
 }
