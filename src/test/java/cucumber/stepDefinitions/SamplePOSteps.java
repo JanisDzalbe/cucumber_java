@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import cucumber.pages_sample.*;
@@ -53,4 +54,15 @@ public class SamplePOSteps {
         agePage.enterName(valuesToEnter.get("name"));
         agePage.enterAge(valuesToEnter.get("age"));
     }
+    // tstk 2
+    @Then("^I see error: \"(.*)\" using PO$")
+    public void iSeeError(String message) throws Throwable {
+        assertEquals("You haven't entered anything in age field", driver.findElement(By.id("error")).getText());
+    }
+
+    @And("^I remain in age page using PO$")
+    public void iRemainOnPage() throws Throwable {
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
+    }
+
 }
