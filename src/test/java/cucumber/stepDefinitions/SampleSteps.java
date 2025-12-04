@@ -173,4 +173,34 @@ public class SampleSteps {
     public void iSeeAgeInFeedbackCheck(int age) throws Throwable {
         assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
     }
+
+
+    //Sample 4 Task
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) throws Throwable {
+        for (String lang : languages) {
+            driver.findElement(By.xpath("//*[@type='checkbox' and @value='"+lang+"']")).click();
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String languages) throws Throwable {
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+
+    // Sample 5 Task
+    @When("^I input values in Feedback page$")
+    public void iEnterValuesInFeedback(Map<String, String> inputMap) throws Throwable {
+        iEnterNameInFeedback(inputMap.get("Name"));
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(inputMap.get("Age"));
+        driver.findElement(By.cssSelector("[type='radio'][value='"+inputMap.get("Genre").toLowerCase()+"']")).click();
+    }
+
+    @Then("^I can see values in feedback check$")
+    public void iCanSeeValuesInFeedbackCheck(Map<String, String> inputMap) throws Throwable {
+        assertEquals(inputMap.get("Name"), driver.findElement(By.id("name")).getText());
+        assertEquals(inputMap.get("Age"), driver.findElement(By.id("age")).getText());
+        assertEquals(inputMap.get("Genre").toLowerCase(), driver.findElement(By.id("gender")).getText());
+    }
 }
