@@ -141,7 +141,7 @@ public class SampleSteps {
 
     //sample 3 Task
 
-    @Given("^I am on feedback page$")
+    @Given("^I am on Feedback page$")
     public void iAmOnFeedbackPage() {
         driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
     }
@@ -215,4 +215,33 @@ public class SampleSteps {
         assertFalse(driver.findElement(By.id("ch1_error")).isDisplayed());
     }
 
+
+
+    //Sample 4 task
+
+//    @Given("^I am on Feedback page$")
+//    public void iAmOnFeedbackPage() {
+//        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+//    }
+@When("I select Feedback languages")
+public void iSelectFeedbackLanguages(List<String> languages) {
+    for (String lang : languages) {
+        driver.findElement(By.cssSelector("input[value='" + lang + "']")).click();
+    }
 }
+
+    @And("I click send feedback")
+    public void iClickSendFeedback() {
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+    }
+
+    @Then("I can see languages {string} in feedback check")
+    public void iCanSeeLanguagesInFeedbackCheck(String expected) {
+        String actual = driver.findElement(By.cssSelector("#language")).getText();
+        assertEquals(expected, actual);
+    }
+
+
+    }
+
+
