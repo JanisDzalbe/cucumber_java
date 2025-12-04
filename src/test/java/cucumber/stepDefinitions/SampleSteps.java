@@ -236,4 +236,23 @@ public class SampleSteps {
         WebElement error = driver.findElement(By.id("ch1_error"));
         assertFalse("Error message should not be visible", error.isDisplayed());
     }
+
+
+
+                //Sample4 task
+
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) throws Throwable {
+        for (String language : languages) {
+            // Find checkbox by value attribute and click it
+            driver.findElement(By.cssSelector("input[value='" + language + "']")).click();
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String expectedLanguages) throws Throwable {
+        String displayedLanguages = driver.findElement(By.id("language")).getText();
+        assertEquals(expectedLanguages, displayedLanguages);
+    }
 }
