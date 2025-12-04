@@ -5,20 +5,26 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.it.Ma;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SampleSteps {
     private WebDriver driver;
+    private static List<String> namesList;
+    private static List<String> jobsList;
 
     public SampleSteps() {
         this.driver = Hooks.driver;
@@ -193,7 +199,7 @@ public class SampleSteps {
         assertEquals(String.valueOf(name), driver.findElement(By.id("name")).getText());
     }
 
-    //Task1
+    //Task1 start
     @When("^I am on the Square root page$")
     public void iAmOnTheSquareRootPage(){
         driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
@@ -269,5 +275,217 @@ public class SampleSteps {
         WebElement errorField = driver.findElement(By.className("error"));
         assertFalse(errorField.isDisplayed());
     }
+    //Task1 end
+
+    //Sample 4 Start
+    @When("^I select Feedback languages$")
+    public void iSelectFeedbackLang(List<String> langList){
+         for(String lang : langList){
+             driver.findElement(By.xpath("//*[@type='checkbox' and @value='" + lang + "']")).click();
+         }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String languages){
+       assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+
+    // Sample 5
+    @When("^I input Name, Age and Genre in Feedback Page$")
+    public void iInputNameAgeAndGenre(Map<String, String> inputMap) throws  Throwable{
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(inputMap.get("Name"));
+
+     //   iEnterNameInFeedback(inputMap.get("Name"));
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(inputMap.get("Age"));
+        driver.findElement(By.cssSelector("[type='radio'][value='" + inputMap.get("Genre").toLowerCase() + "']")).click();
+    }
+
+    @When("^I can see values in feedback page$")
+    public void iAssertValueInFeedbackCheck(Map<String, String> inputMap) throws  Throwable{
+        assertEquals((inputMap.get("Name")),driver.findElement(By.id("name")).getText());
+        assertEquals((inputMap.get("Age")),driver.findElement(By.id("age")).getText());
+        assertEquals((inputMap.get("Genre")),driver.findElement(By.id("gender")).getText());
+    }
+
+    //Task 2 Start
+    @Given ("^I am on the People with jobs page$")
+    public void iAmOnThePeopleWithJobsPage()
+    {
+         driver.get("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+
+     //   WebElement buttonAdd = driver.findElement(By.xpath("//*[@id='addPersonBtn' and contains(@class,'w3-btn') and contains(text(),'Add person')]"));
+        WebElement buttonAdd = driver.findElement(By.xpath("//*[@id='addPersonBtn' and contains(text(),'Add person')]"));
+        assertTrue(buttonAdd.isDisplayed());
+        assertTrue(buttonAdd.isEnabled());
+
+        WebElement buttonResetList = driver.findElement(By.xpath("//*[@id='addPersonBtn' and contains(text(),'Reset List')]"));
+        assertTrue(buttonResetList.isDisplayed());
+        assertTrue(buttonResetList.isEnabled());
+    }
+
+    
+
+    @And ("^Add precondition list with Names and Jobs$")
+    public void addPreconditionListNameAndJob() throws Throwable
+    {
+        namesList = new ArrayList<>();
+        namesList.add("Mike");
+        namesList.add("Jill");
+        namesList.add("Jane");
+        namesList.add("John");
+        namesList.add("Sarah");
+        namesList.add("Carlos");
+        namesList.add("Emily");
+        namesList.add("David");
+        namesList.add("Maria");
+        namesList.add("Alex");
+
+        jobsList = new ArrayList<>();
+        jobsList.add("Web Designer");
+        jobsList.add("Support");
+        jobsList.add("Accountant");
+        jobsList.add("Software Engineer");
+        jobsList.add("Product Manager");
+        jobsList.add("Data Analyst");
+        jobsList.add("UX Designer");
+        jobsList.add("Project Manager");
+        jobsList.add("QA Engineer");
+        jobsList.add("DevOps Engineer");
+    }
+    @Then ("^I compare and prove list$")
+    public void iCompareAndProveList(){
+
+        assertEquals(driver.getCurrentUrl(),"https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+
+        List<WebElement> allPeople = driver.findElements(By.className("w3-padding-16"));
+
+        String xName = "";
+        String xJob = "";
+        for (int i = 0; i < allPeople.size(); i++) {
+            WebElement person = allPeople.get(i);
+            xName = person.findElement(By.className("w3-xlarge")).getText();
+            xJob = person.findElement(By.className("job")).getText();
+
+            assertEquals(xName, namesList.get(i));
+            assertEquals(xJob, jobsList.get(i));
+        }
+        
+    }
+
+
+    @When ("^I add new person with Name and Job$")
+    public void iAddNewPerson(Map<String ,String> table) throws Throwable
+    {
+        WebElement buttonAddPerson = driver.findElement(By.xpath("//*[@id='addPersonBtn' and contains(text(),'Add person')]"));
+
+        buttonAddPerson.click();
+
+        assertEquals(driver.getCurrentUrl(), "https://janisdzalbe.github.io/example-site/tasks/enter_a_new_person_with_a_job.html");
+        WebElement fieldName =  driver.findElement(By.xpath("//*[@id='name']"));
+        WebElement fieldJob = driver.findElement(By.xpath("//*[@id='job']"));
+
+        assertEquals("", fieldName.getText());
+        assertEquals("", fieldJob.getText());
+
+        fieldName.sendKeys(table.get("Name"));
+        fieldJob.sendKeys(table.get("Job"));
+
+        namesList.add(table.get("Name"));
+        jobsList.add(table.get("Job"));
+
+        driver.findElement(By.xpath("//*[@id='modal_button' and contains(text(),'Add')]")).click();
+
+        assertEquals(driver.getCurrentUrl(), "https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+
+     //   Thread.sleep(10000);
+
+
+    }
+
+    @And  ("^I edit a person to$")
+    public void iEditAPerson(Map<String ,String> table) throws Throwable
+    {
+        assertEquals(driver.getCurrentUrl(), "https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+
+        //for example 4rd person John Software Engineer
+        WebElement person3 = driver.findElement(By.cssSelector("#person3 .fa.fa-pencil"));
+        person3.click();
+        int personToEdit = 3;
+
+        assertEquals(driver.getCurrentUrl(), "https://janisdzalbe.github.io/example-site/tasks/enter_a_new_person_with_a_job.html?id=3");
+
+        WebElement fieldName =  driver.findElement(By.xpath("//*[@id='name']"));
+        WebElement fieldJob = driver.findElement(By.xpath("//*[@id='job']"));
+
+        assertEquals("John", fieldName.getAttribute("value"));
+        assertEquals("Software Engineer",  fieldJob.getAttribute("value"));
+
+        fieldName.clear();
+        fieldJob.clear();
+        assertEquals("", fieldName.getAttribute("value"));
+        assertEquals("",  fieldJob.getAttribute("value"));
+
+        namesList.set(personToEdit,table.get("Name"));
+        jobsList.set(personToEdit,table.get("Job"));
+
+        fieldName.sendKeys(table.get("Name"));
+        fieldJob.sendKeys(table.get("Job"));
+
+        assertEquals(table.get("Name"), fieldName.getAttribute("value"));
+        assertEquals(table.get("Job"),  fieldJob.getAttribute("value"));
+
+        WebElement buttonEdit = driver.findElement(By.xpath("//*[@id='modal_button' and contains(text(),'Edit')]"));
+        assertTrue(buttonEdit.isDisplayed());
+        assertTrue(buttonEdit.isEnabled());
+
+        buttonEdit.click();
+
+        assertEquals(driver.getCurrentUrl(), "https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+
+
+        WebElement updatedPerson3 = driver.findElement(By.id("person3"));
+        String xName = updatedPerson3.findElement(By.cssSelector(".w3-xlarge.name")).getText();
+        String xJob = updatedPerson3.findElement(By.className("job")).getText();
+
+        assertEquals(table.get("Name"), xName);
+        assertEquals(table.get("Job"), xJob);
+
+    }
+
+    @And  ("^I remove a person 3$")
+    public void iRemoveAPerson() throws Throwable
+    {
+        assertEquals(driver.getCurrentUrl(), "https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+
+        WebElement person2 = driver.findElement(By.xpath("//*[@onclick='deletePerson(2)']"));
+        assertTrue(person2.isEnabled());
+        assertTrue(person2.isDisplayed());
+
+        person2.click();
+
+        assertEquals(driver.getCurrentUrl(), "https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+
+        namesList.remove(2);
+        jobsList.remove(2);
+
+        //  Thread.sleep(10000);
+    }
+
+    @Then ("^I reset list to original$")
+    public void iResetToOriginalListAndProve() throws Throwable
+    {
+        WebElement buttonResetList = driver.findElement(By.xpath("//*[@id='addPersonBtn' and contains(text(),'Reset List')]"));
+        assertTrue(buttonResetList.isDisplayed());
+        assertTrue(buttonResetList.isEnabled());
+
+
+        addPreconditionListNameAndJob();
+        buttonResetList.click();
+    }
+
+
+    //Task 2 Finish
 
 }
