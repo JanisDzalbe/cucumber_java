@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -243,6 +244,105 @@ public class SampleSteps {
         assertEquals(valuesToEnter.get("genre").toLowerCase(),  driver.findElement(By.id("gender")).getText());
     }
 
+    @Given("^I am on people with jobs page$")
+    public void iGoToPeopleWithJobsPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+    }
+    @When("^I click add person button$")
+    public void iClickAddPersonBtn(){
+        driver.findElement(By.xpath("//h2[text()='People with jobs']/following-sibling::Button[@id='addPersonBtn']")).click();
+    }
+
+    @And("^I fill name as \"([^\"]*)\" and job as \"([^\"]*)\" fields$")
+    public void iFillFields(String name, String job){
+        WebElement nameField = driver.findElement(By.id("name"));
+        WebElement jobField = driver.findElement(By.id("job"));
+        nameField.sendKeys(name);
+        jobField.sendKeys(job);
+    }
+
+    @And("^I click Add$")
+    public void iClickAdd(){
+        driver.findElement(By.xpath("//button[@id='modal_button' and text()='Add']")).click();
+    }
+    @And("^I should see new person is added to the list with name \"([^\"]*)\" and job \"([^\"]*)\"$")
+    public void iAssertOnFieldsForPeopleWithJobsPage(String name, String job){
+        List<WebElement> listOfPeoples = driver.findElements(By.className("w3-padding-16"));
+        assertEquals(listOfPeoples.size(), 11);
+        WebElement lastElement = listOfPeoples.get(listOfPeoples.size()-1);
+        assertEquals(name, lastElement.findElement(By.className("name")).getText());
+        assertEquals(job, lastElement.findElement(By.className("job")).getText());
+    }
+    @And("^I click pencil icon for existing person$")
+    public void iClickPencilIcon(){
+        driver.findElement(By.xpath("//i[@class='fa fa-pencil'][1]")).click();
+    }
+    @And("^I check values in Name and Job fields$")
+    public void iCheckExistingValues(){
+        WebElement nameField = driver.findElement(By.id("name"));
+        WebElement jobField = driver.findElement(By.id("job"));
+        assertEquals("Mike", nameField.getAttribute("value"));
+        assertEquals("Web Designer", jobField.getAttribute("value"));
+
+    }
+    @And("^I change job field to \"([^\"]*)\"$")
+    public void iChangeJobField(String job){
+        WebElement jobField = driver.findElement(By.id("job"));
+        jobField.clear();
+        jobField.sendKeys(job);
+    }
+    @And("^I click edit$")
+    public void iClickEdit(){
+       driver.findElement(By.xpath("//button[@id='modal_button' and text()='Edit']")).click();
+    }
+    @And("^I change job field$")
+    public void iChangeJobField(){
+        WebElement jobField = driver.findElement(By.id("job"));
+        jobField.clear();
+        jobField.sendKeys("Teacher");
+    }
+    @Then("^I check that the person is updated in the list with new job \"([^\"]*)\"$")
+    public void iAssertOnChangedPerson(String job){
+        WebElement firstElementAfterEditing = driver.findElements(By.className("w3-padding-16")).get(0);
+        assertEquals("Mike", firstElementAfterEditing.findElement(By.className("name")).getText());
+        assertEquals(job, firstElementAfterEditing.findElement(By.className("job")).getText());
+    }
+    @When("^I click cross x icon for an existing person$")
+    public void iClickCrossIcon(){
+        driver.findElement(By.xpath("//*[@id='person0']/span[1]")).click();
+    }
+    @Then("^I check that the person is removed from the list$")
+    public void iAssertOnRemovedPerson() {
+        List<WebElement> listOfPeoplesAfterRemoving = driver.findElements(By.className("w3-padding-16"));
+        assertEquals(9, listOfPeoplesAfterRemoving.size());
+        for (WebElement person : listOfPeoplesAfterRemoving) {
+            assertFalse(person.findElement(By.className("name")).getText().equals("Mike"));
+            assertFalse(person.findElement(By.className("job")).getText().equals("Web Designer"));
+        }
+    }
+        @And("^I click Reset List$")
+        public void iClickResetList() throws InterruptedException {
+            driver.findElement(By.xpath("//h2[text()='People with jobs']/following-sibling::Button[@id='addPersonBtn' and text()='Reset List']")).click();
+
+    }
+
+    @Then("^I check that the list is back to initial state with 10 original entries$")
+    public void iAssertOnOriginalList(DataTable table) {
+        List<Map<String, String>> expectedList = table.asMaps(String.class, String.class);
+        List<WebElement> listOfPeoples = driver.findElements(By.className("w3-padding-16"));
+        assertEquals(expectedList.size(), listOfPeoples.size());
+        for (int i = 0; i < expectedList.size(); i++) {
+
+            Map<String, String> expected = expectedList.get(i);
+            WebElement person = listOfPeoples.get(i);
+
+            String actualName = person.findElement(By.className("name")).getText().trim();
+            String actualJob  = person.findElement(By.className("job")).getText().trim();
+
+            assertEquals( expected.get("name"), actualName);
+            assertEquals( expected.get("job"), actualJob);
+        }
+    }
 }
 
 
