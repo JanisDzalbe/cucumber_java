@@ -146,7 +146,7 @@ public class SampleSteps {
   }
 
   // sample 3
-  @And("^I click send$")
+  @And("^I click (?:send|send feedback)$")
   public void iClickSend() {
     // Write code here that turns the phrase above into concrete actions
     driver.findElement(By.xpath("//*[@id=\"fb_form\"]/form/button")).click();
@@ -167,7 +167,7 @@ public class SampleSteps {
 
   @Then("^I see feedback fields$")
   public void iSeeFeedbackFields() {
-      assertNotEquals("https://janisdzalbe.github.io/example-site/tasks/provide_feedback",driver.getCurrentUrl());
+    assertNotEquals("https://janisdzalbe.github.io/example-site/tasks/provide_feedback", driver.getCurrentUrl());
   }
 
   @And("^I check field fb name: \"([^\"]*)\"$")
@@ -183,7 +183,7 @@ public class SampleSteps {
 
   @Given("^I (?:am on|open) EnterNumber page$")
   public void iAmOnEnterNumberPage() {
-      driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
   }
 
   @When("^I enter number in field \"([^\"]*)\"$")
@@ -198,10 +198,11 @@ public class SampleSteps {
 
   @Then("^I see alert \"([^\"]*)\"$")
   public void iSeeAlertMessage(String message) {
-    Alert alert=driver.switchTo().alert();
-    assertEquals(message,alert.getText());
+    Alert alert = driver.switchTo().alert();
+    assertEquals(message, alert.getText());
     alert.accept();
   }
+
   @Given("^I (?:am on|open) ListOfPeople page$")
   public void iAmOnListOfPeoplePage() {
     driver.get(" https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
@@ -224,7 +225,7 @@ public class SampleSteps {
   }
 
   @Then("I see name: {string} and job {string}")
-  public void iSeeNameAndJob(String name,String job) {
+  public void iSeeNameAndJob(String name, String job) {
     List<WebElement> allElements = driver.findElements(By.xpath("//*[@id=\"listOfPeople\"]/div"));
     WebElement Person = null;
     for (WebElement element : allElements) {
@@ -253,6 +254,7 @@ public class SampleSteps {
     WebElement Pencil = Person.findElement(By.xpath(".//i[@class='fa fa-pencil']"));
     Pencil.click();
   }
+
   @And("I Change job: {string}")
   public void iChangeJob(String arg0) {
     driver.findElement(By.id("job")).clear();
@@ -306,15 +308,46 @@ public class SampleSteps {
   @And("I see Person Amount in List")
   public void iSeePersonAmountInList() {
     List<WebElement> allElements = driver.findElements(By.xpath("//*[@id=\"listOfPeople\"]/div"));
-    int count =0;
+    int count = 0;
     for (WebElement element : allElements) {
       count++;
     }
-  assertEquals(10,count);
+    assertEquals(10, count);
   }
 
   @And("I do not see error")
   public void iDoNotSeeError() {
     assertFalse(driver.findElement(By.className("error")).isDisplayed());
+  }
+
+  @When("^I select feedback languages$")
+  public void iSelectFeedbackLanguages(List<String> values) {
+    for (String value : values) {
+      driver.findElement(By.cssSelector("[value='" + value + "']")).click();
+    }
+  }
+
+  @Then("I can see languages {string} in feedback check")
+  public void iCanSeeLanguagesInFeedbackCheck(String arg0) {
+    assertEquals(arg0, driver.findElement(By.id("language")).getText());
+  }
+
+  @Then("^I check for fields:$")
+  public void iCheckForFields(Map<String, String> valuesToEnter)throws Throwable {
+      for (Map.Entry<String, String> e : valuesToEnter.entrySet()) {
+        assertEquals(e.getValue(),driver.findElement(By.id(e.getKey())).getText());
+      }
+    }
+
+  @When("I enter values of page:")
+  public void iEnterValuesOfPage(Map<String, String> valuesToEnter) throws Throwable  {
+      for (Map.Entry<String, String> e : valuesToEnter.entrySet()) {
+        if (e.getKey().equals("fb_name") || e.getKey().equals("fb_age")) {
+          driver.findElement(By.id(e.getKey())).clear();
+          driver.findElement(By.id(e.getKey())).sendKeys(e.getValue());
+        }
+        if (e.getKey().equals("gender")){
+          driver.findElement(By.cssSelector("[value='" + e.getValue() + "']")).click();}
+      }
   }
 }
