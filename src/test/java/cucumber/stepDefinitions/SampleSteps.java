@@ -12,8 +12,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -275,6 +274,166 @@ public class SampleSteps {
         assertEquals(expected.get("age"), actualAge);
         assertEquals(expected.get("gender"), actualGender);
     }
+
+    // Task2
+
+    @Given("^I am on People with jobs page$")
+    public void iAmOnPeopleWithJobsPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+    }
+    @When("^I click \"Add person\" button$")
+    public void iClickAddPersonButton() {
+        driver.findElement(By.xpath("//button[text()='Add person']")).click();
+    }
+
+    @When("^I enter \"([^\"]*)\" and \"([^\"]*)\"$")
+    public void iEnterNameAndJob(String name, String job) {
+        driver.findElement(By.id("name")).clear();
+        driver.findElement(By.id("name")).sendKeys(name);
+
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("job")).sendKeys(job);
+    }
+
+    @When("^I click \"Add\" button$")
+    public void iClickAddButton() {
+        driver.findElement(By.xpath("//button[text()='Add']")).click();
+    }
+
+    @Then("^I see a new person's \"([^\"]*)\" and \"([^\"]*)\" in the list$")
+    public void iSeeNewPersonInTheList(String expectedName, String expectedJob) {
+        List<WebElement> people = driver.findElements(By.className("w3-padding-16"));
+        boolean found = false;
+
+        for (WebElement person : people) {
+            String actualName = person.findElement(By.className("name")).getText();
+            String actualJob = person.findElement(By.className("job")).getText();
+
+            if (actualName.equals(expectedName)) {
+                assertEquals(expectedJob, actualJob);
+                found = true;
+                break;
+            }
+        }
+
+        assertTrue("Person " + expectedName + " was not found in the list!", found);
+    }
+
+    @When("^I edit the name to \"([^\"]*)\" and \"([^\"]*)\"$")
+    public void iEditTheNameTo(String name, String job) {
+        driver.findElement(By.id("name")).clear();
+        driver.findElement(By.id("name")).sendKeys(name);
+
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("job")).sendKeys(job);
+    }
+
+    @When("^I click \"Edit\" button$")
+    public void iClickEditButton() {
+        driver.findElement(By.xpath("//button[text()='Edit']")).click();
+    }
+    @When("^I click Edit button for person: \"([^\"]*)\"$")
+    public void iClickEditButtonForPerson(String personName) {
+        List<WebElement> people = driver.findElements(By.className("w3-padding-16"));
+
+        for (WebElement person : people) {
+            String name = person.findElement(By.className("name")).getText();
+
+            if (name.equals(personName)) {
+                person.findElement(By.className("fa-pencil")).click();
+                return;
+            }
+        }
+
+        fail("Person " + personName + " was not found to edit!");
+    }
+
+    @Then("^I see person \"([^\"]*)\" with job \"([^\"]*)\" in the list$")
+    public void iSeePersonWithJobInTheList(String expectedName, String expectedJob) {
+        List<WebElement> people = driver.findElements(By.className("w3-padding-16"));
+        boolean found = false;
+
+        for (WebElement person : people) {
+            String name = person.findElement(By.className("name")).getText();
+            String job = person.findElement(By.className("job")).getText();
+
+            if (name.equals(expectedName)) {
+                assertEquals(expectedJob, job);
+                found = true;
+                break;
+            }
+        }
+
+        assertTrue("Person " + expectedName + " was not found!", found);
+    }
+
+    @When("^I click Remove button for person \"([^\"]*)\"$")
+    public void iClickRemoveButtonForPerson(String personName) {
+        List<WebElement> people = driver.findElements(By.className("w3-padding-16"));
+
+        for (WebElement person : people) {
+            String name = person.findElement(By.className("name")).getText();
+            if (name.equals(personName)) {
+                person.findElement(By.className("closebtn")).click();
+                break;
+            }
+        }
+    }
+
+    @Then("^I see person \"([^\"]*)\" with job \"([^\"]*)\" removed from the list$")
+    public void iSeePersonRemovedFromList(String expectedName, String expectedJob) {
+        List<WebElement> people = driver.findElements(By.className("w3-padding-16"));
+
+        for (WebElement person : people) {
+            String name = person.findElement(By.className("name")).getText();
+            String job = person.findElement(By.className("job")).getText();
+
+            if (name.equals(expectedName) && job.equals(expectedJob)) {
+                fail("Person " + expectedName + " with job " + expectedJob + " still appears in the list!");
+            }
+        }
+    }
+
+    @When("^I enter name \"([^\"]*)\" and job \"([^\"]*)\"$")
+    public void iEnterNameAndJobAgain(String name, String job) {
+        driver.findElement(By.id("name")).clear();
+        driver.findElement(By.id("name")).sendKeys(name);
+
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("job")).sendKeys(job);
+    }
+
+    @When("^I click \"Reset List\" button$")
+    public void iClickResetListButton() {
+        driver.findElement(By.xpath("//button[text()='Reset List']")).click();
+    }
+
+    @Then("^I see the original list of people with jobs$")
+    public void iSeeOriginalList() {
+        String[][] originalPeople = {
+                {"Mike", "Web Designer"},
+                {"Jill", "Support"},
+                {"Jane", "Accountant"},
+                {"John", "Software Engineer"},
+                {"Sarah", "Product Manager"},
+                {"Carlos", "Data Analyst"},
+                {"Emily", "UX Designer"},
+                {"David", "Project Manager"},
+                {"Maria", "QA Engineer"},
+                {"Alex", "DevOps Engineer"}  };
+
+        List<WebElement> people = driver.findElements(By.className("w3-padding-16"));
+        assertEquals(10, people.size());
+
+        for (int i = 0; i < originalPeople.length; i++) {
+            String actualName = people.get(i).findElement(By.className("name")).getText();
+            String actualJob = people.get(i).findElement(By.className("job")).getText();
+
+            assertEquals(originalPeople[i][0], actualName);
+            assertEquals(originalPeople[i][1], actualJob);
+        }
+    }
+
 }
 
 
