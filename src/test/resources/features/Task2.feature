@@ -7,7 +7,7 @@
 # - reset original list after adding a person, editing a person or removing a person
 
 Feature: Task 2
-  I want to test reset functionality
+  I want to test add, edit, remove and reset functionality
 
   Background:
     Given I am on people with jobs page
