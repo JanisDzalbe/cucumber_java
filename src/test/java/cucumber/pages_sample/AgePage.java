@@ -66,4 +66,8 @@ public class AgePage {
         assertEquals(ageInput.getAttribute("value"), "");
         assertFalse(errorText.isDisplayed());
     }
+
+    public void checkThatImOnAgePage(String currentPageUrl) {
+        assertEquals(getPageUrl(), currentPageUrl);
+    }
 }

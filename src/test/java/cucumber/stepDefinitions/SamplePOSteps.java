@@ -53,4 +53,16 @@ public class SamplePOSteps {
         agePage.enterName(valuesToEnter.get("name"));
         agePage.enterAge(valuesToEnter.get("age"));
     }
+
+    //Sample2 task
+    @Then("^I see error: \"(.*)\" using PO$")
+    public void iSeeError(String message) throws Throwable {
+        agePage.checkErrorMessage(message);
+    }
+
+    @And("^I remain in age page using PO$")
+    public void iRemainInAgePage() throws Throwable {
+        agePage.checkThatImOnAgePage(driver.getCurrentUrl());
+    }
+
 }
