@@ -351,7 +351,7 @@ public class SampleSteps {
       }
   }
 
-  @Then("I check for fields ofListOfPeople:")
+  @Then("^I check for fields ofListOfPeople:$")
   public void iCheckForFieldsOfListOfPeople(Map<String, String> valuesToEnter) {
     String name = valuesToEnter.get("name");
     String job= valuesToEnter.get("job");

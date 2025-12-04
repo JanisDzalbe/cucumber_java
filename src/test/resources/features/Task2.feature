@@ -61,12 +61,12 @@ Feature:
   Scenario Outline: Adding a person
     When I click Add Person
     And I enter values:
-    |name|"<name>" |
-    |job |"<job>"  |
+    |name|<name> |
+    |job |<job> |
     And  I click Add
     Then I check for fields ofListOfPeople:
-      |name|"<name>" |
-      |job |"<job>"  |
+      |name|<name> |
+      |job |<job>  |
     And I see that list is larger
 
     Examples:
@@ -79,8 +79,8 @@ Feature:
     And I Change job: "<job>"
     And i Click Edit
     Then I check for fields ofListOfPeople:
-      |name|"<name>" |
-      |job |"<job>"  |
+      |name|<name> |
+      |job |<job>  |
     And  I see Person Amount in List
     Examples:
       |name         | job            |
@@ -92,8 +92,8 @@ Feature:
     And I do not see name: "<name>" and job "<job>"
     And I click ResetPersonList
     Then I check for fields ofListOfPeople:
-      |name|"<name>" |
-      |job |"<job>"  |
+      |name|<name> |
+      |job |<job>  |
     And  I see Person Amount in List
 
     Examples:
