@@ -19,4 +19,8 @@ public class AgeSubmittedPage {
     public void checkMessageText(String messageText) {
         assertEquals(message.getText(), messageText);
     }
+
+    public String getPageBaseUrl() {
+        return "https://janisdzalbe.github.io/example-site/examples/age_2";
+    }
 }

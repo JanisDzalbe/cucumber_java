@@ -200,4 +200,37 @@ public class SampleSteps {
         assertTrue( driver.findElement(By.id("ch1_error")).getText().isEmpty());
     }
 
+    /// Sample4 implementation(missing steps)
+    @When("^I select feedback languages$")
+    public void iSelectLanguages(List<String> languages) {
+        for (String lang : languages) {
+            driver.findElement(By.cssSelector("input[type='checkbox'][name='language'][value='" + lang + "']")).click();
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String expected) {
+        assertEquals(expected, driver.findElement(By.id("language")).getText());
+    }
+
+    ///  Sample5 implementation
+    @When("^I fill feedback form:$")
+    public void iFillFeedbackForm(Map<String, String> data) {
+
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(data.get("name"));
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(data.get("age"));
+        driver.findElement(By.cssSelector("[type='radio'][value='"+data.get("genre").toLowerCase()+"']")).click();
+
+    }
+
+    @Then("^I see feedback details:$")
+    public void iSeeFeedbackDetails(Map<String, String> expected) throws Throwable {
+        assertEquals(expected.get("name"), driver.findElement(By.id("name")).getText());
+        assertEquals(expected.get("age"), driver.findElement(By.id("age")).getText());
+        assertEquals(expected.get("genre"), driver.findElement(By.id("gender")).getText());
+    }
+
+
 }
