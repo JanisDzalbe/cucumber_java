@@ -347,7 +347,7 @@ public class SampleSteps {
           driver.findElement(By.id(e.getKey())).sendKeys(e.getValue());
         }
         if (e.getKey().equals("gender")){
-          driver.findElement(By.cssSelector("[value='" + e.getValue() + "']")).click();}
+          driver.findElement(By.cssSelector("[value='" + e.getValue().toLowerCase() + "']")).click();}
       }
   }
 }
