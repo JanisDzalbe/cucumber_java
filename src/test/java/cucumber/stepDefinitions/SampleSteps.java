@@ -7,6 +7,7 @@ import io.cucumber.java.en.When;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
@@ -162,16 +163,16 @@ public class SampleSteps {
     public void iClickSendButton() throws Throwable {
         driver.findElement(By.cssSelector("[type=\"submit\"]")).click();
     }
+
     @And("^I see name \"([^\"]*)\" in check Feedback page$")
     public void iSeeNameInFeedbackPage(String name) throws Throwable {
         assertEquals(name, driver.findElement(By.id("name")).getText());
     }
 
     @And("^I see age (\\d+) in check Feedback page$")
-    public void iSeeAgeInCheckFeedbackPage(int age) throws Throwable{
+    public void iSeeAgeInCheckFeedbackPage(int age) throws Throwable {
         assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
     }
-
 
 
     //Task 1
@@ -197,6 +198,7 @@ public class SampleSteps {
         assertEquals(expectedError,
                 driver.findElement(By.id("ch1_error")).getText());
     }
+
     @When("^I enter a number: (\\d+)$")
     public void iEnterANumber(int number) throws Throwable {
         driver.findElement(By.id("numb")).clear();
@@ -216,19 +218,18 @@ public class SampleSteps {
     }
 
 
-
     //Sample 4 task
 
-//    @Given("^I am on Feedback page$")
+    //    @Given("^I am on Feedback page$")
 //    public void iAmOnFeedbackPage() {
 //        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
 //    }
-@When("I select Feedback languages")
-public void iSelectFeedbackLanguages(List<String> languages) {
-    for (String lang : languages) {
-        driver.findElement(By.cssSelector("input[value='" + lang + "']")).click();
+    @When("I select Feedback languages")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        for (String lang : languages) {
+            driver.findElement(By.cssSelector("input[value='" + lang + "']")).click();
+        }
     }
-}
 
     @And("I click send feedback")
     public void iClickSendFeedback() {
@@ -241,7 +242,40 @@ public void iSelectFeedbackLanguages(List<String> languages) {
         assertEquals(expected, actual);
     }
 
+    //Sample 5
+    @When("I fill feedback form with:")
+    public void iFillFeedbackFormWith(Map<String, String> data) {
 
+        WebElement nameInput = driver.findElement(By.cssSelector("input[placeholder='Name']"));
+        nameInput.clear();
+        nameInput.sendKeys(data.get("name"));
+
+        WebElement ageInput = driver.findElement(By.cssSelector("input[name='age']"));
+        ageInput.clear();
+        ageInput.sendKeys(data.get("age"));
+
+        String gender = data.get("gender");
+        String genderValue = gender.toLowerCase();
+
+        driver.findElement(By.cssSelector("input[name='gender'][value='" + genderValue + "']")).click();
     }
+
+//    @And("I click send feedback")
+//    public void iClickSendFeedback() {
+//        driver.findElement(By.cssSelector("button[type='submit']")).click();
+//    }
+
+    @Then("I see feedback result:")
+    public void iSeeFeedbackResult(Map<String, String> expected) {
+        String actualName = driver.findElement(By.id("name")).getText();
+        String actualAge = driver.findElement(By.id("age")).getText();
+        String actualGender = driver.findElement(By.id("gender")).getText();
+
+        assertEquals(expected.get("name"), actualName);
+        assertEquals(expected.get("age"), actualAge);
+        assertEquals(expected.get("gender"), actualGender);
+    }
+}
+
 
 
