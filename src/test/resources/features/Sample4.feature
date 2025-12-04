@@ -1,4 +1,5 @@
-@regression @part4
+
+@regression
 Feature: Introduction to cucumber part 4
   As a test engineer
   I want to be able to write and execute a scenario with steps that have 1 column table
@@ -21,12 +22,11 @@ Feature: Introduction to cucumber part 4
     And I click the result checkbox button
     Then message for checkboxes "You selected value(s): Option 2" is seen
 
-#  TODO - Add implementation for missing steps
-#  @test
-#  Scenario: Feedback with only languages
-#    Given I am on feedback page
-#    When I select feedback languages
-#      | English |
-#      | Spanish |
-#    And I click send feedback
-#    Then I can see languages "English,Spanish" in feedback check
+  @test
+  Scenario: Feedback with only languages
+    Given I am on feedback page
+    When I select feedback languages
+      | English |
+      | Spanish |
+    And I click send feedback
+    Then I can see languages "English,Spanish" in feedback check

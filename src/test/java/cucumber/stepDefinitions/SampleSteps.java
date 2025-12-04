@@ -110,7 +110,8 @@ public class SampleSteps {
     //Sample 1 task
 
     @When("^I am on the locators page$")
-    public void iAmOnTheLocatorsPage() {driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    public void iAmOnTheLocatorsPage() {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
     }
 
     @Then("^I should see both locators page headers$")
@@ -192,10 +193,43 @@ public class SampleSteps {
         assertEquals(expectedAge, ageSpan.getText());
     }
 
+    //Sample 4 task
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+
+        for (String lang : languages) {
+            // Checkbox pattern: <input class="w3-check" type="checkbox" name="language" value="English">
+            WebElement checkbox = driver.findElement(By.xpath("//input[@name='language' and @value='" + lang + "']"));
+
+            if (!checkbox.isSelected()) {
+                checkbox.click();
+            }
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguages(String expected) {
+
+        // Result page shows languages inside:
+        // <span id="language">English,Spanish</span>
+        WebElement langSpan = driver.findElement(By.id("language"));
+        String actual = langSpan.getText().replace(" ", "");
+
+        assertEquals(expected, actual);
+    }
 
 
 
-    // Task 1 feature
+
+
+    // Task 1
+
     @Given("^I am on enter a number page$")
     public void iAmOnEnterANumberPage() {
         driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
@@ -233,8 +267,7 @@ public class SampleSteps {
     }
 
 
-
+    // Task 2
 
 
 }
-
