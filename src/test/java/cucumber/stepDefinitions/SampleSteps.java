@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -107,12 +108,12 @@ public class SampleSteps {
     }
 
     @When("^I am on the locators page$")
-    public void iAmOnTheLocatorsPage() throws Throwable{
+    public void iAmOnTheLocatorsPage() throws Throwable {
         driver.get("https://acctabootcamp.github.io/site/examples/locators");
     }
 
     @Then("^I should see both locators page headers$")
-    public void iShouldSeeBothLocatorsPageHeaders() throws Throwable{
+    public void iShouldSeeBothLocatorsPageHeaders() throws Throwable {
         assertTrue(driver.findElement(By.id("heading_1")).isDisplayed());
         assertTrue(driver.findElement(By.id("heading_2")).isDisplayed());
         assertEquals("Heading 1", driver.findElement(By.id("heading_1")).getText());
@@ -120,7 +121,7 @@ public class SampleSteps {
     }
 
     @And("^Buttons in Locators page are clickable$")
-    public void buttonsInLocatorsPageAreClickable() throws Throwable{
+    public void buttonsInLocatorsPageAreClickable() throws Throwable {
         assertTrue(driver.findElement(By.cssSelector("[name='randomButton1']")).isEnabled());
         assertTrue(driver.findElement(By.cssSelector("[name='randomButton2']")).isEnabled());
     }
@@ -146,19 +147,20 @@ public class SampleSteps {
     public void iClickSendButton() throws Throwable {
         driver.findElement(By.cssSelector("[type=\"submit\"]")).click();
     }
+
     @And("^I see name \"([^\"]*)\" in check Feedback page$")
     public void iSeeNameInFeedbackPage(String name) throws Throwable {
         assertEquals(name, driver.findElement(By.id("name")).getText());
     }
 
     @And("^I see age (\\d+) in check Feedback page$")
-    public void iSeeAgeInCheckFeedbackPage(int age) throws Throwable{
+    public void iSeeAgeInCheckFeedbackPage(int age) throws Throwable {
         assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
     }
-    
+
     //Task 1
     @Given("^I am on EnterNumber page$")
-    public void iAmOnEnterNumberPage() throws Throwable{
+    public void iAmOnEnterNumberPage() throws Throwable {
         driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
     }
 
@@ -181,13 +183,13 @@ public class SampleSteps {
     }
 
     @When("^I enter number: \"([^\"]*)\"$")
-    public void iEnterNumber(String value) throws Throwable{
+    public void iEnterNumber(String value) throws Throwable {
         driver.findElement(By.id("numb")).clear();
         driver.findElement(By.id("numb")).sendKeys(String.valueOf(value));
     }
 
     @Then("^I see success alert for number \"([^\"]*)\"$")
-    public void iSeeSuccessAlert(String inputValue) throws Throwable{
+    public void iSeeSuccessAlert(String inputValue) throws Throwable {
         double number = Double.parseDouble(inputValue);
         double sqrt = Math.sqrt(number);
         String sqrtRounded = String.format("%.2f", sqrt);
@@ -199,21 +201,21 @@ public class SampleSteps {
     }
 
     @And("I do not see an error message")
-    public void iDoNotSeeAnErrorMessage() throws Throwable{
+    public void iDoNotSeeAnErrorMessage() throws Throwable {
         WebElement error = driver.findElement(By.id("ch1_error"));
         assertFalse("Error message should not be visible", error.isDisplayed());
     }
 
     //Sample 4
     @When("^I select feedback languages$")
-    public void iSelectFeedbackLanguages(List<String> languages) throws Throwable{
+    public void iSelectFeedbackLanguages(List<String> languages) throws Throwable {
         for (String lang : languages) {
             driver.findElement(By.xpath("//*[@type='checkbox' and @value='" + lang + "']")).click();
         }
     }
 
     @And("^I click send feedback$")
-    public void iClickSendFeedback() throws Throwable{
+    public void iClickSendFeedback() throws Throwable {
         driver.findElement(By.xpath("//*[@id=\"fb_form\"]/form/button")).click();
     }
 
@@ -234,9 +236,113 @@ public class SampleSteps {
 
 
     @Then("^I can see values in feedback check$")
-    public void iCanSeeValuesInFeedbackCheck(Map<String, String> inputMap) throws Throwable{
+    public void iCanSeeValuesInFeedbackCheck(Map<String, String> inputMap) throws Throwable {
         assertEquals(inputMap.get("Name"), driver.findElement(By.id("name")).getText());
         assertEquals(inputMap.get("Age"), driver.findElement(By.id("age")).getText());
         assertEquals(inputMap.get("Genre").toLowerCase(), driver.findElement(By.id("gender")).getText());
+    }
+
+    //Task2
+    @Given("^I am on the List of people page$")
+    public void iAmOnTheListOfPeoplePage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+    }
+
+    @When("^I click add person$")
+    public void iClickAddPerson() throws Throwable {
+        driver.findElement(By.xpath("//button[text()='Add person']")).click();
+        assertEquals("https://janisdzalbe.github.io/example-site/tasks/enter_a_new_person_with_a_job.html", driver.getCurrentUrl());
+    }
+
+    @And("^I enter name \"([^\"]*)\"$")
+    public void iEnterNameForListOfPeople(String name) throws Throwable {
+        driver.findElement(By.id("name")).clear();
+        driver.findElement(By.id("name")).sendKeys(name);
+    }
+
+    @And("^I enter job \"([^\"]*)\"$")
+    public void iEnterJob(String job) throws Throwable {
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("job")).sendKeys(job);
+    }
+
+    @And("^I click add button$")
+    public void iClickAddButton() throws Throwable {
+        driver.findElement(By.xpath("//button[text()='Add']")).click();
+        assertEquals("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html", driver.getCurrentUrl());
+    }
+
+    @And("^I see name: \"([^\"]*)\" and job \"([^\"]*)\" in the List$")
+    public void iSeeNameAndJobInTheList(String name, String job) throws Throwable {
+        List<WebElement> people = driver.findElements(By.xpath("//*[@id='listOfPeople']/div"));
+        WebElement target = null;
+        for (WebElement p : people) {
+            String personName = p.findElement(By.className("name")).getText();
+            if (personName.equals(name)) {
+                target = p;
+                break;
+            }
+        }
+        assertNotNull(target);
+        String actualJob = target.findElement(By.className("job")).getText();
+        assertEquals(job, actualJob);
+    }
+
+    @When("^I see person \"([^\"]*)\" with job \"([^\"]*)\"$")
+    public void iSeePersonWithJob(String name, String job) {
+        WebElement list = driver.findElement(By.id("listOfPeople"));
+
+        boolean found = list.findElements(By.tagName("li")).stream().anyMatch(li -> {
+            String liName = li.findElement(By.className("name")).getText();
+            String liJob = li.findElement(By.className("job")).getText();
+            return liName.equalsIgnoreCase(name) && liJob.equalsIgnoreCase(job);
+        });
+
+        if (!found) {
+            throw new AssertionError("Person " + name + " with job " + job + " not found in the list");
+        }
+    }
+
+    @And("^I click edit person \"([^\"]*)\"$")
+    public void iClickEditPerson(String name) throws Throwable {
+        WebElement list = driver.findElement(By.id("listOfPeople"));
+        for (WebElement li : list.findElements(By.tagName("li"))) {
+            String liName = li.findElement(By.className("name")).getText();
+            if (liName.equalsIgnoreCase(name)) {
+                li.findElement(By.className("editbtn")).click();
+                break;
+            }
+        }
+    }
+
+    @Then("^I click Edit button$")
+    public void iClickEditButton() throws Throwable {
+        driver.findElement(By.xpath("//button[text()=\"Edit\"]")).click();
+    }
+
+    @And("^I click remove person \"([^\"]*)\"$")
+    public void iClickRemoveButton(String name) throws Throwable {
+        WebElement list = driver.findElement(By.id("listOfPeople"));
+        for (WebElement li : list.findElements(By.tagName("li"))) {
+            String liName = li.findElement(By.className("name")).getText();
+            if (liName.equalsIgnoreCase(name)) {
+                li.findElement(By.className("closebtn")).click();
+                break;
+            }
+        }
+    }
+
+    @Then("^I should not see a person \"([^\"]*)\" in the list$")
+    public void iShouldNotSeeAPersonInTheList(String name) throws Throwable {
+        List<WebElement> persons =
+                driver.findElements(By.xpath("//*[@id='listOfPeople']//*[contains(@class,'name') and text()='Mike']"));
+
+        assertTrue(persons.isEmpty());
+    }
+
+    @When("^I click reset button$")
+    public void iClickResetButton() throws Throwable{
+        Thread.sleep(2000);
+        driver.findElement(By.xpath("//button[text()='Reset List']")).click();
     }
 }
