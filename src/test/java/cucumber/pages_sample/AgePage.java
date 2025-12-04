@@ -18,8 +18,9 @@ public class AgePage {
     private WebElement errorText;
 
 
+
     public String getPageUrl() {
-        return "https://janisdzalbe.github.io/example-site/examples/age";
+        return "https://janisdzalbe.github.io/example-site/examples/age.html";
     }
 
     public void enterName(String name) {
