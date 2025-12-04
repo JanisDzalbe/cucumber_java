@@ -32,7 +32,7 @@ Feature: Introduction to cucumber part 3
     Given I am on feedback page
     When I enter name FB: "<name>"
     And I enter age FB: <age>
-    And I click send button
+    And I click send feedback
     Then I see name "<name>" in feedback
     And I see age <age> in feedback
     @working
