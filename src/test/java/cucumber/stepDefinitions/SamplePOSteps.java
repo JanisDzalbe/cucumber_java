@@ -68,4 +68,15 @@ public class SamplePOSteps {
         assertFalse(driver.getCurrentUrl().contains("https://janisdzalbe.github.io/example-site/examples/age_2"));
         assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
     }
+
+    @Then("^I see error: \"([^\"]*)\" using PO$")
+    public void iSeeErrorUsingPO(String message) throws Throwable{
+        agePage.checkErrorMessage(message);
+    }
+
+    @And("^I remain in age page using PO$")
+    public void iRemainInAgePageUsingPO() throws Throwable{
+        assertEquals(agePage.getPageUrl(), driver.getCurrentUrl());
+        assertFalse(driver.getCurrentUrl().contains(ageSubmittedPage.getPageBaseUrl()));
+    }
 }
