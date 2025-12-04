@@ -302,9 +302,10 @@ public class SampleSteps {
         jobField.sendKeys("Teacher");
     }
     @Then("^I check that the person is updated in the list with new job \"([^\"]*)\"$")
-    public void iAssertOnChangedPerson(String job){
+    public void iAssertOnChangedPerson(String job, DataTable table){
+        List<Map<String, String>> expectedList = table.asMaps(String.class, String.class);
         WebElement firstElementAfterEditing = driver.findElements(By.className("w3-padding-16")).get(0);
-        assertEquals("Mike", firstElementAfterEditing.findElement(By.className("name")).getText());
+        assertEquals(expectedList.get(0).get("name"), firstElementAfterEditing.findElement(By.className("name")).getText());
         assertEquals(job, firstElementAfterEditing.findElement(By.className("job")).getText());
     }
     @When("^I click cross x icon for an existing person$")
@@ -312,12 +313,13 @@ public class SampleSteps {
         driver.findElement(By.xpath("//*[@id='person0']/span[1]")).click();
     }
     @Then("^I check that the person is removed from the list$")
-    public void iAssertOnRemovedPerson() {
+    public void iAssertOnRemovedPerson(DataTable table) {
+        List<Map<String, String>> expectedList = table.asMaps(String.class, String.class);
         List<WebElement> listOfPeoplesAfterRemoving = driver.findElements(By.className("w3-padding-16"));
-        assertEquals(9, listOfPeoplesAfterRemoving.size());
+        assertEquals(expectedList.size()-1, listOfPeoplesAfterRemoving.size());
         for (WebElement person : listOfPeoplesAfterRemoving) {
-            assertFalse(person.findElement(By.className("name")).getText().equals("Mike"));
-            assertFalse(person.findElement(By.className("job")).getText().equals("Web Designer"));
+            assertFalse(person.findElement(By.className("name")).getText().equals(expectedList.get(0).get("name")));
+            assertFalse(person.findElement(By.className("job")).getText().equals(expectedList.get(0).get("job")));
         }
     }
         @And("^I click Reset List$")

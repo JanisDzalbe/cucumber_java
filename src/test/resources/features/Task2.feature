@@ -17,11 +17,33 @@ Feature: people with jobs page
     And I change job field to "Teacher"
     And I click edit
     Then I check that the person is updated in the list with new job "Teacher"
+      | name  | job |
+      | Mike  | Web Designer|
+      | Jill  | Support  |
+      | Jane  | Accountant|
+      | John  | Software Engineer  |
+      | Sarah | Product Manager |
+      | Carlos| Data Analyst  |
+      | Emily | UX Designer  |
+      | David | Project Manager  |
+      | Maria | QA Engineer  |
+      | Alex  | DevOps Engineer  |
 
   Scenario: Remove a person
     Given I am on people with jobs page
     When I click cross x icon for an existing person
     Then I check that the person is removed from the list
+      | name  | job |
+      | Mike  | Web Designer|
+      | Jill  | Support  |
+      | Jane  | Accountant|
+      | John  | Software Engineer  |
+      | Sarah | Product Manager |
+      | Carlos| Data Analyst  |
+      | Emily | UX Designer  |
+      | David | Project Manager  |
+      | Maria | QA Engineer  |
+      | Alex  | DevOps Engineer  |
 
   Scenario: Reset original list after removing a person
     Given I am on people with jobs page
