@@ -8,6 +8,7 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import javax.swing.*;
 import java.util.List;
 import java.util.Map;
 
@@ -166,10 +167,7 @@ public class SampleSteps {
     }
 
     //Task1
-    @Given("^I am on Enter a number page$")
-    public void iAmOnEnteraNumberPage() throws Throwable {
-        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
-    }
+
 
     @When("^I enter invalid number or text: (.*)$")
     public void iEnterInvalidNumberOrText(String input) throws Throwable {
@@ -203,5 +201,41 @@ public class SampleSteps {
     @And("^No error is shown$")
     public void noErrorIsShown() throws Throwable {
         assertTrue(driver.findElements(By.id("ch1_error")).isEmpty());
+    }
+
+    @Then("^I select feedback languages$")
+    public void isSelectFeedbackLaguages$(List<String> languages) throws Throwable {
+       for (String language : languages) {
+           driver.findElement(By.xpath("//*[@type='checkbox' and @value='" + language + "']")).click();
+       }
+    }
+    @Then("I can see languages {string} in feedback check")
+    public void isAssertLanguagesInFeedbackCheck$(String languages) throws Throwable {
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+    @Given("^I am on feedback page$")
+    public void iAmOnEnteraNumberPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+    @And("^I click send feedback$")
+    public void iClickSendFeedback() throws Throwable {
+        driver.findElement(By.xpath("//button[normalize-space()='Send']")).click();
+    }
+
+    //Sample 5
+    @When("^I input values in Feedback page$")
+    public void iInputValuesInFeedbackPage(Map<String, String> inputMapp) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(inputMapp.get("Name"));
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(inputMapp.get("Age"));
+        driver.findElement(By.cssSelector("[type='radio'][value = '"+inputMapp.get("Genre").toLowerCase()+"']")).click();
+    }
+
+    @When("^I can see values in feedback check$")
+    public void iAssertValuesInFeedbackCheck(Map<String, String> inputMapp) throws Throwable {
+        assertEquals(inputMapp.get("Name"), driver.findElement(By.id("name")).getText());
+        assertEquals(inputMapp.get("Age"), driver.findElement(By.id("age")).getText());
+        assertEquals(inputMapp.get("Genre").toLowerCase(), driver.findElement(By.id("gender")).getText());
     }
 }
