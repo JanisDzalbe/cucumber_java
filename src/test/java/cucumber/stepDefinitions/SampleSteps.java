@@ -371,4 +371,14 @@ public class SampleSteps {
     assertEquals(job, Person.findElement(By.className("job")).getText());
 
   }
+
+  @And("I see that list is larger")
+  public void iSeeThatListIsLarger() {
+    List<WebElement> allElements = driver.findElements(By.xpath("//*[@id=\"listOfPeople\"]/div"));
+    int count = 0;
+    for (WebElement element : allElements) {
+      count++;
+    }
+    assertTrue(count>10);
+  }
 }

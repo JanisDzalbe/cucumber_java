@@ -17,6 +17,7 @@ Feature:
     And  I enter Job: "<job>"
     And  I click Add
     Then I see name: "<name>" and job "<job>"
+    And  I see that list is larger
 
     Examples:
       | name   | job            |
@@ -28,6 +29,7 @@ Feature:
       And I Change job: "<job>"
       And i Click Edit
       Then I see name: "<name>" and job "<job>"
+      And  I see Person Amount in List
       Examples:
       |name         | job            |
       | Jane        | bbb            |
@@ -65,6 +67,7 @@ Feature:
     Then I check for fields ofListOfPeople:
       |name|"<name>" |
       |job |"<job>"  |
+    And I see that list is larger
 
     Examples:
       | name   | job            |
@@ -78,6 +81,7 @@ Feature:
     Then I check for fields ofListOfPeople:
       |name|"<name>" |
       |job |"<job>"  |
+    And  I see Person Amount in List
     Examples:
       |name         | job            |
       | Jane        | bbb            |
