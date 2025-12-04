@@ -180,6 +180,7 @@ public class SampleSteps {
     @And("^I click send feedback button$")
     public void iClickSendFeedbackButton() throws Throwable {
         driver.findElement(By.xpath("//button[text()='Send']")).click();        //find button by xpath, 'send'text
+        //Thread.sleep(3000);               //checking if input works
     }
 
     @Then("^I should see feedback name displayed as: \"([^\"]*)\"$")
@@ -255,4 +256,81 @@ public class SampleSteps {
         String displayedLanguages = driver.findElement(By.id("language")).getText();
         assertEquals(expectedLanguages, displayedLanguages);
     }
+
+
+
+            //Sample5 task
+
+
+    @When("^I enter all feedback details:$")
+    public void iEnterAllFeedbackDetails(Map<String, String> feedbackData) {
+
+        for (Map.Entry<String, String> entry : feedbackData.entrySet()) {       //loop through cucumber table fields
+            String field = entry.getKey();
+            String value = entry.getValue();
+
+            if (field.equals("genre")) {                //handling of radiobuttons
+                String lower = value.toLowerCase();     // to lower case to match html. Female -> female
+                WebElement radio = driver.findElement(
+                        By.cssSelector("input[type='radio'][name='gender'][value='" + lower + "']")
+                );
+                radio.click();                          //clicking the correct gender
+                continue;
+            }
+
+            //read text inside found element ID, for example if the found id is  "name" then input our data into corresponding field
+            WebElement element = driver.findElement(By.id(field));
+            element.clear();
+            element.sendKeys(value);
+        }
+    }
+
+    @Then("^I should see all feedback details displayed:$")
+    public void iShouldSeeAllFeedbackDetailsDisplayed(Map<String, String> expectedData) throws Throwable {
+        for (Map.Entry<String, String> entry : expectedData.entrySet()) {   // Map Cucumber table keys to HTML ids
+            String field = entry.getKey();
+            String expectedValue = entry.getValue();
+
+            String htmlId;
+            switch (field) {
+                case "name":
+                    htmlId = "name";
+                    break;
+                case "age":
+                    htmlId = "age";
+                    break;
+                case "genre":
+                    htmlId = "gender";          // table uses genre, HTML uses gender (at least on this page)
+                    break;
+                default:
+                    htmlId = field;
+            }
+
+            //read text inside found element ID, for example if the found id is  "name" then read what's the text within the span
+            WebElement element = driver.findElement(By.id(htmlId));
+            String actualValue = element.getText();
+            //lower case just for the gender field. if in previous step didn't use lowercase, then wouldn't need it but the table then has to be exactly like in html
+            assertEquals("Data mismatch" + field, expectedValue.toLowerCase(), actualValue.toLowerCase());
+        }
+    }
+
+    /*                      //A way simpler approach
+    @When("^I enter all feedback details:$")
+    public void iEnterValuesInFeedback(Map<String, String> inputMap) throws Throwable {
+        iEnterNameInFeedback(inputMap.get("Name"));
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(inputMap.get("Age"));
+        driver.findElement(By.cssSelector("input[type='radio'][value='" + inputMap.get("Genre").toLowerCase() + "']")).click();
+    }
+
+    @When("^I should see all feedback details displayed:$")
+    public void iAssertValuesInFeedbackCheck(Map<String, String> inputMap) throws Throwable {
+        assertEquals(inputMap.get("Name"), driver.findElement(By.id("name")).getText());
+        assertEquals(inputMap.get("Age"), driver.findElement(By.id("age")).getText());
+        assertEquals(inputMap.get("Genre").toLowerCase(), driver.findElement(By.id("gender")).getText());
+    }
+     */
+
+
+
 }
