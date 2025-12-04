@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,6 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class SampleSteps {
     private WebDriver driver;
+
+    private int peopleCountBefore;
+    private int originalPeopleCount;
 
     public SampleSteps() {
         this.driver = Hooks.driver;
@@ -232,5 +236,169 @@ public class SampleSteps {
         assertEquals(expected.get("genre"), driver.findElement(By.id("gender")).getText());
     }
 
+    /// Task2 implementation
+    @Given("^I am on \"People with jobs\" page$")
+    public void iAmOnJobPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+    }
 
+    /// 2.1 Add
+    @When("^I click \"Add person\" button$")
+    public void iClickAddPersonButton() {
+        peopleCountBefore = driver.findElements(By.cssSelector("#listOfPeople > div.w3-padding-16")).size();
+        driver.findElement(By.xpath("//button[normalize-space()='Add person']")).click();
+    }
+
+    @And("^I fill form with:$")
+    public void iFillFormWith(Map<String, String> data) {
+        WebElement nameInput = driver.findElement(By.id("name"));
+        WebElement jobInput  = driver.findElement(By.id("job"));
+
+        nameInput.clear();
+        nameInput.sendKeys(data.get("name"));
+
+        jobInput.clear();
+        jobInput.sendKeys(data.get("job"));
+    }
+
+    @And("^I click add button$")
+    public void iClickAdd() {
+        driver.findElement(By.xpath("//button[text()='Add']")).click();
+    }
+
+    @Then("^I should see person in the list:$")
+    public void iShouldSeePersonInList(Map<String, String> expected) {
+        List<WebElement> rows = driver.findElements(By.cssSelector("#listOfPeople > div.w3-padding-16"));
+
+        WebElement foundRow = null;
+        for (WebElement row : rows) {
+            String rowName = row.findElement(By.cssSelector(".name")).getText();
+            if (rowName.equals(expected.get("name"))) {
+                foundRow = row;
+                break;
+            }
+        }
+
+        Assert.assertNotNull("Person not found in list: " + expected.get("name"), foundRow);
+
+        String actualName = foundRow.findElement(By.cssSelector(".name")).getText();
+        String actualJob  = foundRow.findElement(By.cssSelector(".job")).getText();
+
+        assertEquals(expected.get("name"), actualName);
+        assertEquals(expected.get("job"), actualJob);
+    }
+
+    @Then("^list size should increase by one$")
+    public void peopleListSizeShouldIncreaseBy1() {
+        int after = driver.findElements(By.cssSelector("#listOfPeople > div.w3-padding-16")).size();
+        assertEquals("Person was not added", peopleCountBefore + 1, after);
+    }
+
+    /// Edit 2.2 Edit
+    @When("^I click edit for person \"([^\"]*)\"$")
+    public void iClickEditForPerson(String name) {
+        WebElement targetRow = null;
+
+        for (WebElement row : driver.findElements(By.cssSelector("#listOfPeople > div.w3-padding-16"))) {
+            String rowName = row.findElement(By.cssSelector(".name")).getText();
+            if (rowName.equals(name)) {
+                targetRow = row;
+                break;
+            }
+        }
+        Assert.assertNotNull("Person not found in list: " + name, targetRow);
+        targetRow.findElement(By.cssSelector("span[onclick*='openModalForEditPersonWithJob']")).click();
+    }
+
+    @Then("^I should see prefilled form with:$")
+    public void iShouldSeePrefilledFormWith(Map<String, String> expected) {
+        assertEquals(expected.get("name"), driver.findElement(By.id("name")).getAttribute("value"));
+        assertEquals(expected.get("job"), driver.findElement(By.id("job")).getAttribute("value"));
+    }
+
+    @When("^I change job to \"([^\"]*)\"$")
+    public void iChangeJobTo(String newJob) {
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("job")).sendKeys(newJob);
+    }
+
+    @And("^I click edit button$")
+    public void iClickEditButton() {
+        driver.findElement(By.xpath("//button[text()='Edit']")).click();
+    }
+
+    /// Task 2.3 Remove
+    @When("^I click delete a person \"([^\"]*)\"$")
+    public void iClickDeleteForPerson(String name) {
+        WebElement targetRow = null;
+        for (WebElement row : driver.findElements(By.cssSelector("#listOfPeople > div.w3-padding-16"))) {
+            String rowName = row.findElement(By.cssSelector(".name")).getText();
+            if (rowName.equals(name)) {
+                targetRow = row;
+                break;
+            }
+        }
+        Assert.assertNotNull("Person not found in list: " + name, targetRow);
+
+        targetRow.findElement(By.cssSelector("span[onclick*='deletePerson']")).click();
+    }
+
+    @Then("^I should not see person \"([^\"]*)\" in the list$")
+    public void iShouldNotSeePersonInTheList(String name) {
+        boolean personExists = false;
+        for (WebElement row : driver.findElements(By.cssSelector("#listOfPeople > div.w3-padding-16"))) {
+            String rowName = row.findElement(By.cssSelector(".name")).getText();
+            if (rowName.equals(name)) {
+                personExists = true;
+                break;
+            }
+        }
+        Assert.assertFalse("Person should be removed but is still present: " + name, personExists);
+    }
+
+    /// Task 2.4 Reset
+
+    @When("^I add person \"([^\"]*)\" with job \"([^\"]*)\"$")
+    public void iAddPersonWithJob(String name, String job) {
+        driver.findElement(By.id("addPersonBtn")).click();
+
+        driver.findElement(By.id("name")).clear();
+        driver.findElement(By.id("name")).sendKeys(name);
+
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("job")).sendKeys(job);
+
+        driver.findElement(By.id("modal_button")).click();
+
+        boolean found = false;
+        for (WebElement row : driver.findElements(By.cssSelector("#listOfPeople > div.w3-padding-16"))) {
+            String rowName = row.findElement(By.cssSelector(".name")).getText().trim();
+            if (rowName.equals(name)) {
+                found = true;
+                break;
+            }
+        }
+        assertTrue("Person was not added to list: " + name, found);
+    }
+
+    @When("^I click reset list$")
+    public void iClickResetList() {
+        driver.findElement(By.cssSelector("button[onclick='resetListOfPeople()']")).click();
+    }
+
+    @Then("^I should see original list$")
+    public void iShouldSeeDefaultPeopleList() {
+
+        String[][] DEFAULT_PEOPLE = {{"Mike", "Web Designer"}, {"Jill", "Support"}, {"Jane", "Accountant"}, {"John", "Software Engineer"}, {"Sarah", "Product Manager"}, {"Carlos", "Data Analyst"}, {"Emily", "UX Designer"}, {"David", "Project Manager"}, {"Maria", "QA Engineer"}, {"Alex", "DevOps Engineer"}};
+
+        assertEquals("List must contain 10 entries", 10, driver.findElements(By.cssSelector("#listOfPeople > div.w3-padding-16")).size());
+
+        for (int i = 0; i < 10; i++) {
+            String actualName = driver.findElements(By.cssSelector("#listOfPeople > div.w3-padding-16")).get(i).findElement(By.cssSelector(".name")).getText();
+            String actualJob  = driver.findElements(By.cssSelector("#listOfPeople > div.w3-padding-16")).get(i).findElement(By.cssSelector(".job")).getText();
+
+            assertEquals("Name mismatch at row " + i, DEFAULT_PEOPLE[i][0], actualName);
+            assertEquals("Job mismatch at row " + i, DEFAULT_PEOPLE[i][1], actualJob);
+        }
+    }
 }
