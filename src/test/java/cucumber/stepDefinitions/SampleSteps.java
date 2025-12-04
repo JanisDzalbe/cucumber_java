@@ -203,4 +203,40 @@ public class SampleSteps {
         WebElement error = driver.findElement(By.id("ch1_error"));
         assertFalse("Error message should not be visible", error.isDisplayed());
     }
+
+    //Sample 4
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) throws Throwable{
+        for (String lang : languages) {
+            driver.findElement(By.xpath("//*[@type='checkbox' and @value='" + lang + "']")).click();
+        }
+    }
+
+    @And("^I click send feedback$")
+    public void iClickSendFeedback() throws Throwable{
+        driver.findElement(By.xpath("//*[@id=\"fb_form\"]/form/button")).click();
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String language) throws Throwable {
+        assertEquals(language, driver.findElement(By.id("language")).getText());
+    }
+
+    //Sample 5
+    @When("^I enter values for feedback:$")
+    public void iEnterValuesForFeedback(Map<String, String> inputMap) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(inputMap.get("Name"));
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(inputMap.get("Age"));
+        driver.findElement(By.cssSelector("[type='radio'][value='" + inputMap.get("Genre").toLowerCase() + "']")).click();
+    }
+
+
+    @Then("^I can see values in feedback check$")
+    public void iCanSeeValuesInFeedbackCheck(Map<String, String> inputMap) throws Throwable{
+        assertEquals(inputMap.get("Name"), driver.findElement(By.id("name")).getText());
+        assertEquals(inputMap.get("Age"), driver.findElement(By.id("age")).getText());
+        assertEquals(inputMap.get("Genre").toLowerCase(), driver.findElement(By.id("gender")).getText());
+    }
 }
