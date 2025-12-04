@@ -1,6 +1,7 @@
 package cucumber.stepDefinitions;
 
 import com.google.common.base.Equivalence;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -152,12 +153,12 @@ public class SampleSteps {
 
     @When("^I click Send$")
     public void iClickSend() {
-        driver.findElement(By.cssSelector("[type=\"submit\"]")).click();
+        driver.findElement(By.cssSelector("[type='submit']")).click();
     }
 
     @Then("^I see the confirmation check page$")
     public void iSeeTheConfirmationCheckPage() {
-//        assertTrue(driver.getCurrentUrl().contains("check_feedback.html"));
+//        assertTrue(driver.getCurrentUrl().contains("/check_feedback.html"));
         // randomly fails, possibly need to wait()
         assertEquals("Is this the feedback you want to give us?", driver.findElement(By.tagName("h2")).getText());
     }
@@ -166,5 +167,49 @@ public class SampleSteps {
     public void iSeeTheNameIsAndAgeIsAge(String name, int age) {
         assertEquals(name, driver.findElement(By.id("name")).getText());
         assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
+    }
+
+    // Sample 4
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        for (String value : languages) {
+            driver.findElement(By.cssSelector("[type='checkbox'][value='" + value + "']")).click();
+        }
+    }
+
+    @When("^I click send feedback$")
+    public void iClickSendFeedback() {
+        driver.findElement(By.cssSelector("[type='submit']")).click();
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String languages) {
+//        assertTrue(driver.getCurrentUrl().contains("/check_feedback.html"));
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+
+    // Sample 5
+    @When("I enter the values:")
+    public void iEnterTheValues(Map<String, String> table) {
+        // Enter the name
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(table.get("name"));
+        // Enter the age
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(table.get("age"));
+        // Select the gender
+        driver.findElement(By.cssSelector("[type='radio'][value='" + table.get("gender").toLowerCase() + "']")).click();
+    }
+
+    @Then("I can see the values in feedback check:")
+    public void iCanSeeTheValuesInFeedbackCheck(Map<String, String> table) {
+        assertEquals(table.get("name"), driver.findElement(By.id("name")).getText());
+        assertEquals(table.get("age"), driver.findElement(By.id("age")).getText());
+        assertEquals(table.get("gender").toLowerCase(), driver.findElement(By.id("gender")).getText().toLowerCase());
     }
 }
