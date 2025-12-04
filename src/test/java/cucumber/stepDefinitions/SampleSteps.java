@@ -183,5 +183,26 @@ public class SampleSteps {
                 pageText.contains("Your age: " + age));
     }
 
+    //Sample 4 Task..........................................................
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) throws Throwable {
+        for (String language : languages) {
+            driver.findElement(By.cssSelector("input[value='" + language + "']")).click();
+        }
+    }
+
+    @And("^I click send feedback$")
+    public void iClickSendFeedback() throws Throwable {
+        iPressTheSendButton();
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String expectedLanguages) throws Throwable {
+        String pageText = driver.findElement(By.tagName("body")).getText();
+        assertTrue("Expected languages to be shown in feedback check",
+                pageText.contains(expectedLanguages));
+    }
+
 
 }
