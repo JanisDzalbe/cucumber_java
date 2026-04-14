@@ -10,8 +10,8 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -65,12 +65,10 @@ public class SampleSteps {
 
     @When("^I enter values:$")
     public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
-        for (Map.Entry<String, String> e : valuesToEnter.entrySet()) {
-            driver.findElement(By.id(e.getKey())).clear();
-            driver.findElement(By.id(e.getKey())).sendKeys(e.getValue());
-            System.out.println("key is " + e.getKey());
-            System.out.println("value is " + e.getValue());
-        }
+        driver.findElement(By.id("name")).clear();
+        driver.findElement(By.id("name")).sendKeys(valuesToEnter.get("name"));
+        driver.findElement(By.id("age")).clear();
+        driver.findElement(By.id("age")).sendKeys(valuesToEnter.get("age"));
     }
 
     @And("^I should see menu$")
