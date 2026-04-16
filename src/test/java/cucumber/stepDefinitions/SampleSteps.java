@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -96,5 +97,35 @@ public class SampleSteps {
     @Given("^I am on action page$")
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
+    }
+
+    @When("^I am on the locators page$")
+    public void iAmOnLocatorsPage() throws Throwable{
+        driver.get("https://janisdzalbe.github.io/example-site/examples/locators");
+    }
+
+    @Then("I should see both locators page headers")
+    public void iShouldSeeBothLocatorsPageHeaders() {
+        assertTrue(driver.findElement(By.id("heading_1")).isDisplayed());
+        assertEquals("Heading 1", driver. findElement(By.id("heading_1")).getText());
+        assertTrue(driver.findElement(By.id("heading_2")).isDisplayed());
+        assertEquals("Heading 2 text", driver. findElement(By.id("heading_2")).getText());
+    }
+
+    @And("Buttons in Locators page are clickable")
+    public void buttonsInLocatorsPageAreClickable() throws Throwable{
+        var button1 = driver.findElement(By.name("randomButton1"));
+        var button2 = driver.findElement(By.id("buttonId"));
+
+        assertTrue(button1.isDisplayed());
+        assertTrue(button2.isDisplayed());
+
+        assertTrue(button1.isEnabled());
+        assertTrue(button2.isEnabled());
+    }
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeErrorMessage(String errorMessage) throws Throwable{
+        assertEquals(errorMessage, driver.findElement(By.id("error")).getText());
     }
 }
