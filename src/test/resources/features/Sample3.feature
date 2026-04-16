@@ -19,7 +19,7 @@ Feature: Introduction to cucumber part 3
   @not_working
     Examples:
       | name | age | message                   |
-      | Tom  | 15  | Hello, Tom, you are a kid |
+      | Tom  | 15  | Hello, Tom, you are a teenager |
 
 
 #   TODO - create Scenario Outline for 'Give us your feedback!' page
@@ -27,3 +27,17 @@ Feature: Introduction to cucumber part 3
 #   Navigate to page
 #   Set name and age based on test Examples
 #   Click "Send" button and verify that previous input is displayed in correct fields
+
+  @feedback
+  Scenario Outline: a new scenario outline
+    Given I navigate to page
+    When I enter feedback name: "<name>"
+    And I enter feedback age: "<age>"
+    And I click send button
+    Then I should see name "<name>" and age "<age>"
+
+    @working
+    Examples:
+      | name  | age |
+      | John   | 20 |
+

@@ -124,4 +124,29 @@ public class SampleSteps {
         assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
     }
 
+    @Given("^I navigate to page$")
+    public void navigateToPage(){
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter feedback name: \"([^\"]*)\"$")
+    public void enterFeedbackName(String name) {
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @When("^I enter feedback age: \"([^\"]*)\"$")
+    public void enterFeedbackAge(String age) {
+        driver.findElement(By.id("fb_age")).sendKeys(age);
+    }
+
+    @And("^I click send button$")
+    public void clickSendButton(){
+        driver.findElement(By.className("w3-btn-block")).click();
+    }
+
+    @Then("^I should see name \"([^\"]*)\" and age \"([^\"]*)\"")
+    public void seeNameAge(String name, String age){
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+        assertEquals(age, driver.findElement(By.id("age")).getText());
+    }
 }
