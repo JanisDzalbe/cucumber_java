@@ -3,6 +3,7 @@ package cucumber.stepDefinitions;
 import io.cucumber.java.en.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 import java.util.Map;
@@ -15,8 +16,6 @@ public class SampleSteps {
     public SampleSteps() {
         this.driver = Hooks.driver;
     }
-
-    // ---------------- HOME PAGE ----------------
 
     @Given("^I am on the home page$")
     public void iAmOnTheHomePage() {
@@ -41,7 +40,6 @@ public class SampleSteps {
         assertTrue(driver.findElement(By.className("w3-navbar")).isDisplayed());
     }
 
-    // ---------------- AGE PAGE ----------------
 
     @Given("^I (?:am on|open) age page$")
     public void iAmOnAgePage() {
@@ -70,8 +68,6 @@ public class SampleSteps {
         assertEquals(message, driver.findElement(By.id("message")).getText());
     }
 
-    // ---------------- ERROR SCENARIO ----------------
-
     @Then("^I see error: \"([^\"]*)\"$")
     public void iSeeError(String errorMessage) {
         assertEquals(errorMessage, driver.findElement(By.id("error")).getText());
@@ -81,8 +77,6 @@ public class SampleSteps {
     public void iAmNotNavigatedToAgeMessagePage() {
         assertTrue(driver.getCurrentUrl().contains("/examples/age"));
     }
-
-    // ---------------- OTHER EXISTING STEPS ----------------
 
     @When("^I enter values:$")
     public void iEnterValues(Map<String, String> valuesToEnter) {
@@ -113,5 +107,63 @@ public class SampleSteps {
     @Given("^I am on action page$")
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
+    }
+
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter feedback name: \"([^\"]*)\"$")
+    public void iEnterFeedbackName(String name) {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("^I enter feedback age: (\\d+)$")
+    public void iEnterFeedbackAge(int age) {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("^I choose feedback option: \"([^\"]*)\"$")
+    public void iChooseFeedbackOption(String option) {
+        Select select = new Select(driver.findElement(By.id("like_us")));
+        select.selectByVisibleText(option);
+    }
+
+    @And("^I enter feedback comment: \"([^\"]*)\"$")
+    public void iEnterFeedbackComment(String comment) {
+        driver.findElement(By.cssSelector("textarea[name='comment']")).clear();
+        driver.findElement(By.cssSelector("textarea[name='comment']")).sendKeys(comment);
+    }
+
+    @And("^I click send feedback$")
+    public void iClickSendFeedback() {
+        driver.findElement(By.xpath("//button[text()='Send']")).click();
+    }
+
+    @Then("^I should see feedback name: \"([^\"]*)\"$")
+    public void iShouldSeeFeedbackName(String name) {
+        assertTrue(driver.getCurrentUrl().contains("name=" + name));
+    }
+
+    @And("^I should see feedback age: \"([^\"]*)\"$")
+    public void iShouldSeeFeedbackAge(String age) {
+        assertTrue(driver.getCurrentUrl().contains("age=" + age));
+    }
+
+    @And("^I should see feedback option: \"([^\"]*)\"$")
+    public void iShouldSeeFeedbackOption(String option) {
+        String expectedOption = option.replace(" ", "+").replace("?", "%3F");
+        assertTrue(driver.getCurrentUrl().contains("option=" + expectedOption));
+    }
+
+    @And("^I should see feedback comment: \"([^\"]*)\"$")
+    public void iShouldSeeFeedbackComment(String comment) {
+        String expectedComment = comment.replace(" ", "+").replace("?", "%3F");
+        assertTrue(driver.getCurrentUrl().contains("comment=" + expectedComment));
+
     }
 }
