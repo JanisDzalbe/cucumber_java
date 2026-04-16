@@ -1,6 +1,5 @@
 package cucumber.stepDefinitions;
 
-import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -132,5 +131,37 @@ public class SampleSteps {
     @And("I am not navigated to age message page")
     public void iAmNotNavigatedToAgeMessagePage() {
         assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
+    }
+
+    @Given("Im on feedback page")
+    public void imOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("I enter feedback name: {string}")
+    public void iEnterFeedbackName(String name) {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("I enter feedback age: {int}")
+    public void iEnterFeedbackAge(int age) {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("I click send button")
+    public void iClickSendButton() {
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+    }
+
+    @Then("I should see feedback name: {string}")
+    public void iShouldSeeFeedbackName(String name) {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @And("I should see feedback age: {string}")
+    public void iShouldSeeFeedbackAge(String age) {
+        assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
     }
 }
