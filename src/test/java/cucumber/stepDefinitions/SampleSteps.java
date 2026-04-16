@@ -121,12 +121,11 @@ public class SampleSteps {
         assertTrue(driver.findElement(By.xpath("//input[@value='This is a button']")).isEnabled());
     }
 
-    @Then("^I see error: \"You haven't entered anything in age field\"$")
-    public void iSeeError() {
-        String expectedErrorResult = "You haven't entered anything in age field";
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeError(String message) {
         WebElement errorMessage = driver.findElement(By.id("error"));
         assertTrue(errorMessage.isDisplayed());
-        assertEquals(expectedErrorResult, errorMessage.getText());
+        assertEquals(message, errorMessage.getText());
     }
 
     @Then("^I am not navigated to age message page$")
