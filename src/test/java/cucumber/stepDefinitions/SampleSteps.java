@@ -1,17 +1,18 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -25,10 +26,26 @@ public class SampleSteps {
         driver.get("https://acctabootcamp.github.io/site");
     }
 
+    @When("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
+    @Given("I am on feedback page")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
     @Then("^I should see home page header$")
     public void iShouldSeeHomePageHeader() throws Throwable {
         assertEquals("This is a home page",
                 driver.findElement(By.cssSelector("h1")).getText());
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorsPageHeaders() {
+        assertEquals("Heading 1", driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text", driver.findElement(By.id("heading_2")).getText());
     }
 
     @And("^I should see home page description$")
@@ -46,6 +63,16 @@ public class SampleSteps {
     @And("^I enter age: (\\d+)$")
     public void iEnterAge(int age) throws Throwable {
         driver.findElement(By.id("age")).sendKeys(String.valueOf(age));
+    }
+
+    @When("^I enter name: \"([^\"]*)\" and age: \"(\\d+)\"$")
+    public void iEnterNameAndAge(String name, String age) {
+        WebElement nameInput = driver.findElement(By.id("fb_name"));
+        WebElement ageInput = driver.findElement(By.id("fb_age"));
+        nameInput.clear();
+        nameInput.sendKeys(name);
+        ageInput.clear();
+        ageInput.sendKeys(age);
     }
 
     @Given("^I (?:am on|open) age page$")
@@ -76,6 +103,12 @@ public class SampleSteps {
         assertTrue(driver.findElement(By.className("w3-navbar")).isDisplayed());
     }
 
+    @And("^Buttons in Locators page are clickable$")
+    public void buttonsInLocatorsPageAreClickable() {
+        driver.findElements(By.cssSelector("input[type='button']"))
+                .forEach(b -> assertTrue(b.isDisplayed() && b.isEnabled()));
+    }
+
     @And("^I click the result checkbox button$")
     public void iClickTheResultCheckboxButton() throws Throwable {
         driver.findElement(By.id("result_button_checkbox")).click();
@@ -88,6 +121,12 @@ public class SampleSteps {
         }
     }
 
+    @And("I click send")
+    public void iClickSend() {
+        WebElement sendButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        sendButton.click();
+    }
+    
     @Then("^message for checkboxes \"([^\"]*)\" is seen$")
     public void messageForCheckboxesIsSeen(String message) throws Throwable {
         assertEquals(message, driver.findElement(By.id("result_checkbox")).getText());
@@ -96,5 +135,24 @@ public class SampleSteps {
     @Given("^I am on action page$")
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
+    }
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeError(String errorMessage) {
+        assertEquals(errorMessage, driver.findElement(By.id("error")).getText());
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() {
+        assertFalse(driver.getCurrentUrl().matches("^https://janisdzalbe\\.github\\.io/example-site/examples/age_2\\.html\\?name=.+&age=\\d+$"));
+    }
+
+    @Then("^I see name field is \"([^\"]*)\"$")
+    public void iSeeNameFieldIs(String name) {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+    @And("^I see age field is \"(\\d+)\"$")
+    public void iSeeAgeFieldIs(String age) {
+        assertEquals(age, driver.findElement(By.id("age")).getText());
     }
 }
