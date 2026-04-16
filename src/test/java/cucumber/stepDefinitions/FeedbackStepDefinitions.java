@@ -1,133 +1,202 @@
 package cucumber.stepDefinitions;
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
+
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.And;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.WebDriver;
 import org.junit.Assert;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 public class FeedbackStepDefinitions {
 
-    private static final String BASE_URL = "https://janisdzalbe.github.io/example-site";
-    private static final String FEEDBACK_URL = BASE_URL + "/tasks/provide_feedback";
+    // Use the same driver/wait from your Hooks class
+    // Adjust these based on how your project shares the driver
     private WebDriver driver;
     private WebDriverWait wait;
 
-    @Before
-    public void setUp() {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-    }
+    private static final String BASE_URL = "https://janisdzalbe.github.io/example-site";
 
-    @After
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
-
-    // --- Background / Given ---
+    // --- Navigation ---
 
     @Given("I am on provide feedback page")
     public void iAmOnProvideFeedbackPage() {
-        driver.get(FEEDBACK_URL);
+        driver.get(BASE_URL + "/tasks/provide_feedback");
     }
 
-    // --- When steps ---
+    @Given("I am on feedback page")
+    public void iAmOnFeedbackPage() {
+        driver.get(BASE_URL + "/tasks/provide_feedback");
+    }
+
+    // --- Language checkboxes (type="checkbox", name="language") ---
 
     @When("I select language: {string}")
     public void iSelectLanguage(String language) {
-        WebElement languageOption = wait.until(
+        WebElement checkbox = wait.until(
                 ExpectedConditions.elementToBeClickable(
-                        By.xpath("//input[@type='radio' and @name='language' and @value='"
-                                + language + "']")
+                        By.cssSelector("input[type='checkbox'][name='language'][value='" + language + "']")
                 )
         );
-        languageOption.click();
+        checkbox.click();
     }
+
+    @When("I select feedback languages")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        for (String language : languages) {
+            WebElement checkbox = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.cssSelector("input[type='checkbox'][name='language'][value='" + language + "']")
+                    )
+            );
+            checkbox.click();
+        }
+    }
+
+    // --- Genre radio buttons (type="radio") ---
 
     @When("I select genre: {string}")
     public void iSelectGenre(String genre) {
-        WebElement genreOption = wait.until(
+        WebElement radio = wait.until(
                 ExpectedConditions.elementToBeClickable(
-                        By.xpath("//input[@type='radio' and @name='genre' and @value='"
-                                + genre + "']")
+                        By.cssSelector("input[type='radio'][value='" + genre + "']")
                 )
         );
-        genreOption.click();
+        radio.click();
     }
+
+    // --- Rating dropdown ---
 
     @When("I select rating: {string}")
     public void iSelectRating(String rating) {
         WebElement dropdown = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(By.id("rating"))
+                ExpectedConditions.visibilityOfElementLocated(By.name("rating"))
         );
-        Select select = new Select(dropdown);
-        select.selectByVisibleText(rating);
+        new Select(dropdown).selectByVisibleText(rating);
     }
+
+    // --- Comment ---
 
     @When("I enter comment: {string}")
     public void iEnterComment(String comment) {
         WebElement commentField = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(By.id("comment"))
+                ExpectedConditions.visibilityOfElementLocated(By.name("comment"))
         );
         commentField.clear();
         commentField.sendKeys(comment);
     }
 
-    @When("I click Send button")
+    // --- Send button ---
+
+    @And("I click Send button")
     public void iClickSendButton() {
         WebElement sendButton = wait.until(
                 ExpectedConditions.elementToBeClickable(
-                        By.xpath("//button[text()='Send'] | //input[@value='Send']")
+                        By.cssSelector("button[type='submit'], input[type='submit']")
                 )
         );
         sendButton.click();
     }
 
-    // --- Then steps: verify submitted values are displayed ---
+    @And("I click send feedback")
+    public void iClickSendFeedback() {
+        iClickSendButton();
+    }
+
+    // --- 2-column map input (for Part 4) ---
+
+    @When("I fill in feedback form:")
+    public void iFillInFeedbackForm(Map<String, String> formData) {
+        for (Map.Entry<String, String> entry : formData.entrySet()) {
+            String field = entry.getKey();
+            String value = entry.getValue();
+
+            switch (field) {
+                case "name":
+                    WebElement nameField = wait.until(
+                            ExpectedConditions.visibilityOfElementLocated(By.name("name"))
+                    );
+                    nameField.clear();
+                    nameField.sendKeys(value);
+                    break;
+                case "age":
+                    WebElement ageField = wait.until(
+                            ExpectedConditions.visibilityOfElementLocated(By.name("age"))
+                    );
+                    ageField.clear();
+                    ageField.sendKeys(value);
+                    break;
+                case "genre":
+                    iSelectGenre(value);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown field: " + field);
+            }
+        }
+    }
+
+    // --- Verification steps ---
 
     @Then("I see submitted language: {string}")
-    public void iSeeSubmittedLanguage(String expectedLanguage) {
-        WebElement languageResult = wait.until(
+    public void iSeeSubmittedLanguage(String expected) {
+        WebElement result = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(By.id("submitted-language"))
         );
-        Assert.assertEquals(expectedLanguage, languageResult.getText());
+        Assert.assertEquals(expected, result.getText());
     }
 
     @Then("I see submitted genre: {string}")
-    public void iSeeSubmittedGenre(String expectedGenre) {
-        WebElement genreResult = wait.until(
+    public void iSeeSubmittedGenre(String expected) {
+        WebElement result = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(By.id("submitted-genre"))
         );
-        Assert.assertEquals(expectedGenre, genreResult.getText());
+        Assert.assertEquals(expected, result.getText());
     }
 
     @Then("I see submitted rating: {string}")
-    public void iSeeSubmittedRating(String expectedRating) {
-        WebElement ratingResult = wait.until(
+    public void iSeeSubmittedRating(String expected) {
+        WebElement result = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(By.id("submitted-rating"))
         );
-        Assert.assertEquals(expectedRating, ratingResult.getText());
+        Assert.assertEquals(expected, result.getText());
     }
 
     @Then("I see submitted comment: {string}")
-    public void iSeeSubmittedComment(String expectedComment) {
-        WebElement commentResult = wait.until(
+    public void iSeeSubmittedComment(String expected) {
+        WebElement result = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(By.id("submitted-comment"))
         );
-        Assert.assertEquals(expectedComment, commentResult.getText());
+        Assert.assertEquals(expected, result.getText());
+    }
+
+    @Then("I can see languages {string} in feedback check")
+    public void iCanSeeLanguagesInFeedbackCheck(String expected) {
+        WebElement result = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.id("submitted-language"))
+        );
+        Assert.assertEquals(expected, result.getText());
+    }
+
+    @Then("I verify submitted feedback:")
+    public void iVerifySubmittedFeedback(Map<String, String> expectedData) {
+        for (Map.Entry<String, String> entry : expectedData.entrySet()) {
+            WebElement result = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.id("submitted-" + entry.getKey())
+                    )
+            );
+            Assert.assertEquals(
+                    "Mismatch for '" + entry.getKey() + "'",
+                    entry.getValue(), result.getText()
+            );
+        }
     }
 }

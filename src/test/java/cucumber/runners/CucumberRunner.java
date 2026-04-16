@@ -1,5 +1,9 @@
 package cucumber.runners;
 
+import io.cucumber.junit.Cucumber;
+import io.cucumber.junit.CucumberOptions;
+import org.junit.runner.RunWith;
+
 // Runs only @test scenarios
 @RunWith(Cucumber.class)
 @CucumberOptions(
@@ -10,7 +14,7 @@ package cucumber.runners;
         tags = "@test",
         glue = {"cucumber.stepDefinitions"}
 )
-public class CucumberRunnerTest {
+public class CucumberRunner {
 }
 
 // Runs only @regression scenarios
@@ -23,5 +27,5 @@ public class CucumberRunnerTest {
         tags = "@regression",
         glue = {"cucumber.stepDefinitions"}
 )
-public class CucumberRunnerRegression {
+class CucumberRunnerRegression {
 }
