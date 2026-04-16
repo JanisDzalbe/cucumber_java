@@ -126,11 +126,10 @@ public class SampleSteps {
     }
 
     @Then("^I see error: \"([^\"]*)\"$")
-    public void iSeeError(String arg0) {
-        System.out.println(arg0);
+    public void iSeeError(String errorText) {
         WebElement errorTextElement = driver.findElement(By.id("error"));
         assertTrue(errorTextElement.isDisplayed());
-        assertEquals(arg0, driver.findElement(By.id("error")).getText());
+        assertEquals(errorText, driver.findElement(By.id("error")).getText());
     }
 
     @Then("^I am not navigated to age message page$")
@@ -138,4 +137,36 @@ public class SampleSteps {
         String urlStart = "https://janisdzalbe.github.io/example-site/examples/age_2.html";
         assertFalse(driver.getCurrentUrl().contains(urlStart));
     }
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @And("^I click send feedback$")
+    public void iClickSubmitFeedback() {
+        driver.findElement(By.tagName("button")).click();
+    }
+
+    @Then("^I see name: \"([^\"]*)\"$")
+    public void iSeeName(String name) {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @And("^I see age: (\\d*)$")
+    public void iSeeAgeAge(Integer age) {
+        assertEquals(age.toString(), driver.findElement(By.id("age")).getText());
+    }
+
+    @When("^I enter feedback name \"([^\"]*)\"$")
+    public void iEnterNameInFeedback(String name) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("^I enter feedback age (\\d+)$")
+    public void iEnterAgeInFeedback(int age) throws Throwable {
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
 }
