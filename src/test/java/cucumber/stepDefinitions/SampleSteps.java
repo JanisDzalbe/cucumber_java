@@ -147,7 +147,7 @@ public class SampleSteps {
         driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
     }
 
-    @And("^I click send feedback$")
+    @When("^I click send feedback$")
     public void iClickSubmitFeedback() {
         driver.findElement(By.tagName("button")).click();
     }
@@ -157,7 +157,7 @@ public class SampleSteps {
         assertEquals(name, driver.findElement(By.id("name")).getText());
     }
 
-    @And("^I see feedback age: (\\d*)$")
+    @Then("^I see feedback age: (\\d*)$")
     public void iSeeAgeAge(Integer age) {
         assertEquals(age.toString(), driver.findElement(By.id("age")).getText());
     }
@@ -168,7 +168,7 @@ public class SampleSteps {
         driver.findElement(By.id("fb_name")).sendKeys(name);
     }
 
-    @And("^I enter feedback age (\\d+)$")
+    @When("^I enter feedback age (\\d+)$")
     public void iEnterAgeInFeedback(int age) throws Throwable {
         driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
     }
