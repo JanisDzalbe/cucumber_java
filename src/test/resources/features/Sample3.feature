@@ -26,13 +26,12 @@ Feature: Introduction to cucumber part 3
 #   URL: https://janisdzalbe.github.io/example-site/tasks/provide_feedback
    Scenario Outline: A new Scenario Outline 'Give us your feedback'
      Given I am on feedback page
-     When I enter the name: "<name>"
-     And I enter the age: <age>
-     And I click the send
-     Then I see the name: "<name>" in feedback
-     And I see the age: "<age>" in feedback
+     When I enter the feedback name: "<name>"
+     And I enter the feedback age: <age>
+     And I click the send button
+     Then I see the feedback name: "<name>" in feedback
+     And I see the feedback age: "<age>" in feedback
 
-     @working
      Examples:
        | name  | age |
        | John  | 30 |

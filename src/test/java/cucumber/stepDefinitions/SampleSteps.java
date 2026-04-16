@@ -5,6 +5,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -79,8 +80,8 @@ public class SampleSteps {
         driver.findElement(By.id("submit")).click();
     }
 
-    @And("^I click the send$")
-    public void iClickTheSend() throws Throwable {
+    @And("^I click the send button$")
+    public void iClickTheSendButton() throws Throwable {
         driver.findElement(By.xpath("//button[text()='Send']")).click();
     }
 
@@ -94,24 +95,24 @@ public class SampleSteps {
         driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
     }
 
-    @When("^I enter the name: \"([^\"]*)\"$")
-    public void iEnterTheName(String name) throws Throwable {
+    @When("^I enter the feedback name: \"([^\"]*)\"$")
+    public void iEnterTheFeedbackName(String name) throws Throwable {
         driver.findElement(By.id("fb_name")).clear();
         driver.findElement(By.id("fb_name")).sendKeys(name);
     }
 
-    @And("^I enter the age: (\\d+)$")
-    public void iEnterTheAge(int age) throws Throwable {
+    @And("^I enter the feedback age: (\\d+)$")
+    public void iEnterTheFeedbackAge(int age) throws Throwable {
         driver.findElement(By.id("fb_age")).clear();
         driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
     }
 
-    @Then("^I see the name: \"([^\"]*)\" in feedback$")
+    @Then("^I see the feedback name: \"([^\"]*)\" in feedback$")
     public void iSeeTheFeedbackName(String name) throws Throwable {
         assertEquals(name, driver.findElement(By.id("name")).getText());
     }
 
-    @And("^I see the age: \"([^\"]*)\" in feedback$")
+    @And("^I see the feedback age: \"([^\"]*)\" in feedback$")
     public void iSeeTheFeedbackAge(String age) throws Throwable {
         assertEquals(age, driver.findElement(By.id("age")).getText());
     }
@@ -160,4 +161,35 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+    @Given("^I am on the enter number page$")
+    public void iAmOnTheEnterNumberPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+
+    @When("^I write \"([^\"]*)\" in field$")
+    public void iWriteNumberInField(String input)throws Throwable{
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(input);
+    }
+
+    @And("^I click on submit$")
+    public void iClickOnSubmit() throws Throwable {
+        driver.findElement(By.className("w3-orange")).click();
+    }
+
+    @Then("^I see errormessage: \"([^\"]*)\"$")
+    public void iSeeErrorMessage(String errormessage) throws Throwable {
+        assertEquals(errormessage, driver.findElement(By.id("ch1_error")).getText());
+    }
+
+    @Then("^I see squareroot message: \"([^\"]*)\"$")
+    public void iSeeSquarerootMessage(String expectedMessage) throws Throwable {
+
+        Alert alert = driver.switchTo().alert();
+        assertEquals(expectedMessage, alert.getText());
+        alert.accept();
+    }
+
 }
+
