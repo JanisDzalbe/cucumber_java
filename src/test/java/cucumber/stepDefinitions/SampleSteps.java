@@ -6,10 +6,12 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -25,11 +27,28 @@ public class SampleSteps {
         driver.get("https://acctabootcamp.github.io/site");
     }
 
+    @Given("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/examples/locators");
+    }
+
+
     @Then("^I should see home page header$")
     public void iShouldSeeHomePageHeader() throws Throwable {
         assertEquals("This is a home page",
                 driver.findElement(By.cssSelector("h1")).getText());
     }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeLocatorsHeaders() throws Throwable {
+        assertTrue(driver.findElement(By.id("heading_1")).isDisplayed());
+        assertTrue(driver.findElement(By.id("heading_2")).isDisplayed());
+
+        assertEquals("Heading 1", driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text", driver.findElement(By.id("heading_2")).getText());
+
+    }
+
 
     @And("^I should see home page description$")
     public void iShouldSeeHomePageDescription() throws Throwable {
@@ -61,6 +80,36 @@ public class SampleSteps {
     @Then("^I see message: \"([^\"]*)\"$")
     public void iSeeMessage(String message) throws Throwable {
         assertEquals(message, driver.findElement(By.id("message")).getText());
+    }
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeError(String errorMessage) {
+        WebElement error = driver.findElement(By.id("error"));
+
+        assertTrue(error.isDisplayed());
+        assertEquals(errorMessage, error.getText());
+    }
+
+    @Then("^Buttons in Locators page are clickable$")
+    public void ButtonsInLocatorsPageAreClickable() throws Throwable {
+        List<WebElement> buttons = driver.findElements(
+                By.cssSelector("button, input[type='button'], a.w3-button")
+        );
+
+        // ensure at least one clickable element exists
+        assertTrue(buttons.size() > 0);
+
+        for (WebElement button : buttons) {
+            assertTrue(button.isDisplayed());
+            assertTrue(button.isEnabled());
+        }
+    }
+
+    @Then("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() {
+        String currentUrl = driver.getCurrentUrl();
+
+        assertTrue(currentUrl.contains("/examples/age"));
     }
 
     @When("^I enter values:$")
