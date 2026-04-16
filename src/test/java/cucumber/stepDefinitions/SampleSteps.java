@@ -10,8 +10,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -96,5 +95,66 @@ public class SampleSteps {
     @Given("^I am on action page$")
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
+    }
+
+    @Then("I see error: {string}")
+    public void iSeeError(String arg0) {
+        driver.findElement(By.className("error")).isDisplayed();
+        assertEquals("You haven't entered anything in age field",driver.findElement(By.className("error")).getText());
+
+    }
+
+    @And("I am not navigated to age message page")
+    public void iAmNotNavigatedToAgeMessagePage() {
+        assertFalse(driver.getCurrentUrl().contains("age_2"));
+    }
+
+    @Given("Navigate to page")
+    public void navigateToPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+
+    @When("I enter proper {string}")
+    public void iEnter(String name2) {
+        driver.findElement(By.id("fb_name")).sendKeys(name2);
+    }
+
+
+
+
+    @And("{string} and {string} are displayed")
+    public void andAreDisplayed(String name2, String age2) {
+        assertEquals(name2,driver.findElement(By.id("name")).getText());
+        assertEquals(age2,driver.findElement(By.id("age")).getText());
+    }
+
+
+    @And("Click send")
+    public void clickSend() {
+        driver.findElement(By.xpath("//button[contains(text(),'Send')]")).click();
+    }
+
+    @And("I enter proper {int}")
+    public void iEnterProperAge(int age2) {
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age2));
+
+    }
+
+    @When("I am on the locators page")
+    public void iAmOnTheLocatorsPage() {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
+    @Then("I should see both locators page headers")
+    public void iShouldSeeBothLocatorsPageHeaders() {
+        assertEquals("Heading 1", driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text", driver.findElement(By.id("heading_2")).getText());
+    }
+
+    @And("Buttons in Locators page are clickable")
+    public void buttonsInLocatorsPageAreClickable() {
+        assertTrue(driver.findElement(By.name("randomButton1")).isEnabled());
+        assertTrue(driver.findElement(By.name("randomButton2")).isEnabled());
     }
 }

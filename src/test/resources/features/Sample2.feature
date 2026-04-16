@@ -19,8 +19,8 @@ Feature: Introduction to cucumber part 2
 
 #  TODO - Add implementation for missing steps
 #  @test
-#  Scenario: a new scenario error
-#    When I enter name: "John"
-#    And I click submit age
-#    Then I see error: "You haven't entered anything in age field"
-#    And I am not navigated to age message page
+  Scenario: a new scenario error
+    When I enter name: "John"
+    And I click submit age
+    Then I see error: "You haven't entered anything in age field"
+    And I am not navigated to age message page
