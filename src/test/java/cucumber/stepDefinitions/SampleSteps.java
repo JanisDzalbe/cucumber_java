@@ -148,12 +148,12 @@ public class SampleSteps {
         driver.findElement(By.tagName("button")).click();
     }
 
-    @Then("^I see name: \"([^\"]*)\"$")
+    @Then("^I see feedback name: \"([^\"]*)\"$")
     public void iSeeName(String name) {
         assertEquals(name, driver.findElement(By.id("name")).getText());
     }
 
-    @And("^I see age: (\\d*)$")
+    @And("^I see feedback age: (\\d*)$")
     public void iSeeAgeAge(Integer age) {
         assertEquals(age.toString(), driver.findElement(By.id("age")).getText());
     }
