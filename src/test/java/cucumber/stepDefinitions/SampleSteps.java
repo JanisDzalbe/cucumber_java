@@ -5,10 +5,14 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -169,4 +173,37 @@ public class SampleSteps {
         driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
     }
 
+    @Given("^I am on \"Enter a number\" page$")
+    public void iAmOnPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+
+    @When("^I enter text: \"([^\"]*)\"$")
+    public void iEnterTextText(String text) {
+        WebElement textInputField = driver.findElement(By.id("numb"));
+        textInputField.clear();
+        textInputField.sendKeys(text);
+    }
+
+    @When("^I click submit button$")
+    public void iClickSubmitButton() {
+        driver.findElement(By.tagName("button")).click();
+    }
+
+    @Then("^I see error message: \"([^\"]*)\"$")
+    public void iSeeErrorMessage(String errorMessage) {
+        assertEquals(errorMessage, driver.findElement(By.id("ch1_error")).getText());
+    }
+
+    @Then("I see the correct alert message")
+    public void iSeeTheAlertMessage() {
+        Alert alert = driver.switchTo().alert();
+        assertEquals("Square root of 100 is 10.00", alert.getText());
+        alert.dismiss();
+    }
+
+    @And("I see no error message")
+    public void iSeeNoErrorMessage() {
+        assertFalse(driver.findElement(By.id("ch1_error")).isDisplayed());
+    }
 }
