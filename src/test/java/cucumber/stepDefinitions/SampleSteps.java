@@ -128,4 +128,9 @@ public class SampleSteps {
     public void iSeeErrorMessage(String errorMessage) throws Throwable{
         assertEquals(errorMessage, driver.findElement(By.id("error")).getText());
     }
+
+    @And("I am not navigated to age message page")
+    public void iAmNotNavigatedToAgeMessagePage() {
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
+    }
 }
