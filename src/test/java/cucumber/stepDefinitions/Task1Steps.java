@@ -44,10 +44,10 @@ public class Task1Steps {
 
 
     @Then("^I see square massage: \"([^\"]*)\"$")
-    public void iSeeSquareRootMessage(String expectedMessage) {
+    public void iSeeSquareRootMessage(String exeptMessage) {
 //      Check the alert message and accept it
         Alert alert = driver.switchTo().alert();
-        assertEquals(expectedMessage, alert.getText());
+        assertEquals(exeptMessage, alert.getText());
         alert.accept();
 
     }
