@@ -125,14 +125,15 @@ public class SampleSteps {
         assertTrue(buttons.get(1).isEnabled());
     }
 
-    @Then("I see error: {string}")
+    @Then("^I see error: \"([^\"]*)\"$")
     public void iSeeError(String arg0) {
+        System.out.println(arg0);
         WebElement errorTextElement = driver.findElement(By.id("error"));
         assertTrue(errorTextElement.isDisplayed());
         assertEquals(arg0, driver.findElement(By.id("error")).getText());
     }
 
-    @And("^I am not navigated to age message page$")
+    @Then("^I am not navigated to age message page$")
     public void iAmNotNavigatedToAgeMessagePage() {
         String urlStart = "https://janisdzalbe.github.io/example-site/examples/age_2.html";
         assertFalse(driver.getCurrentUrl().contains(urlStart));
