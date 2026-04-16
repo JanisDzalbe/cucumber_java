@@ -6,12 +6,12 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -58,6 +58,8 @@ public class SampleSteps {
         driver.findElement(By.id("submit")).click();
     }
 
+
+
     @Then("^I see message: \"([^\"]*)\"$")
     public void iSeeMessage(String message) throws Throwable {
         assertEquals(message, driver.findElement(By.id("message")).getText());
@@ -97,4 +99,40 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+    // ---- For new scenarios
+    @When("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorsPageHeaders() {
+        assertEquals("Heading 1", driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text", driver.findElement(By.id("heading_2")).getText());
+    }
+
+    @Then("^Buttons in Locators page are clickable$")
+    public void buttonsInLocatorsPageAreClickable() {
+        assertTrue(driver.findElement(By.id("buttonId")).isDisplayed());
+        assertTrue(driver.findElement(By.id("buttonId")).isEnabled());
+
+        assertTrue(driver.findElement(By.xpath("//input[@value='This is a button']")).isDisplayed());
+        assertTrue(driver.findElement(By.xpath("//input[@value='This is a button']")).isEnabled());
+    }
+
+    @Then("^I see error: \"You haven't entered anything in age field\"$")
+    public void iSeeError() {
+        String expectedErrorResult = "You haven't entered anything in age field";
+        WebElement errorMessage = driver.findElement(By.id("error"));
+        assertTrue(errorMessage.isDisplayed());
+        assertEquals(expectedErrorResult, errorMessage.getText());
+    }
+
+    @Then("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage(){
+        String expectedPageUrl = "https://janisdzalbe.github.io/example-site/examples/age_2.html";
+        assertNotEquals(expectedPageUrl, driver.getCurrentUrl());
+    }
+
 }
