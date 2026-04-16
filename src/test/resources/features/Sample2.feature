@@ -7,7 +7,7 @@ Feature: Introduction to cucumber part 2
 
   Scenario: a new scenario 1 with regex
     When I enter name: "Ann"
-    And I enter age: 5
+    And I enter age: 5222
     And I click submit age
     Then I see message: "Hello, Ann, you are a kid"
 
@@ -18,9 +18,9 @@ Feature: Introduction to cucumber part 2
     Then I see message: "Hello, Bob, you are an adult"
 
 #  TODO - Add implementation for missing steps
-#  @test
-#  Scenario: a new scenario error
-#    When I enter name: "John"
-#    And I click submit age
-#    Then I see error: "You haven't entered anything in age field"
-#    And I am not navigated to age message page
+  @someTag
+  Scenario: a new scenario error
+    When I enter name: "John"
+    And I click submit age
+    Then I see error: "You haven't entered anything in age field"
+    And I am not navigated to age message page
