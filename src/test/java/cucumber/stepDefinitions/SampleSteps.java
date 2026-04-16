@@ -17,6 +17,8 @@ public class SampleSteps {
         this.driver = Hooks.driver;
     }
 
+    // ---------------- HOME PAGE ----------------
+
     @Given("^I am on the home page$")
     public void iAmOnTheHomePage() {
         driver.get("https://acctabootcamp.github.io/site");
@@ -40,6 +42,7 @@ public class SampleSteps {
         assertTrue(driver.findElement(By.className("w3-navbar")).isDisplayed());
     }
 
+    // ---------------- AGE PAGE ----------------
 
     @Given("^I (?:am on|open) age page$")
     public void iAmOnAgePage() {
@@ -68,6 +71,8 @@ public class SampleSteps {
         assertEquals(message, driver.findElement(By.id("message")).getText());
     }
 
+    // ---------------- ERROR SCENARIO ----------------
+
     @Then("^I see error: \"([^\"]*)\"$")
     public void iSeeError(String errorMessage) {
         assertEquals(errorMessage, driver.findElement(By.id("error")).getText());
@@ -77,6 +82,8 @@ public class SampleSteps {
     public void iAmNotNavigatedToAgeMessagePage() {
         assertTrue(driver.getCurrentUrl().contains("/examples/age"));
     }
+
+    // ---------------- OTHER EXISTING STEPS ----------------
 
     @When("^I enter values:$")
     public void iEnterValues(Map<String, String> valuesToEnter) {
@@ -109,6 +116,7 @@ public class SampleSteps {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
 
+    // ---------------- FEEDBACK PAGE ----------------
 
     @Given("^I am on feedback page$")
     public void iAmOnFeedbackPage() {
@@ -164,6 +172,35 @@ public class SampleSteps {
     public void iShouldSeeFeedbackComment(String comment) {
         String expectedComment = comment.replace(" ", "+").replace("?", "%3F");
         assertTrue(driver.getCurrentUrl().contains("comment=" + expectedComment));
+    }
 
+    // ---------------- ENTER A NUMBER PAGE ----------------
+
+    @Given("^I am on enter a number page$")
+    public void iAmOnEnterANumberPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+
+    @When("^I enter number value: \"([^\"]*)\"$")
+    public void iEnterNumberValue(String value) {
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(value);
+    }
+
+    @And("^I click submit number$")
+    public void iClickSubmitNumber() {
+        driver.findElement(By.xpath("//button[text()='Submit']")).click();
+    }
+
+    @Then("^I should see number error: \"([^\"]*)\"$")
+    public void iShouldSeeNumberError(String error) {
+        assertEquals(error, driver.findElement(By.id("ch1_error")).getText());
+    }
+
+    @Then("^I should see square root message: \"([^\"]*)\"$")
+    public void iShouldSeeSquareRootMessage(String expectedMessage) {
+        String actualAlertText = driver.switchTo().alert().getText();
+        assertEquals(expectedMessage, actualAlertText);
+        driver.switchTo().alert().accept();
     }
 }
