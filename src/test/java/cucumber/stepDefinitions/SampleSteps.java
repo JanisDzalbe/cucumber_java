@@ -112,4 +112,16 @@ public class SampleSteps {
         assertTrue(driver.findElement(By.name("randomButton1")).isDisplayed());
         assertTrue(driver.findElement(By.name("randomButton2")).isDisplayed());
     }
+
+    @Then("^I see error: \"([^\"]*)\"$")
+        public void seeError(String message){
+        assertTrue(driver.findElement(By.id("error")).isDisplayed());
+        assertEquals(message, driver.findElement(By.id("error")).getText());
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void notNavigated(){
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
+    }
+
 }
