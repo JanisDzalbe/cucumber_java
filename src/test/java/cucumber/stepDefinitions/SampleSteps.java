@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -27,7 +28,7 @@ public class SampleSteps {
     }
 
     @When("^I am on the locators page$")
-public void iAmOnTheLocatorsPage() throws Throwable{
+    public void iAmOnTheLocatorsPage() throws Throwable {
         driver.get("https://janisdzalbe.github.io/example-site/examples/locators");
     }
 
@@ -44,15 +45,15 @@ public void iAmOnTheLocatorsPage() throws Throwable{
     }
 
     @Then("^I should see both locators page headers$")
-    public void iShouldSeeBothLocatorsPageHeaders() throws Throwable{
-    assertTrue(driver.findElement(By.id("heading-1")).isDisplayed());
-    assertEquals("Heading 1", driver.findElement(By.id("heading-1")).getText());
-    assertTrue(driver.findElement(By.id("heading-2")).isDisplayed());
-    assertEquals("Heading 2 text", driver.findElement(By.id("heading-2")).getText());
+    public void iShouldSeeBothLocatorsPageHeaders() throws Throwable {
+        assertTrue(driver.findElement(By.id("heading-1")).isDisplayed());
+        assertEquals("Heading 1", driver.findElement(By.id("heading-1")).getText());
+        assertTrue(driver.findElement(By.id("heading-2")).isDisplayed());
+        assertEquals("Heading 2 text", driver.findElement(By.id("heading-2")).getText());
     }
 
     @And("^Buttons in Locators page are clickable$")
-    public void buttonsInLocatorsPageAreClickable()throws Throwable{
+    public void buttonsInLocatorsPageAreClickable() throws Throwable {
         assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton1\"]")).isDisplayed());
         assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton1\"]")).isEnabled());
 
@@ -125,10 +126,74 @@ public void iAmOnTheLocatorsPage() throws Throwable{
     public void messageForCheckboxesIsSeen(String message) throws Throwable {
         assertEquals(message, driver.findElement(By.id("result_checkbox")).getText());
     }
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
 
+
+    @When("^I enter feedback name \"([^\"]*)\"$")
+    public void iEnterNameInFeedback(String name) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @When("^I click send feedback$")
+    public void iClickSendFeedback() throws Throwable {
+        driver.findElement(By.className("w3-blue")).click();
+    }
+
+
+    @Then("^I can see name \"([^\"]*)\" in feedback check$")
+    public void iSeeNameInFeedbackCheck(String name) throws Throwable {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @Then("^I can see age \"([^\"]*)\" in feedback check$")
+    public void iSeeAgeInFeedbackCheck(int age) throws Throwable {
+        assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
+    }
+
+    @When("^I enter feedback age \"([^\"]*)\"$")
+    public void iEnterAgeInFeedback(String age) throws Throwable {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(age);
+    }
+
+    @Given("^I am on enter number page$")
+    public void iAmOnEnterNumberPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+
+    @When("^I enter value \"([^\"]*)\"$")
+    public void iEnterValue(String value) {
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(value);
+    }
+
+    @And("^I click submit$")
+    public void iClickSubmit() throws Throwable {
+        driver.findElement(By.xpath("//button[text()='Submit']")).click();
+    }
+
+    @Then("^I should see error message \"([^\"]*)\"$")
+    public void iShouldSeeErrorMessage(String expectedError) throws Throwable {
+        String actualError = driver.findElement(By.id("ch1_error")).getText().trim();
+        assertEquals(expectedError, actualError);
+    }
+
+    @Then("^I should see result \"([^\"]*)\"$")
+    public void iShouldSeeResult(String expectedResult) {
+        String alertText = driver.switchTo().alert().getText();
+        assertTrue(alertText.contains(expectedResult));
+        driver.switchTo().alert().accept();
+    }
 
     @Given("^I am on action page$")
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+
+
 }
