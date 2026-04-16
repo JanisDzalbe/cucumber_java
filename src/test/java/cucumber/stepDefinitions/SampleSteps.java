@@ -107,9 +107,9 @@ public class SampleSteps {
 
     @Then("^I am not navigated to age message page$")
     public void iAmNotNavigatedToAgeMessagePage() {
-        String currentUrl = driver.getCurrentUrl();
 
-        assertTrue(currentUrl.contains("/examples/age"));
+        assertFalse(driver.getCurrentUrl().contains("age2.html"));
+
     }
 
     @When("^I enter values:$")
