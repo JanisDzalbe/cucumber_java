@@ -5,22 +5,24 @@ Feature: Introduction to cucumber part 2
   Background:
     Given I am on age page
 
+  @test
   Scenario: a new scenario 1 with regex
     When I enter name: "Ann"
     And I enter age: 5
     And I click submit age
     Then I see message: "Hello, Ann, you are a kid"
 
+  @test
   Scenario: a new scenario 2 with regex
     When I enter name: "Bob"
     And I enter age: 61
     And I click submit age
     Then I see message: "Hello, Bob, you are an adult"
 
-#  TODO - Add implementation for missing steps
-#  @test
-#  Scenario: a new scenario error
-#    When I enter name: "John"
-#    And I click submit age
-#    Then I see error: "You haven't entered anything in age field"
-#    And I am not navigated to age message page
+#  Add implementation for missing steps
+  @test
+  Scenario: a new scenario error
+    When I enter name: "John"
+    And I click submit age
+    Then I see error: "You haven't entered anything in age field"
+    And I am not navigated to age message page

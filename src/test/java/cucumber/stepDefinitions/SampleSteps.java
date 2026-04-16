@@ -6,10 +6,13 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -20,9 +23,28 @@ public class SampleSteps {
         this.driver = Hooks.driver;
     }
 
+    @When("^I am on the locators page$")
+    public void iAmOnLocatorsPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeLocatorsHeaders() throws Throwable {
+        assertTrue(driver.findElement(By.id("heading_1")).isDisplayed());
+        assertEquals("Heading 1", driver.findElement(By.id("heading_1")).getText());
+    }
+
+    @Then("Buttons in Locators page are clickable$")
+    public void buttonsAreClickable() throws Throwable {
+        assertTrue(driver.findElement(By.name("randomButton1")).isDisplayed());
+        assertTrue(driver.findElement(By.name("randomButton1")).isEnabled());
+        assertTrue(driver.findElement(By.id("buttonId")).isDisplayed());
+        assertTrue(driver.findElement(By.id("buttonId")).isEnabled());
+    }
+
     @Given("^I am on the home page$")
     public void iAmOnTheHomePage() throws Throwable {
-        driver.get("https://acctabootcamp.github.io/site");
+        driver.get("https://janisdzalbe.github.io/example-site/");
     }
 
     @Then("^I should see home page header$")
@@ -63,6 +85,16 @@ public class SampleSteps {
         assertEquals(message, driver.findElement(By.id("message")).getText());
     }
 
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeError(String error) throws Throwable {
+        assertEquals(error, driver.findElement(By.id("error")).getText());
+    }
+
+    @Then ("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() throws Throwable {
+        assertFalse(driver.getCurrentUrl().contains("age_2.html"));
+    }
+
     @When("^I enter values:$")
     public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
         driver.findElement(By.id("name")).clear();
@@ -97,4 +129,5 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
 }
