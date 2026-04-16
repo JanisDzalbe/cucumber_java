@@ -97,4 +97,19 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+    @When("^I am on the locators page$")
+    public void iAmOnLocatorsPage(){driver.get("https://janisdzalbe.github.io/example-site/examples/locators");}
+
+    @Then("^I should see both locators page headers$")
+        public void seeBothLocatorsPage(){
+            assertTrue(driver.findElement(By.id("heading_1")).isDisplayed());
+            assertTrue(driver.findElement(By.id("heading_2")).isDisplayed());
+    }
+
+    @And("^Buttons in Locators page are clickable$")
+    public void buttonsAreClickable(){
+        assertTrue(driver.findElement(By.name("randomButton1")).isDisplayed());
+        assertTrue(driver.findElement(By.name("randomButton2")).isDisplayed());
+    }
 }
