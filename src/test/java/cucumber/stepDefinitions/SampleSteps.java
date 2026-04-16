@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -97,4 +98,173 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+    @When("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorsPageHeaders() throws Throwable {
+        assertEquals("Heading 1", driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text", driver.findElement(By.id("heading_2")).getText());
+    }
+
+    @And("^Buttons in Locators page are clickable$")
+    public void buttonsInLocatorsPageAreClickable() throws Throwable {
+        assertTrue(driver.findElement(By.name("randomButton1")).isEnabled());
+        assertTrue(driver.findElement(By.name("randomButton2")).isEnabled());
+    }
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeError(String errorMessage) throws Throwable {
+        assertEquals(errorMessage, driver.findElement(By.id("error")).getText());
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() throws Throwable {
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
+    }
+
+
+
+    @Given("I open feedback page")
+    public void iOpenFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("I enter feedback name {string}")
+    public void iEnterFeedbackName(String name) {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("I enter feedback age {int}")
+    public void iEnterFeedbackAge(int age) {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("I click send feedback")
+    public void iClickSendFeedback() {
+        driver.findElement(By.xpath("//button[contains(text(),'Send')]")).click();
+    }
+
+    @Then("I see name {string} in input")
+    public void iSeeNameInInput(String expected) {
+
+        String pageText = driver.findElement(By.tagName("body")).getText();
+
+        assertTrue(pageText.contains("Your name: " + expected));
+    }
+
+    @And("I see age {string} in input")
+    public void iSeeAgeInInput(String expected) {
+
+        String pageText = driver.findElement(By.tagName("body")).getText();
+
+        assertTrue(pageText.contains("Your age: " + expected));
+    }
+
+    @Given("I am on feedback page")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("I select feedback languages")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        for (String language : languages) {
+            driver.findElement(By.xpath("//label[contains(.,'" + language + "')]/input | //input[contains(@value,'" + language + "')]")).click();
+        }
+    }
+
+    @Then("I can see languages {string} in feedback check")
+    public void iCanSeeLanguagesInFeedbackCheck(String expected) {
+        String pageText = driver.findElement(By.tagName("body")).getText();
+        assertTrue(pageText.contains("Your language: " + expected));
+    }
+
+
+
+    @When("I enter feedback values:")
+    public void iEnterFeedbackValues(Map<String, String> data) {
+
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(data.get("name"));
+
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(data.get("age"));
+
+        String genre = data.get("genre");
+
+        driver.findElement(
+                By.xpath("//input[@type='radio' and @value='" + genre.toLowerCase() + "']")
+        ).click();
+    }
+
+    @Then("I see name {string} in feedback")
+    public void iSeeNameInFeedback(String expected) {
+        String text = driver.findElement(By.tagName("body")).getText();
+        assertTrue(text.contains("Your name: " + expected));
+    }
+
+    @And("I see age {string} in feedback")
+    public void iSeeAgeInFeedback(String expected) {
+        String text = driver.findElement(By.tagName("body")).getText();
+        assertTrue(text.contains("Your age: " + expected));
+    }
+
+    @And("I see genre {string} in feedback")
+    public void iSeeGenreInFeedback(String expected) {
+
+        String url = driver.getCurrentUrl();
+
+        assertTrue(url.contains("gender=" + expected.toLowerCase()));
+    }
+
+
+    //  ----------------Task 1-----------------
+
+    @Given("^I open enter number page$")
+    public void iOpenEnterNumberPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+
+    @When("^I enter value \"([^\"]*)\"$")
+    public void iEnterValue(String value) {
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(value);
+    }
+
+    @And("^I click submit number$")
+    public void iClickSubmitNumber() {
+        driver.findElement(By.xpath("//button[text()='Submit']")).click();
+    }
+
+    @Then("I see error message {string}")
+    public void iSeeErrorMessage(String message) {
+
+        String actual = driver.findElement(By.id("ch1_error")).getText();
+        assertTrue(actual.contains(message));
+    }
+
+    @Then("I see result {string}")
+    public void iSeeResult(String expected) {
+
+        Alert alert = driver.switchTo().alert();
+
+        String actual = alert.getText();
+
+        assertTrue(actual.contains(expected));
+
+        alert.accept();
+    }
+
 }
+
+
+
+
+
+
+
