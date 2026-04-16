@@ -6,157 +6,125 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SampleSteps {
-
     private WebDriver driver;
 
     public SampleSteps() {
         this.driver = Hooks.driver;
     }
 
-    // ---------- HOME PAGE ----------
-
     @Given("^I am on the home page$")
-    public void iAmOnTheHomePage() {
+    public void iAmOnTheHomePage() throws Throwable {
         driver.get("https://acctabootcamp.github.io/site");
+
     }
 
-    @When("I am on the locators page")
-    public void iAmOnLocatorPage() {
+    @When("^I am on the locators page$")
+    public void IAmOnTheLocatorsPage() throws Throwable {
         driver.get("https://janisdzalbe.github.io/example-site/examples/locators");
+
     }
 
     @Then("^I should see home page header$")
-    public void iShouldSeeHomePageHeader() {
+    public void iShouldSeeHomePageHeader() throws Throwable {
         assertEquals("This is a home page",
                 driver.findElement(By.cssSelector("h1")).getText());
     }
 
+    @Then("^I should see both locators page headers$")
+    public void IShouhSeeBothLacatorsPageHeaders() {
+        assertTrue(driver.findElement(By.id("heading_1")).isDisplayed());
+        assertEquals("Heading 1", driver.findElement(By.id("heading_1")).getText());
+        assertTrue(driver.findElement(By.id("heading_2")).isDisplayed());
+        assertEquals("Heading 2 text", driver.findElement(By.id("heading_2")).getText());
+
+    }
+
+    @Then("^Buttons in Locators page are clickable$")
+    public void buttonsInLacotorsPageAreClickable() {
+        assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton1\"]")).isDisplayed());
+        assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton1\"]")).isEnabled());
+        assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton2\"]")).isDisplayed());
+        assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton2\"]")).isEnabled());
+    }
+
     @And("^I should see home page description$")
-    public void iShouldSeeHomePageDescription() {
-        assertEquals(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    public void iShouldSeeHomePageDescription() throws Throwable {
+        assertEquals("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                 driver.findElement(By.cssSelector("p")).getText());
     }
 
-    @And("^I should see menu$")
-    public void iShouldSeeMenu() {
-        assertTrue(driver.findElement(By.className("w3-navbar")).isDisplayed());
-    }
-
-    // ---------- LOCATORS PAGE ----------
-
-    @Then("I should see both locators page headers")
-    public void iShouldSeeLocatorsPageHeaders() {
-
-        WebElement header1 = driver.findElement(By.id("heading_1"));
-        WebElement header2 = driver.findElement(By.id("heading_2"));
-
-        assertTrue(header1.isDisplayed());
-        assertEquals("Heading 1", header1.getText());
-
-        assertTrue(header2.isDisplayed());
-        assertEquals("Heading 2 text", header2.getText());
-    }
-
-    @And("Buttons in Locators page are clickable")
-    public void buttonsInLocatorsPageAreClickable() {
-
-        WebElement button1 = driver.findElement(By.cssSelector("[name='randomButton1']"));
-        WebElement button2 = driver.findElement(By.cssSelector("[name='randomButton2']"));
-
-        assertTrue(button1.isDisplayed());
-        assertTrue(button1.isEnabled());
-
-        assertTrue(button2.isDisplayed());
-        assertTrue(button2.isEnabled());
-    }
-
-    // ---------- AGE PAGE ----------
-
-    @Given("^I (?:am on|open) age page$")
-    public void iAmOnAgePage() {
-        driver.get("https://janisdzalbe.github.io/example-site/examples/age");
-    }
-
     @When("^I enter name: \"([^\"]*)\"$")
-    public void iEnterName(String name) {
+    public void iEnterName(String name) throws Throwable {
         driver.findElement(By.id("name")).clear();
         driver.findElement(By.id("name")).sendKeys(name);
     }
 
     @And("^I enter age: (\\d+)$")
-    public void iEnterAge(int age) {
-        driver.findElement(By.id("age")).clear();
+    public void iEnterAge(int age) throws Throwable {
         driver.findElement(By.id("age")).sendKeys(String.valueOf(age));
     }
 
+    @Given("^I (?:am on|open) age page$")
+    public void iAmOnAgePage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/examples/age");
+    }
+
+
     @And("^I click submit age$")
-    public void iClickSubmitAge() {
+    public void iClickSubmitAge() throws Throwable {
         driver.findElement(By.id("submit")).click();
     }
 
+
     @Then("^I see message: \"([^\"]*)\"$")
-    public void iSeeMessage(String message) {
+    public void iSeeMessage(String message) throws Throwable {
         assertEquals(message, driver.findElement(By.id("message")).getText());
     }
 
-    // ---------- ✅ MISSING TASK IMPLEMENTATION ----------
-
     @Then("^I see error: \"([^\"]*)\"$")
-    public void iSeeError(String errorMessage) {
-        String actualError = driver.findElement(By.id("error")).getText();
-        assertEquals(errorMessage, actualError);
+    public void iSeeErrorYouHaventEnteredAnythingInAgeField(String error) throws Throwable {
+        assertEquals(error, driver.findElement(By.id("error")).getText());
     }
 
     @And("^I am not navigated to age message page$")
-    public void iAmNotNavigatedToAgeMessagePage() {
-        String currentUrl = driver.getCurrentUrl();
-
-        // still on age page
-        assertTrue(currentUrl.contains("age"));
-
-        // message should not be displayed
-        boolean messageExists = driver.findElements(By.id("message")).size() > 0;
-
-        if (messageExists) {
-            assertTrue(driver.findElement(By.id("message")).getText().isEmpty());
-        }
+    public void iAmNotNavigatedToAgeMessagePage() throws Throwable {
+        assertFalse(driver.getCurrentUrl().contains("age_2"));
     }
 
-    // ---------- OTHER STEPS ----------
-
     @When("^I enter values:$")
-    public void iEnterValues(Map<String, String> valuesToEnter) {
+    public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
         driver.findElement(By.id("name")).clear();
         driver.findElement(By.id("name")).sendKeys(valuesToEnter.get("name"));
-
         driver.findElement(By.id("age")).clear();
         driver.findElement(By.id("age")).sendKeys(valuesToEnter.get("age"));
     }
 
+    @And("^I should see menu$")
+    public void iShouldSeeMenu() throws Throwable {
+        assertTrue(driver.findElement(By.className("w3-navbar")).isDisplayed());
+    }
+
     @And("^I click the result checkbox button$")
-    public void iClickTheResultCheckboxButton() {
+    public void iClickTheResultCheckboxButton() throws Throwable {
         driver.findElement(By.id("result_button_checkbox")).click();
     }
 
     @When("^I clicked on checkboxes:$")
-    public void iClickedOnCheckboxes(List<String> values) {
+    public void iClickedOnCheckboxes(List<String> values) throws Throwable {
         for (String value : values) {
             driver.findElement(By.cssSelector("[value='" + value + "']")).click();
         }
     }
 
     @Then("^message for checkboxes \"([^\"]*)\" is seen$")
-    public void messageForCheckboxesIsSeen(String message) {
+    public void messageForCheckboxesIsSeen(String message) throws Throwable {
         assertEquals(message, driver.findElement(By.id("result_checkbox")).getText());
     }
 
@@ -164,4 +132,38 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+
+    }
+
+    @When("^I enter feedback name \"([^\"]*)\"$")
+    public void iEnterFeedbackName(String name) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("^I enter feedback age \"(\\d+)\"$")
+    public void iEnterFeedbackAge(int age) throws Throwable {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("^I click send feedback$")
+    public void iClickSendFeedback() throws Throwable {
+        driver.findElement(By.className("w3-blue")).click();
+    }
+
+    @Then("^I can see name \"([^\"]*)\" in feedback check$")
+    public void iCanSeeNameInFeedbackCheck(String name) throws Throwable {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @And("^I see age \"([^\"]*)\" in feedback check$")
+    public void iSeeAgeInFeedbackCheck(int age) throws Throwable {
+        assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
+    }
+
 }
