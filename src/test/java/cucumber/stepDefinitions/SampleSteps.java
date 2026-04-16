@@ -72,6 +72,11 @@ public class SampleSteps {
         driver.get("https://janisdzalbe.github.io/example-site/examples/age");
     }
 
+    @Given("I am on feedback page")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
     @And("^I click submit age$")
     public void iClickSubmitAge() throws Throwable {
         driver.findElement(By.id("submit")).click();
@@ -120,6 +125,25 @@ public class SampleSteps {
         driver.findElement(By.id("age")).sendKeys(valuesToEnter.get("age"));
     }
 
+    @When("I enter feedback name {string}")
+    public void iEnterFeedbackName(String name) {
+        WebElement nameInput = driver.findElement(By.id("fb_name"));
+        nameInput.clear();
+        nameInput.sendKeys(name);
+    }
+
+    @And("I enter feedback age {int}")
+    public void iEnterFeedbackAge(int age) {
+        WebElement ageInput = driver.findElement(By.id("fb_age"));
+        ageInput.clear();
+        ageInput.sendKeys(String.valueOf(age));
+    }
+
+    @And("I click send feedback")
+    public void iClickSendFeedback() {
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+    }
+
     @And("^I should see menu$")
     public void iShouldSeeMenu() throws Throwable {
         assertTrue(driver.findElement(By.className("w3-navbar")).isDisplayed());
@@ -142,8 +166,24 @@ public class SampleSteps {
         assertEquals(message, driver.findElement(By.id("result_checkbox")).getText());
     }
 
+    @Then("I should see feedback name {string}")
+    public void iShouldSeeFeedbackName(String expectedName) {
+        String actualName = driver.findElement(By.id("name")).getText();
+        assertEquals(expectedName, actualName);
+    }
+
+    @And("I should see feedback age {string}")
+    public void iShouldSeeFeedbackAge(String expectedAge) {
+        String pageText = driver.findElement(By.tagName("body")).getText();
+
+        // verify age is present in text like "Your age: 24"
+        assertTrue(pageText.contains("Your age: " + expectedAge));
+    }
+
     @Given("^I am on action page$")
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
 }
+
+
