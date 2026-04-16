@@ -58,12 +58,11 @@ public class SampleSteps {
         driver.findElement(By.id("submit")).click();
     }
 
-
-
     @Then("^I see message: \"([^\"]*)\"$")
     public void iSeeMessage(String message) throws Throwable {
         assertEquals(message, driver.findElement(By.id("message")).getText());
     }
+
 
     @When("^I enter values:$")
     public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
@@ -132,6 +131,39 @@ public class SampleSteps {
     public void iAmNotNavigatedToAgeMessagePage(){
         String expectedPageUrl = "https://janisdzalbe.github.io/example-site/examples/age_2.html";
         assertNotEquals(expectedPageUrl, driver.getCurrentUrl());
+    }
+
+    // ---- Feedback Form (Sample3.feature)
+
+    @Given("^I (?:am on|open) Feedback page$")
+    public void iAmOnFeedbackPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter name for feedback: \"([^\"]*)\"$")
+    public void iEnterNameForFeedback(String name) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("^I enter age for feedback: (\\d+)$")
+    public void iEnterAgeForFeedback(int age) throws Throwable {
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("^I click send feedback$")
+    public void iClickSendFeedback() throws Throwable {
+        driver.findElement(By.xpath("//button[@type='submit' and text()='Send']")).click();
+    }
+
+    @Then("^I see name field: \"([^\"]*)\"$")
+    public void iSeeNameFieldFeedback(String feedbackName) throws Throwable {
+        assertEquals(feedbackName, driver.findElement(By.id("name")).getText());
+    }
+
+    @Then("^I see age field: \"([^\"]*)\"$")
+    public void iSeeAgeFieldFeedback(String feedbackAge) throws Throwable {
+        assertEquals(feedbackAge, driver.findElement(By.id("age")).getText());
     }
 
 }
