@@ -22,7 +22,7 @@ public class SampleSteps {
         this.driver = Hooks.driver;
     }
 
-    // ---------- HOME PAGE ----------
+    
 
     @Given("^I am on the home page$")
     public void iAmOnTheHomePage() {
@@ -52,7 +52,7 @@ public class SampleSteps {
         assertTrue(driver.findElement(By.className("w3-navbar")).isDisplayed());
     }
 
-    // ---------- LOCATORS PAGE ----------
+   
 
     @Then("I should see both locators page headers")
     public void iShouldSeeLocatorsPageHeaders() {
@@ -80,7 +80,7 @@ public class SampleSteps {
         assertTrue(button2.isEnabled());
     }
 
-    // ---------- AGE PAGE ----------
+   
 
     @Given("^I (?:am on|open) age page$")
     public void iAmOnAgePage() {
@@ -109,7 +109,7 @@ public class SampleSteps {
         assertEquals(message, driver.findElement(By.id("message")).getText());
     }
 
-    // ---------- ✅ MISSING TASK IMPLEMENTATION ----------
+   
 
     @Then("^I see error: \"([^\"]*)\"$")
     public void iSeeError(String errorMessage) {
@@ -132,7 +132,7 @@ public class SampleSteps {
         }
     }
 
-    // ---------- OTHER STEPS ----------
+   -
 
     @When("^I enter values:$")
     public void iEnterValues(Map<String, String> valuesToEnter) {
