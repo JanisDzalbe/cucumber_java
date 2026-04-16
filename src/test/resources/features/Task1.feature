@@ -7,7 +7,7 @@
 
 Feature: Introduction to cucumber part 3
   As a test engineer
-  I want to be able to see if "Enter the number" page works correctly
+  I want to test if "Enter the number" page works correctly
 
   Scenario Outline: Check functionality of "Enter the number"
     Given I am on "Enter a number" page

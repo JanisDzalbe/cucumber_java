@@ -202,7 +202,7 @@ public class SampleSteps {
         alert.dismiss();
     }
 
-    @And("I see no error message")
+    @Then("I see no error message")
     public void iSeeNoErrorMessage() {
         assertFalse(driver.findElement(By.id("ch1_error")).isDisplayed());
     }
