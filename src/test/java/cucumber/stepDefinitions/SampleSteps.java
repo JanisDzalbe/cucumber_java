@@ -1,11 +1,13 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
@@ -97,4 +99,87 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+    @When("I am on the locators page")
+    public void iAmOnTheLocatorsPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/examples/locators");
+    }
+
+    @Then("I should see both locators page headers")
+    public void iShouldSeeBothLocatorsPageHeaders() {
+        assertTrue(driver.findElement(By.id("heading_1")).isDisplayed());
+        assertEquals("Heading 1", driver.findElement(By.id("heading_1")).getText());
+        assertTrue(driver.findElement(By.id("heading_2")).isDisplayed());
+        assertEquals("Heading 2 text", driver.findElement(By.id("heading_2")).getText());
+    }
+
+    @And("Buttons in Locators page are clickable")
+    public void buttonsInLocatorsPageAreClickable() {
+        WebElement button1 = driver.findElement(By.name("randomButton1"));
+        assertTrue(button1.isDisplayed(), "Button 1 is not displayed");
+        assertTrue(button1.isEnabled(), "Button 1 is not enabled");
+
+        WebElement button2 = driver.findElement(By.id("buttonId"));
+        assertTrue(button2.isDisplayed(), "Button 2 is not displayed");
+        assertTrue(button2.isEnabled(), "Button 2 is not enabled");
+    }
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter feedback name: \"([^\"]*)\"$")
+    public void iEnterFeedbackName(String name) {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("^I enter feedback age: (\\d+)$")
+    public void iEnterFeedbackAge(int age) {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("^I click send feedback$")
+    public void iClickSendFeedback() {
+        driver.findElement(By.xpath("//button[text()='Send']")).click();
+    }
+
+    @Then("^I see feedback name: \"([^\"]*)\"$")
+    public void iSeeFeedbackName(String expectedName) {
+        assertEquals(expectedName, driver.findElement(By.id("name")).getText());
+    }
+
+    @And("^I see feedback age: \"([^\"]*)\"$")
+    public void iSeeFeedbackAge(String expectedAge) {
+        assertEquals(expectedAge, driver.findElement(By.id("age")).getText());
+    }
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        for (String language : languages) {
+            driver.findElement(By.cssSelector("input[value='" + language + "']")).click();
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String expectedLanguages) {
+        assertEquals(expectedLanguages, driver.findElement(By.id("language")).getText());
+    }
+    @When("^I fill in the feedback form with the following:$")
+    public void iFillInTheFeedbackFormWithTheFollowing(Map<String, String> data) {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(data.get("name"));
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(data.get("age"));
+        String genderValue = data.get("gender").toLowerCase();
+        driver.findElement(By.cssSelector("input[name='gender'][value='" + genderValue + "']")).click();
+    }
+
+    @And("^I see feedback gender: \"([^\"]*)\"$")
+    public void iSeeFeedbackGender(String expectedGender) {
+        assertEquals(expectedGender, driver.findElement(By.id("gender")).getText());
+    }
 }
+
