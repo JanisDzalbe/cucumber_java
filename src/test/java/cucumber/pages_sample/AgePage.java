@@ -66,4 +66,8 @@ public class AgePage {
         assertEquals(ageInput.getAttribute("value"), "");
         assertFalse(errorText.isDisplayed());
     }
+
+    public void checkIfStayedOnTheSamePage(String pageUrl) {
+        assertEquals(getPageUrl(), pageUrl);
+    }
 }
