@@ -32,12 +32,12 @@ Feature: Introduction to cucumber part 3
       When I enter name for feedback: "<name>"
       And I enter age for feedback: <age>
       And I click send feedback
-      Then I see name field: "<feedbackName>"
-      Then I see age field: "<feedbackAge>"
+      Then I see name field: "<name>"
+      Then I see age field: "<age>"
       @working
       Examples:
-        | name  | age | feedbackName |  feedbackAge  |
-        | Ann   | 5   | Ann          |  5            |
-        | Marry | 50  | Marry        |  50           |
-        | Maks  | 22  | Maks         |  22           |
+        | name  | age |
+        | Ann   | 5   |
+        | Marry | 50  |
+        | Maks  | 22  |
 

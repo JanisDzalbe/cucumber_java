@@ -128,7 +128,7 @@ public class SampleSteps {
     }
 
     @Then("^I am not navigated to age message page$")
-    public void iAmNotNavigatedToAgeMessagePage(){
+    public void iAmNotNavigatedToAgeMessagePage() {
         String expectedPageUrl = "https://janisdzalbe.github.io/example-site/examples/age_2.html";
         assertNotEquals(expectedPageUrl, driver.getCurrentUrl());
     }
@@ -151,6 +151,11 @@ public class SampleSteps {
         driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
     }
 
+    @And("^I select genre: ")
+    public void iSelectGenre(String value) {
+        driver.findElement(By.cssSelector("[value='" + value + "']")).click();
+    }
+
     @And("^I click send feedback$")
     public void iClickSendFeedback() throws Throwable {
         driver.findElement(By.xpath("//button[@type='submit' and text()='Send']")).click();
@@ -166,6 +171,11 @@ public class SampleSteps {
         assertEquals(feedbackAge, driver.findElement(By.id("age")).getText());
     }
 
+    @Then("^I see genre field: \"([^\"]*)\"$")
+    public void iSeeGenreFieldFeedback(String genreFeedback) throws Throwable {
+        assertEquals(genreFeedback, driver.findElement(By.id("gender")).getText());
+    }
+
     @When("^I select language for feedback:$")
     public void iSelectLanguageForFeedback(List<String> values) throws Throwable {
         for (String value : values) {
@@ -178,6 +188,20 @@ public class SampleSteps {
         String expectedResult = "English,Spanish";
         assertTrue(driver.findElement(By.id("language")).isDisplayed());
         assertEquals(expectedResult, driver.findElement(By.id("language")).getText());
+    }
+
+    @Then("^I entered values for Feedback:$")
+    public void iEnterValuesForFeedback(Map<String, String> values) throws Throwable {
+        iEnterNameForFeedback(values.get("name"));
+        iEnterAgeForFeedback(Integer.parseInt(values.get("age"))); // need to improve as there are two type changes in the code already
+        iSelectGenre(values.get("genre"));
+    }
+
+    @Then("^I see results:$")
+    public void iSeeResults(Map<String, String> values) throws Throwable {
+        iSeeNameFieldFeedback(values.get("name"));
+        iSeeAgeFieldFeedback(values.get("age"));
+        iSeeGenreFieldFeedback(values.get("genre"));
     }
 
 }
