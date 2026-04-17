@@ -121,12 +121,19 @@ public class SampleSteps {
         }
     }
 
-    @And("I click send")
-    public void iClickSend() {
-        WebElement sendButton = driver.findElement(By.cssSelector("button[type='submit']"));
-        sendButton.click();
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        for (String l : languages){
+            driver.findElement(By.cssSelector("[value='"+l+"']")).click();
+        }
     }
-    
+
+    @And("^I click send feedback$")
+    public void iClickSendFeedback() {
+        WebElement sendFeedbackButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        sendFeedbackButton.click();
+    }
+
     @Then("^message for checkboxes \"([^\"]*)\" is seen$")
     public void messageForCheckboxesIsSeen(String message) throws Throwable {
         assertEquals(message, driver.findElement(By.id("result_checkbox")).getText());
@@ -151,9 +158,39 @@ public class SampleSteps {
     public void iSeeNameFieldIs(String name) {
         assertEquals(name, driver.findElement(By.id("name")).getText());
     }
+
     @And("^I see age field is \"(\\d+)\"$")
     public void iSeeAgeFieldIs(String age) {
         assertEquals(age, driver.findElement(By.id("age")).getText());
     }
 
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String expectedLanguages) {
+        WebElement languageFeedbackElement = driver.findElement(By.id("language"));
+        assertEquals(expectedLanguages, languageFeedbackElement.getText());
+    }
+
+    @When("I enter name, age and gender into feedback")
+    public void iEnterNameAgeAndGenderIntoFeedback(Map<String, String> inputMap) {
+        WebElement nameInput = driver.findElement(By.id("fb_name"));
+        WebElement ageInput = driver.findElement(By.id("fb_age"));
+        WebElement genderRadioButton = driver.findElement(By.cssSelector("[value='"+inputMap.get("gender")+"']"));
+        
+        nameInput.clear();
+        nameInput.sendKeys(inputMap.get("name"));
+        ageInput.clear();
+        ageInput.sendKeys(inputMap.get("age"));
+        genderRadioButton.click();
+    }
+
+    @Then("I verify name, age and gender from feedback")
+    public void iVerifyNameAgeAndGenderFromFeedback(Map<String, String> expectedMap) {
+        WebElement nameField = driver.findElement(By.id("name"));
+        WebElement ageField = driver.findElement(By.id("age"));
+        WebElement genderField = driver.findElement(By.id("gender"));
+
+        assertEquals(expectedMap.get("name"), nameField.getText());
+        assertEquals(expectedMap.get("age"), ageField.getText());
+        assertEquals(expectedMap.get("gender"), genderField.getText());
+    }
 }

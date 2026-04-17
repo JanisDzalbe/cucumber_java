@@ -31,11 +31,25 @@ Feature: Introduction to cucumber part 4
       | Ann  | 5   | Hello, Ann, you are a kid    |
       | Bob  | 61  | Hello, Bob, you are an adult |
 
- # TODO - create Scenario Outline for 'Give us your feedback!' page
-  # URL: https://janisdzalbe.github.io/example-site/tasks/provide_feedback
-  # Navigate to page
-  # Set Name, Age and Genre
-  # - All input MUST be done in single step
-  # - All input MUST use Examples for data
-  # - Step can use Map or Domain object
-  # Click "Send" button and verify that previous input is displayed in correct fields
+  Scenario Outline: Give us your feedback!
+    Given I am on feedback page
+    When I enter name, age and gender into feedback
+      | name   | <name>   |
+      | gender | <gender> |
+      | age    | <age>    |
+    And I click send feedback
+    Then I verify name, age and gender from feedback
+      | age    | <age>    |
+      | gender | <gender> |
+      | name   | <name>   |
+    Examples:
+    | name | age | gender |
+    | Bob  | 34  | male   |
+    | Lila | 56  | female |
+    | Lana | 21  | female |
+    | Anna | 45  | female |
+#   Set Name, Age and Genre
+#   - All input MUST be done in single step
+#   - All input MUST use Examples for data
+#   - Step can use Map or Domain object
+#   Click "Send" button and verify that previous input is displayed in correct fields

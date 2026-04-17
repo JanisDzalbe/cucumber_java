@@ -27,7 +27,7 @@ Feature: Introduction to cucumber part 3
   Scenario Outline: Give us your feedback!
     Given I am on feedback page
     When I enter name: "<name>" and age: "<age>"
-    And I click send
+    And I click send feedback
     Then I see name field is "<name>"
     Then I see age field is "<age>"
   @working
