@@ -4,12 +4,14 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import cucumber.pages_sample.*;
 
 import java.util.Map;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SamplePOSteps {
@@ -48,9 +50,19 @@ public class SamplePOSteps {
         ageSubmittedPage.checkMessageText(message);
     }
 
+    @Then("^I see error: \"(.*)\" using PO$")
+    public void iSeeError(String message) throws Throwable {
+        agePage.checkErrorMessage(message);
+    }
+
     @When("^I enter values using PO:$")
     public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
         agePage.enterName(valuesToEnter.get("name"));
         agePage.enterAge(valuesToEnter.get("age"));
+    }
+
+    @Then("^I remain in age page using PO$")
+    public void iRemainInAgePage() throws Throwable {
+        assertEquals(agePage.getPageUrl(), driver.getCurrentUrl());
     }
 }
