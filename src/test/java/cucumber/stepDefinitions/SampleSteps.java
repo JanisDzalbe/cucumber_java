@@ -161,4 +161,18 @@ public class SampleSteps {
     public void seeLanguages(String languages){
         assertEquals(languages, driver.findElement(By.id("language")).getText());
     }
+
+    @When("^I enter feedback values$")
+    public void enterFeedbackValues(Map<String, String> values){
+        driver.findElement(By.id("fb_name")).sendKeys(values.get("name"));
+        driver.findElement(By.id("fb_age")).sendKeys(values.get("age"));
+        driver.findElement(By.cssSelector("input[type='radio'][value='" + values.get("genre") + "']")).click();
+    }
+
+    @Then("^I should see name \"([^\"]*)\" age \"([^\"]*)\" and genre \"([^\"]*)\"$")
+    public void seeNameAgeGenre(String name, String age, String genre) {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+        assertEquals(age, driver.findElement(By.id("age")).getText());
+        assertEquals(genre, driver.findElement(By.id("gender")).getText());
+    }
 }
