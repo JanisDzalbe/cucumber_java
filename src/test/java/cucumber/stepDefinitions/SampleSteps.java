@@ -157,4 +157,17 @@ public class SampleSteps {
         assertTrue(driver.findElement(By.name("randomButton1")).isEnabled());
         assertTrue(driver.findElement(By.name("randomButton2")).isEnabled());
     }
+
+    @When("I select feedback languages")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        for (String lang : languages) {
+            driver.findElement(By.cssSelector("[value='" + lang + "']")).click();
+        }
+    }
+
+    @Then("I can see languages {string} in feedback check")
+    public void iCanSeeLanguagesInFeedbackCheck(String languages) {
+        assertEquals(languages,driver.findElement(By.id("language")).getText());
+
+    }
 }
