@@ -10,6 +10,7 @@ import cucumber.pages_sample.*;
 
 import java.util.Map;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SamplePOSteps {
@@ -52,5 +53,15 @@ public class SamplePOSteps {
     public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
         agePage.enterName(valuesToEnter.get("name"));
         agePage.enterAge(valuesToEnter.get("age"));
+    }
+
+    @Then("^I see error: \"(.*)\" using PO$")
+    public void iseeerror(String error) throws Throwable{
+        agePage.checkErrorMessage(error);
+    }
+
+    @And("^I remain in age page using PO$")
+    public void iRemainInAgePageUsingPO() {
+        driver.get(agePage.getPageUrl());
     }
 }
