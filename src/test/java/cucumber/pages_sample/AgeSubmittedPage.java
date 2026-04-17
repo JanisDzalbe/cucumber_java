@@ -7,8 +7,10 @@ import org.openqa.selenium.support.How;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AgeSubmittedPage {
-    @FindBy(how = How.CSS, using = "#message")
+
+    @FindBy(how = How.ID, using = "message")
     private WebElement message;
+
     @FindBy(how = How.TAG_NAME, using = "button")
     private WebElement backButton;
 
@@ -16,7 +18,7 @@ public class AgeSubmittedPage {
         backButton.click();
     }
 
-    public void checkMessageText(String messageText) {
-        assertEquals(message.getText(), messageText);
+    public void checkMessageText(String expectedMessage) {
+        assertEquals(expectedMessage, message.getText());
     }
 }

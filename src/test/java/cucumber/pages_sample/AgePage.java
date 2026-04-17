@@ -1,69 +1,65 @@
 package cucumber.pages_sample;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.How;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 public class AgePage {
-    @FindBy(how = How.ID, using = "name") // By.id("name")
-    private WebElement nameInput; // WebElement nameInput = driver.findElement(By.id("name"));
-    @FindBy(how = How.NAME, using = "age") // By.name("age")
-    private WebElement ageInput;
-    @FindBy(how = How.ID, using = "submit")
-    private WebElement submitButton;
-    @FindBy(how = How.CLASS_NAME, using = "error") // By.className("error)
-    private WebElement errorText;
 
+    private WebDriver driver;
+
+    public AgePage(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    private By nameBy = By.id("name");
+    private By ageBy = By.id("age");
+    private By submitBy = By.id("submit");
+    private By errorBy = By.id("error");
 
     public String getPageUrl() {
         return "https://janisdzalbe.github.io/example-site/examples/age";
     }
 
+    private WebElement name() {
+        return driver.findElement(nameBy);
+    }
+
+    private WebElement age() {
+        return driver.findElement(ageBy);
+    }
+
+    private WebElement submit() {
+        return driver.findElement(submitBy);
+    }
+
+    private WebElement error() {
+        return driver.findElement(errorBy);
+    }
+
     public void enterName(String name) {
-        nameInput.clear();
-        nameInput.sendKeys(name);
+        name().clear();
+        name().sendKeys(name);
     }
 
     public void enterAge(int age) {
-        enterAge(String.valueOf(age));
-    }
-
-    public void enterAge(String age) {
-        ageInput.clear();
-        ageInput.sendKeys(age);
+        age().clear();
+        age().sendKeys(String.valueOf(age));
     }
 
     public void clickSubmit() {
-        submitButton.click();
+        submit().click();
     }
 
-    public void enterNameAgeAndClickSubmit(String name, int age) {
-        enterNameAgeAndClickSubmit(name, String.valueOf(age));
-    }
-
-    public void enterNameAgeAndClickSubmit() {
-        enterName("admib");
-        enterAge("pass");
-        submitButton.click();
-    }
-
-    public void enterNameAgeAndClickSubmit(String name, String age) {
-        enterName(name);
-        enterAge(age);
-        submitButton.click();
-    }
-
-    public void checkErrorMessage(String errorMessage) {
-        assertEquals(errorText.getText(), errorMessage);
-        assertTrue(errorText.isDisplayed());
+    public void checkErrorMessage(String expected) {
+        assertTrue(error().isDisplayed());
+        assertEquals(expected, error().getText());
     }
 
     public void checkThatFormIsClean() {
-        assertEquals(nameInput.getAttribute("value"), "Enter name here");
-        assertEquals(ageInput.getAttribute("value"), "");
-        assertFalse(errorText.isDisplayed());
+        assertEquals("Enter name here", name().getAttribute("value"));
+        assertEquals("", age().getAttribute("value"));
     }
 }
