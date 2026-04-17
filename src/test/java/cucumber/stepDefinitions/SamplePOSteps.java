@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -52,5 +53,17 @@ public class SamplePOSteps {
     public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
         agePage.enterName(valuesToEnter.get("name"));
         agePage.enterAge(valuesToEnter.get("age"));
+    }
+
+    // Steps by Ilmars
+
+    @Then("^I see error: \"([^\"]*)\" using PO$")
+    public void iSeeErrorUsingPO(String errorMessage) {
+        agePage.checkErrorMessage(errorMessage);
+    }
+
+    @Then("^I remain in age page using PO$")
+    public void iRemainInAgePageUsingPO() {
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age", agePage.getPageUrl());
     }
 }
