@@ -26,16 +26,28 @@ Feature: Introduction to cucumber part 4
       | age  | <age>  |
     And I click submit age
     Then I see message: "<message>"
+
     Examples:
       | name | age | message                      |
       | Ann  | 5   | Hello, Ann, you are a kid    |
       | Bob  | 61  | Hello, Bob, you are an adult |
 
- # TODO - create Scenario Outline for 'Give us your feedback!' page
-  # URL: https://janisdzalbe.github.io/example-site/tasks/provide_feedback
-  # Navigate to page
-  # Set Name, Age and Genre
-  # - All input MUST be done in single step
-  # - All input MUST use Examples for data
-  # - Step can use Map or Domain object
-  # Click "Send" button and verify that previous input is displayed in correct fields
+  @test
+  Scenario Outline: feedback page with 2-column table
+    Given I am on feedback page
+    When I enter feedback values:
+      | name   | <name>   |
+      | age    | <age>    |
+      | option | <option> |
+      | comment | <comment> |
+    And I click send feedback
+    Then I should see feedback name: "<name>"
+    And I should see feedback age: "<age>"
+    And I should see feedback option: "<option>"
+    And I should see feedback comment: "<comment>"
+
+    Examples:
+      | name  | age | option | comment           |
+      | Anna  | 22  | Good   | Very nice page    |
+      | Bob   | 35  | Bad    | Needs improvement |
+      | Marry | 41  | Why me?| Strange question  |
