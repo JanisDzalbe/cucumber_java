@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -163,5 +164,36 @@ public class SampleSteps {
     @Given("^I am on action page$")
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
+    }
+
+    // ---------- ENTER A NUMBER PAGE (TASK 1) ----------
+
+    @Given("I am on the enter a number page")
+    public void iAmOnTheEnterANumberPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+
+    @When("I enter the number {string}")
+    public void iEnterTheNumber(String number) {
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(number);
+    }
+
+    @When("I click the number submit button")
+    public void iClickTheNumberSubmitButton() {
+        driver.findElement(By.cssSelector("button[onclick='numberValidation()']")).click();
+    }
+
+    @Then("I should see the number error message {string}")
+    public void iShouldSeeTheNumberErrorMessage(String expectedMessage) {
+        assertEquals(expectedMessage, driver.findElement(By.id("ch1_error")).getText());
+    }
+
+    @Then("I should see an alert with message {string}")
+    public void iShouldSeeAnAlertWithMessage(String expectedMessage) {
+        Alert alert = driver.switchTo().alert();
+        String actualMessage = alert.getText();
+        alert.accept();
+        assertEquals(expectedMessage, actualMessage);
     }
 }
