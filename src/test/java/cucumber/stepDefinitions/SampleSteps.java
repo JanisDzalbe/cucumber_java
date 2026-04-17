@@ -203,5 +203,4 @@ public class SampleSteps {
         iSeeAgeFieldFeedback(values.get("age"));
         iSeeGenreFieldFeedback(values.get("genre"));
     }
-
 }

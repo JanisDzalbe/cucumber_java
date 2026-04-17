@@ -54,9 +54,9 @@ public class SamplePOSteps {
         agePage.enterAge(valuesToEnter.get("age"));
     }
 
-    @Then("^I see error: \"You haven't entered anything in age field\" using PO$")
-    public void iSeeErrorUsingPo() {
-        agePage.checkErrorMessage("You haven't entered anything in age field");
+    @Then("^I see error: \"(.*)\" using PO$")
+    public void iSeeErrorUsingPo(String string) {
+        agePage.checkErrorMessage(string);
     }
 
     @Then("^I remain in age page using PO$")
