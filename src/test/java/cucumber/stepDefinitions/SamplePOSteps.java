@@ -17,6 +17,7 @@ public class SamplePOSteps {
     static AgePage agePage;
     static AgeSubmittedPage ageSubmittedPage;
 
+
     public SamplePOSteps() {
         this.driver = Hooks.driver;
         agePage = PageFactory.initElements(Hooks.driver, AgePage.class);
@@ -53,4 +54,14 @@ public class SamplePOSteps {
         agePage.enterName(valuesToEnter.get("name"));
         agePage.enterAge(valuesToEnter.get("age"));
     }
+    @Then("^I see error: \"([^\"]*)\" using PO$")
+    public void iSeeError(String message)throws Throwable{
+        agePage.checkErrorMessage(message);
+    }
+    @Then("^I remain in age page using PO$")
+    public void iRemainInAgePage() throws Throwable {
+        assertEquals(agePage.getPageUrl(), driver.getCurrentUrl());
+    }
+
+
 }

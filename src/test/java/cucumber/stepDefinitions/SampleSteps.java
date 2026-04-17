@@ -128,6 +128,7 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
     @Given("^I am on feedback page$")
     public void iAmOnFeedbackPage() {
         driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
@@ -151,13 +152,48 @@ public class SampleSteps {
     public void iCanSeeNameInFeedbackCheck(String name) throws Throwable {
         assertEquals(name, driver.findElement(By.id("name")).getText());
     }
-    @And("^I see age \"([^\"]*)\" in feedback check$")
+    @And("^I can see age \"([^\"]*)\" in feedback check$")
     public void iSeeAgeInFeedbackCheck(int age) throws Throwable {
         assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
     }
+    @When("I select feedback languages")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        for (String language : languages) {
+            driver.findElement(By.cssSelector("[value='" + language + "']")).click();
+        }
+    }
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String languages) throws Throwable {
+        Thread.sleep(5000);
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+    @When("^I add feedback details:$")
+    public void iAddFeedbackDetails(Map<String, String>feedbackDetails) throws Throwable{
+        if (feedbackDetails.containsKey("name")){
+            iEnterFeedbackName(feedbackDetails.get("name"));
+        }
+
+
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(feedbackDetails.get("age"));
+
+        driver.findElement(By.cssSelector("[value='" + feedbackDetails.get("gender")+ "']")).click();
 
 
 
+    }
+    @Then("^I can see gender \"([^\"]*)\" in feedback check$")
+    public void iCanSeeGenderInFeedbackCheck(String name) throws Throwable{
+        assertEquals(name, driver.findElement(By.id("gender")).getText());
+
+    }
+    @Then("^I can see details in feedback check$")
+    public void iCanSeeDetailsInFeedbackCheck(Map<String, String>feedbackDetails) throws Throwable{
+        iCanSeeNameInFeedbackCheck(feedbackDetails.get("name"));
+        assertEquals(feedbackDetails.get("age"), driver.findElement(By.id("age")).getText());
+        iCanSeeGenderInFeedbackCheck(feedbackDetails.get("gender"));
+
+    }
 
 
 }

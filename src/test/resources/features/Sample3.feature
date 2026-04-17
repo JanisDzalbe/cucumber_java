@@ -34,7 +34,7 @@ Feature: Introduction to cucumber part 3
       And I enter feedback age "<age>"
       And I click send feedback
       Then I can see name "<name>" in feedback check
-      And I see age "<age>" in feedback check
+      And I can see age "<age>" in feedback check
     Examples:
       | name  | age |
       | Ann   | 5   |

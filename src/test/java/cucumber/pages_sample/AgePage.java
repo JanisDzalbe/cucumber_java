@@ -66,4 +66,5 @@ public class AgePage {
         assertEquals(ageInput.getAttribute("value"), "");
         assertFalse(errorText.isDisplayed());
     }
+    
 }
