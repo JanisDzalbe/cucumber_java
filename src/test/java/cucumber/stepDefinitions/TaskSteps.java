@@ -119,7 +119,5 @@ public class TaskSteps {
         assertTrue(driver.findElement(By.xpath("//span[text()='" + name + "']")).isDisplayed());
     }
 
-
-
 }
 
