@@ -7,12 +7,12 @@ import io.cucumber.java.en.When;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -259,6 +259,78 @@ public class SampleSteps {
 
         alert.accept();
     }
+
+
+    //  ----------------Task 2-----------------
+
+    @Given("I am on people with jobs page")
+    public void iAmOnPeoplePage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs");
+    }
+
+    @When("I add person with values:")
+    public void iAddPerson(Map<String, String> data) {
+
+        driver.findElement(By.id("addPersonBtn")).click();
+
+        driver.findElement(By.id("name")).sendKeys(data.get("name"));
+        driver.findElement(By.id("job")).sendKeys(data.get("job"));
+
+        driver.findElement(By.xpath("//button[text()='Add']")).click();
+    }
+
+    @Then("I can see person {string} with job {string}")
+    public void iCanSeePerson(String name, String job) {
+
+        String text = driver.findElement(By.id("listOfPeople")).getText();
+
+        assertTrue(text.contains(name));
+        assertTrue(text.contains(job));
+    }
+
+    @When("I edit person {string} and change job to {string}")
+    public void iEditPerson(String name, String newJob) {
+
+        driver.findElement(
+                By.xpath("//li[contains(.,'" + name + "')]//span[contains(@onclick,'openModal')]")
+        ).click();
+
+        WebElement jobInput = driver.findElement(By.id("job"));
+        jobInput.clear();
+        jobInput.sendKeys(newJob);
+
+        driver.findElement(By.xpath("//button[text()='Edit']")).click();
+    }
+
+    @When("I remove person {string}")
+    public void iRemovePerson(String name) {
+
+        driver.findElement(
+                By.xpath("//li[contains(.,'" + name + "')]//span[contains(@onclick,'deletePerson')]")
+        ).click();
+    }
+
+    @Then("I cannot see person {string}")
+    public void iCannotSeePerson(String name) {
+
+        String text = driver.findElement(By.id("listOfPeople")).getText();
+
+        assertFalse(text.contains(name));
+    }
+
+    @And("I click reset list")
+    public void iClickReset() {
+        driver.findElement(By.xpath("//button[text()='Reset List']")).click();    }
+
+    @Then("I can see original list with 10 people")
+    public void iSeeOriginalList() {
+
+        List<WebElement> people = driver.findElements(By.cssSelector("[id^='person']"));
+
+        assertEquals(10, people.size());
+    }
+
+
 
 }
 
