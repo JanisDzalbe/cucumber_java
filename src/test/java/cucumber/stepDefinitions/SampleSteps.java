@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -191,15 +192,27 @@ public class SampleSteps {
         assertEquals(errorMessage, driver.findElement(By.id("ch1_error")).getText());
     }
 
-    @Then("I see the correct alert message")
+    @Then("^I see the correct alert message$")
     public void iSeeTheAlertMessage() {
         Alert alert = driver.switchTo().alert();
         assertEquals("Square root of 100 is 10.00", alert.getText());
         alert.dismiss();
     }
 
-    @Then("I see no error message")
+    @Then("^I see no error message$")
     public void iSeeNoErrorMessage() {
         assertFalse(driver.findElement(By.id("ch1_error")).isDisplayed());
+    }
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        for (String language: languages) {
+            driver.findElement(By.xpath("//input[@value='" + language + "']")).click();
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String languages) {
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
     }
 }
