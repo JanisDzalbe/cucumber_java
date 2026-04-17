@@ -1,4 +1,5 @@
 package cucumber.stepDefinitions;
+
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
@@ -37,14 +38,12 @@ public class AgeStepDefinitions {
         }
     }
 
-    // --- Background ---
+    // ==================== Non-PO steps (existing) ====================
 
     @Given("I am on age page")
     public void iAmOnAgePage() {
         driver.get(AGE_PAGE_URL);
     }
-
-    // --- When steps ---
 
     @When("I enter name: {string}")
     public void iEnterName(String name) {
@@ -72,8 +71,6 @@ public class AgeStepDefinitions {
         submitButton.click();
     }
 
-    // --- Then steps ---
-
     @Then("I see message: {string}")
     public void iSeeMessage(String expectedMessage) {
         WebElement message = wait.until(
@@ -92,6 +89,73 @@ public class AgeStepDefinitions {
 
     @And("I am not navigated to age message page")
     public void iAmNotNavigatedToAgeMessagePage() {
+        String currentUrl = driver.getCurrentUrl();
+        Assert.assertFalse(
+                "Should not navigate to message page, but was: " + currentUrl,
+                currentUrl.contains(AGE_MESSAGE_PAGE_URL)
+        );
+        Assert.assertTrue(
+                "Should remain on age page, but was: " + currentUrl,
+                currentUrl.contains(AGE_PAGE_URL)
+        );
+    }
+
+    // ==================== PO steps (new) ====================
+
+    @Given("I am on age page using PO")
+    public void iAmOnAgePageUsingPO() {
+        driver.get(AGE_PAGE_URL);
+    }
+
+    @Given("I open age page using PO")
+    public void iOpenAgePageUsingPO() {
+        driver.get(AGE_PAGE_URL);
+    }
+
+    @When("I enter name: {string} using PO")
+    public void iEnterNameUsingPO(String name) {
+        WebElement nameField = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.id("name"))
+        );
+        nameField.clear();
+        nameField.sendKeys(name);
+    }
+
+    @When("I enter age: {int} using PO")
+    public void iEnterAgeUsingPO(int age) {
+        WebElement ageField = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.id("age"))
+        );
+        ageField.clear();
+        ageField.sendKeys(String.valueOf(age));
+    }
+
+    @When("I click submit age using PO")
+    public void iClickSubmitAgeUsingPO() {
+        WebElement submitButton = wait.until(
+                ExpectedConditions.elementToBeClickable(By.id("submit"))
+        );
+        submitButton.click();
+    }
+
+    @Then("I see message: {string} using PO")
+    public void iSeeMessageUsingPO(String expectedMessage) {
+        WebElement message = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.id("message"))
+        );
+        Assert.assertEquals(expectedMessage, message.getText());
+    }
+
+    @Then("I see error: {string} using PO")
+    public void iSeeErrorUsingPO(String expectedError) {
+        WebElement error = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.id("error"))
+        );
+        Assert.assertEquals(expectedError, error.getText());
+    }
+
+    @And("I remain in age page using PO")
+    public void iRemainInAgePageUsingPO() {
         String currentUrl = driver.getCurrentUrl();
         Assert.assertFalse(
                 "Should not navigate to message page, but was: " + currentUrl,
