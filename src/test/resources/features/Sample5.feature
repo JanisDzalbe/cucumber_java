@@ -33,11 +33,28 @@ Feature: Introduction to cucumber part 4
 
   Scenario Outline: test feedback page
     Given I am on feedback page
-    When I set info: "<name>", <age> and "<genre>"
+    When I set info in feedback: "<name>", <age> and "<genre>"
     And I click send feedback
     Then I see feedback name: "<name>"
     And I see feedback age: <age>
     And I see feedback genre: "<genre>"
+    Examples:
+      | name  | age | genre  |
+      | Ann   | 32  | female |
+      | Bob   | 39  | male   |
+      | Janis | 30  | male   |
+
+  Scenario Outline: Test feedback page 2
+    Given I am on feedback page
+    When I set feedback details
+      | name  | <name>  |
+      | age   | <age>   |
+      | genre | <genre> |
+    And I click send feedback
+    Then I see feedback details
+      | name  | <name>  |
+      | age   | <age>   |
+      | genre | <genre> |
     Examples:
       | name  | age | genre  |
       | Ann   | 32  | female |

@@ -1,6 +1,5 @@
 package cucumber.stepDefinitions;
 
-import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -10,6 +9,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -216,8 +216,8 @@ public class SampleSteps {
         assertEquals(languages, driver.findElement(By.id("language")).getText());
     }
 
-    @When("^I set info: \"([^\"]*)\", (\\d+) and \"([^\"]*)\"$")
-    public void iSetInfoAgeAnd(String name, int age, String genre) {
+    @When("^I set info in feedback: \"([^\"]*)\", (\\d+) and \"([^\"]*)\"$")
+    public void iSetInfoInFeedback(String name, int age, String genre) {
         WebElement fb_name = driver.findElement(By.id("fb_name"));
         fb_name.clear();
         fb_name.sendKeys(name);
@@ -232,4 +232,45 @@ public class SampleSteps {
     public void iSeeFeedbackGenre(String genre) {
         assertEquals(genre, driver.findElement(By.id("gender")).getText());
     }
+
+    @When("^I set feedback details$")
+    public void iSetFeedbackDetails(Map<String, String> map) {
+        Runnable actionForName = () -> {
+            WebElement element = driver.findElement(By.id("fb_name"));
+            element.clear();
+            element.sendKeys(map.get("name"));
+        };
+        Runnable actionForAge = () -> {
+            WebElement element = driver.findElement(By.id("fb_age"));
+            element.clear();
+            element.sendKeys(map.get("age"));
+        };
+        Runnable actionForGenre = () -> {
+            WebElement element = driver.findElement(By.xpath("//input[@name='gender' and @value='" + map.get("genre") + "']"));
+            element.click();
+        };
+        Map<String, Runnable> actions = Map.of(
+                "name", actionForName,
+                "age", actionForAge,
+                "genre", actionForGenre
+        );
+        for (String key : map.keySet()) {
+            actions.get(key).run();
+        }
+    }
+
+    @When("^I see feedback details$")
+    public void iSeeFeedbackDetails(Map<String, String> map) {
+        Map<String, String> ids = Map.of(
+                "name", "name",
+                "age", "age",
+                "genre", "gender"
+        );
+        System.out.println("Got this far!");
+        for (String key : map.keySet()) {
+            assertEquals(map.get(key), driver.findElement(By.id(ids.get(key))).getText());
+        }
+
+    }
+
 }
