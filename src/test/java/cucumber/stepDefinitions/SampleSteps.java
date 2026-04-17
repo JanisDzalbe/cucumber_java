@@ -266,11 +266,9 @@ public class SampleSteps {
                 "age", "age",
                 "genre", "gender"
         );
-        System.out.println("Got this far!");
         for (String key : map.keySet()) {
             assertEquals(map.get(key), driver.findElement(By.id(ids.get(key))).getText());
         }
-
     }
 
 }
