@@ -1,9 +1,11 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import cucumber.pages_sample.*;
@@ -52,5 +54,15 @@ public class SamplePOSteps {
     public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
         agePage.enterName(valuesToEnter.get("name"));
         agePage.enterAge(valuesToEnter.get("age"));
+    }
+
+    @Then("^I see error: \"([^\"]*)\" using PO$")
+    public void iSeeErrorUsingPO(String expectedErrorMessage) {
+        agePage.checkErrorMessage(expectedErrorMessage);
+    }
+
+    @And("^I remain in age page using PO$")
+    public void iRemainInAgePageUsingPO() {
+        assertEquals(agePage.getPageUrl(), driver.getCurrentUrl());
     }
 }
