@@ -5,12 +5,11 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -94,6 +93,24 @@ public class SampleSteps {
     public void iAmOnTheFeedbackPage()throws Throwable{
         driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
     }
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) throws Throwable {
+        for (String language : languages) {
+            driver.findElement(By.cssSelector("[value='" + language + "']")).click();
+        }
+    }
+
+    @And("^I click send feedback$")
+    public void iClickSendFeedback() throws Throwable {
+        driver.findElement(By.xpath("//button[text()='Send']")).click();
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iSeeLanguagesInFeedbackCheck(String languages) throws Throwable {
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+
 
     @When("^I enter the feedback name: \"([^\"]*)\"$")
     public void iEnterTheFeedbackName(String name) throws Throwable {
@@ -191,5 +208,97 @@ public class SampleSteps {
         alert.accept();
     }
 
+    @When("^I add feedback details:$")
+    public void iAddFeedbackDetails(Map<String, String> feedbackDetails) throws Throwable{
+        iEnterTheFeedbackName(feedbackDetails.get("name"));
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(feedbackDetails.get("age"));
+        driver.findElement(By.cssSelector("[value='" + feedbackDetails.get("gender")+ "'")).click();
+    }
+
+    @Then("^I can see name \"([^\"]*)\" in feedback page$")
+    public void iCanSeeNameInFeedbackPage(String name)throws Throwable{
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @And("^I can see age \"([^\"]*)\" in feedback page$")
+    public void iCanSeeAgeInFeedbackPage(String age)throws Throwable{
+        assertEquals(age, driver.findElement(By.id("age")).getText());
+    }
+
+
+    @Then("^I can see gender \"([^\"]*)\" in feedback page$")
+    public void iCanSeeGenderInFeedbackPage(String gender)throws Throwable{
+    assertEquals(gender, driver.findElement(By.id("gender")).getText());
+    }
+
+
+    @Given("^I am on list of people with jobs page$")
+    public void iAmOnListOfPeoplePage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+    }
+
+    @And("^I enter name: \"([^\"]*)\" and job: \"([^\"]*)\"$")
+    public void iEnterNameAndJob(String name,String job)throws Throwable{
+        driver.findElement(By.id("name")).clear();
+        driver.findElement(By.id("name")).sendKeys(name);
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("job")).sendKeys(job);
+    }
+
+    @And("^I see name: \"([^\"]*)\" with job: \"([^\"]*)\" in the list$")
+    public void iSeeNewPersonOnList(String name,String job) throws Throwable {
+        WebElement newPerson= driver.findElement(By.xpath("//span[text()='" + name + "']"));
+        WebElement newJob= driver.findElement(By.xpath("//span[text()='" + job + "']"));
+        assertNotNull(newPerson);
+        assertNotNull(newJob);
+    }
+
+    @Then("^I should see \"([^\"]*)\" in the list$")
+    public void iShouldSeeInTheList(String name) {
+        assertTrue(driver.findElement(By.xpath("//span[text()='" + name + "']")).isDisplayed());
+    }
+
+    @When("^I click Add Person button$")
+    public void iClickAddPersonButton() throws Throwable {
+        driver.findElement(By.xpath("//button[text()='Add person']")).click();
+    }
+
+    @When("^I click on the Reset list button$")
+    public void iClickOnTheRestButton() throws Throwable {
+        driver.findElement(By.xpath("//button[text()='Reset List']")).click();
+    }
+
+    @Then("^I click on Add button$")
+    public void iClickOnAddButton() throws Throwable {
+        driver.findElement(By.xpath("//button[text()='Add']")).click();
+    }
+
+    @Then("^I should see the original list$")
+    public void iShouldSeeOriginalList() throws Throwable {
+        assertTrue(driver.findElement(By.xpath("//span[text()='John']")).isDisplayed());
+    }
+
+    @Then("^I remove person \"([^\"]*)\"$")
+    public void iRemovePerson(String name) throws Throwable {
+//        driver.findElement(By.xpath("//li[@id='person2']//span[contains(@class,'large name')]")).getText();
+        driver.findElement(By.xpath("//span[contains(@class, 'large name') and text()='" + name + "']//parent::li//child::span[contains(@onclick,'deletePerson')]")).click();
+    }
+
+    @Then("^I should not see \"([^\"]*)\" in list$")
+    public void iShouldNotSeeRemovedPersonOnList(String name) throws Throwable {
+        assertThrows(NoSuchElementException.class, ()->driver.findElement(By.xpath("//span[text()='" +name+ "']")).isDisplayed());
+    }
+
+    @When("^I edit name: \"([^\"]*)\" with new name: \"([^\"]*)\" and new job: \"([^\"]*)\"$")
+    public void iEditNameAndJob(String name,String newName, String newJob)throws Throwable{
+        //driver.findElement(By.xpath("//li[@id='person5']//span[contains(@class,'large name')]")).getText();
+        driver.findElement(By.xpath("//span[text()='" +name+ "']//preceding::span[1]")).click();
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("name")).clear();
+        driver.findElement(By.id("job")).sendKeys(newJob);
+        driver.findElement(By.id("name")).sendKeys(newName);
+        driver.findElement(By.xpath("//button[text()='Edit']")).click();
+    }
 }
 
