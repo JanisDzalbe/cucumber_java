@@ -375,8 +375,6 @@ public class SampleSteps {
             String job = element.findElement(By.className("job")).getText();
             peopleAndJobsOnWebsite.put(name, job);
         }
-        System.out.println(peopleAndJobs);
-        System.out.println(peopleAndJobsOnWebsite);
         assertEquals(peopleAndJobs, peopleAndJobsOnWebsite);
     }
 }
