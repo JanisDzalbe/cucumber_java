@@ -121,7 +121,6 @@ public class SampleSteps {
     @And("^I am not navigated to age message page$")
     public void iAmNotNavigatedToAgeMessagePage() {
         String currentUrl = driver.getCurrentUrl();
-
         assertTrue(currentUrl.contains("age"));
 
         boolean messageExists = driver.findElements(By.id("message")).size() > 0;
@@ -166,40 +165,58 @@ public class SampleSteps {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
 
-    // ---------- ✅ FEEDBACK TASK (FIXED PROPERLY) ----------
+
 
     @Given("^I am on feedback page$")
     public void iAmOnFeedbackPage() {
         driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
     }
 
-    @When("^I select feedback languages$")
-    public void iSelectFeedbackLanguages(List<String> languages) {
-        List<WebElement> checkboxes = driver.findElements(By.name("language"));
+    @When("^I enter feedback details:$")
+    public void iEnterFeedbackDetails(Map<String, String> data) {
 
-        for (String language : languages) {
-            for (WebElement checkbox : checkboxes) {
-                if (checkbox.getAttribute("value").equals(language)) {
-                    if (!checkbox.isSelected()) {
-                        checkbox.click();
-                    }
-                }
+        WebElement name = driver.findElement(By.id("fb_name"));
+        name.clear();
+        name.sendKeys(data.get("name"));
+
+        WebElement age = driver.findElement(By.id("fb_age"));
+        age.clear();
+        age.sendKeys(data.get("age"));
+
+        String gender = data.get("gender");
+
+        List<WebElement> radios = driver.findElements(By.name("gender"));
+
+        for (WebElement radio : radios) {
+            if (radio.getAttribute("value").equalsIgnoreCase(gender)) {
+                radio.click();
+                break;
             }
         }
     }
 
-    @And("^I click send feedback$")
+    @When("^I click send feedback$")
     public void iClickSendFeedback() {
         driver.findElement(By.cssSelector("button")).click();
     }
 
-    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
-    public void iCanSeeLanguagesInFeedbackCheck(String expectedLanguages) {
-        String pageText = driver.findElement(By.tagName("body")).getText();
-        assertTrue(pageText.contains(expectedLanguages));
+
+    @Then("^I should see feedback result with \"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\"$")
+    public void iShouldSeeFeedbackResult(String name, String age, String gender) {
+
+        // Wait until URL changes to result page
+        new org.openqa.selenium.support.ui.WebDriverWait(driver, java.time.Duration.ofSeconds(5))
+                .until(d -> d.getCurrentUrl().contains("check_feedback"));
+
+        // Now safely get fresh body text
+        String bodyText = driver.findElement(By.tagName("body")).getText();
+
+        // Validate values
+        assertTrue(bodyText.contains(name));
+        assertTrue(bodyText.contains(age));
+        assertTrue(bodyText.toLowerCase().contains(gender.toLowerCase()));
     }
 
-    // ---------- ENTER A NUMBER PAGE ----------
 
     @Given("I am on the enter a number page")
     public void iAmOnTheEnterANumberPage() {
