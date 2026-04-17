@@ -206,7 +206,7 @@ public class SampleSteps {
 
     @When("^I select feedback languages$")
     public void iSelectFeedbackLanguages(List<String> languages) {
-        for (String language: languages) {
+        for (String language : languages) {
             driver.findElement(By.xpath("//input[@value='" + language + "']")).click();
         }
     }
@@ -214,5 +214,22 @@ public class SampleSteps {
     @Then("^I can see languages \"([^\"]*)\" in feedback check$")
     public void iCanSeeLanguagesInFeedbackCheck(String languages) {
         assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+
+    @When("^I set info: \"([^\"]*)\", (\\d+) and \"([^\"]*)\"$")
+    public void iSetInfoAgeAnd(String name, int age, String genre) {
+        WebElement fb_name = driver.findElement(By.id("fb_name"));
+        fb_name.clear();
+        fb_name.sendKeys(name);
+        WebElement fb_age = driver.findElement(By.id("fb_age"));
+        fb_age.clear();
+        fb_age.sendKeys(String.valueOf(age));
+        WebElement fb_gender = driver.findElement(By.xpath("//input[@name='gender' and @value='" + genre + "']"));
+        fb_gender.click();
+    }
+
+    @And("^I see feedback genre: \"([^\"]*)\"$")
+    public void iSeeFeedbackGenre(String genre) {
+        assertEquals(genre, driver.findElement(By.id("gender")).getText());
     }
 }
