@@ -67,10 +67,9 @@ public class Task2Steps {
         driver.findElement(By.xpath(xpath)).click();
     }
 
-    @Then("^I check the person \"([^\"]*)\"$")
-    public void Ichecktheperson(String name) {
-        WebElement personcheck = driver.findElement(By.xpath("//li[span[text()='" + name + "']]"));
-        assertTrue(personcheck.getText().contains(name));
+    @Then("^I should not see the person \"([^\"]*)\"$")
+    public void iShouldNotSeeThePerson(String name) {
+        assertEquals(0, driver.findElements(By.xpath("//li[span[text()='" + name + "']]")).size());
     }
 
     @Then("^I check a original list$")

@@ -36,7 +36,7 @@ Feature: People job management
 
     Scenario Outline: Remove a person
        When I want delete person named: "<name>"
-       Then I check the person "<name>"
+       Then I should not see the person "<name>"
        Then I click "Reset List" button
        And I check a original list
         Examples:
