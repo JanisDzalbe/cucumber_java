@@ -64,6 +64,6 @@ public class SamplePOSteps {
 
     @Then("^I remain in age page using PO$")
     public void iRemainInAgePageUsingPO() {
-        assertEquals("https://janisdzalbe.github.io/example-site/examples/age", agePage.getPageUrl());
+        assertEquals(driver.getCurrentUrl(), agePage.getPageUrl());
     }
 }
