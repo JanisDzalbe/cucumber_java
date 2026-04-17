@@ -110,7 +110,7 @@ public class SampleSteps {
         assertEquals(message, driver.findElement(By.id("message")).getText());
     }
 
-    // ---------- ✅ MISSING TASK IMPLEMENTATION ----------
+    // ---------- ERROR HANDLING ----------
 
     @Then("^I see error: \"([^\"]*)\"$")
     public void iSeeError(String errorMessage) {
@@ -122,10 +122,8 @@ public class SampleSteps {
     public void iAmNotNavigatedToAgeMessagePage() {
         String currentUrl = driver.getCurrentUrl();
 
-        // still on age page
         assertTrue(currentUrl.contains("age"));
 
-        // message should not be displayed
         boolean messageExists = driver.findElements(By.id("message")).size() > 0;
 
         if (messageExists) {
@@ -133,7 +131,7 @@ public class SampleSteps {
         }
     }
 
-    // ---------- OTHER STEPS ----------
+    // ---------- TABLE INPUT ----------
 
     @When("^I enter values:$")
     public void iEnterValues(Map<String, String> valuesToEnter) {
@@ -143,6 +141,8 @@ public class SampleSteps {
         driver.findElement(By.id("age")).clear();
         driver.findElement(By.id("age")).sendKeys(valuesToEnter.get("age"));
     }
+
+    // ---------- CHECKBOX TASK ----------
 
     @And("^I click the result checkbox button$")
     public void iClickTheResultCheckboxButton() {
@@ -166,7 +166,40 @@ public class SampleSteps {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
 
-    // ---------- ENTER A NUMBER PAGE (TASK 1) ----------
+    // ---------- ✅ FEEDBACK TASK (FIXED PROPERLY) ----------
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        List<WebElement> checkboxes = driver.findElements(By.name("language"));
+
+        for (String language : languages) {
+            for (WebElement checkbox : checkboxes) {
+                if (checkbox.getAttribute("value").equals(language)) {
+                    if (!checkbox.isSelected()) {
+                        checkbox.click();
+                    }
+                }
+            }
+        }
+    }
+
+    @And("^I click send feedback$")
+    public void iClickSendFeedback() {
+        driver.findElement(By.cssSelector("button")).click();
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String expectedLanguages) {
+        String pageText = driver.findElement(By.tagName("body")).getText();
+        assertTrue(pageText.contains(expectedLanguages));
+    }
+
+    // ---------- ENTER A NUMBER PAGE ----------
 
     @Given("I am on the enter a number page")
     public void iAmOnTheEnterANumberPage() {
