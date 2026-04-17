@@ -46,10 +46,10 @@ public class SampleSteps {
 
     @Then("^I should see both locators page headers$")
     public void iShouldSeeBothLocatorsPageHeaders() throws Throwable {
-        assertTrue(driver.findElement(By.id("heading-1")).isDisplayed());
-        assertEquals("Heading 1", driver.findElement(By.id("heading-1")).getText());
-        assertTrue(driver.findElement(By.id("heading-2")).isDisplayed());
-        assertEquals("Heading 2 text", driver.findElement(By.id("heading-2")).getText());
+        assertTrue(driver.findElement(By.id("heading_1")).isDisplayed());
+        assertEquals("Heading 1", driver.findElement(By.id("heading_1")).getText());
+        assertTrue(driver.findElement(By.id("heading_2")).isDisplayed());
+        assertEquals("Heading 2 text", driver.findElement(By.id("heading_2")).getText());
     }
 
     @And("^Buttons in Locators page are clickable$")
@@ -57,8 +57,8 @@ public class SampleSteps {
         assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton1\"]")).isDisplayed());
         assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton1\"]")).isEnabled());
 
-        assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton2\"]")).isDisplayed());
-        assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton2\"]")).isEnabled());
+        assertTrue(driver.findElement(By.id("buttonId")).isDisplayed());
+        assertTrue(driver.findElement(By.id("buttonId")).isEnabled());
     }
 
     @When("^I enter name: \"([^\"]*)\"$")
@@ -129,6 +129,20 @@ public class SampleSteps {
     @Given("^I am on feedback page$")
     public void iAmOnFeedbackPage() throws Throwable {
         driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> values) throws Throwable {
+        for (String value : values) {
+            driver.findElement(By.xpath("//input[@name='language' and @value='" + value + "']")).click();
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String expectedLanguages) throws Throwable {
+
+        String actualLanguages = driver.findElement(By.id("language")).getText().trim();
+
+        assertEquals(expectedLanguages, actualLanguages);
     }
 
 
