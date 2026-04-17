@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -176,4 +177,37 @@ public class SampleSteps {
     public void iSeeLanguagesInFeedbackCheck(String languages) throws Throwable {
         assertEquals(languages, driver.findElement(By.id("language")).getText());
     }
+
+    @When("I add feedback details")
+    public void iAddFeedbackDetails(Map <String, String> feedbackDetails) throws Throwable{
+        iEnterFeedbackName(feedbackDetails.get("name"));
+
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(feedbackDetails.get("age"));
+
+        driver.findElement(By.cssSelector("[value='" + feedbackDetails.get("gender")+ "']")).click();
+    }
+
+    @Then("^I can see name \"([^\"]*)\" in feedback check$")
+    public void iSeeNameInFeedbackCheck(String name) throws Throwable {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @Then("^I can see age \"(\\d+)\" in feedback check$")
+    public void iSeeAgeInFeedbackCheck(int age) throws Throwable {
+        assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
+    }
+
+    @Then("^I can see gender \"([^\"]*)\" in feedback check$")
+    public void iSeeGenderInFeedbackCheck(String name) throws Throwable {
+        assertEquals(name, driver.findElement(By.id("gender")).getText());
+    }
+
+    @Then("^I can see details in feedback check$")
+    public void iSeeDetailsInFeedbackCheck(Map<String, String> feedbackDetails) throws Throwable {
+        iSeeNameInFeedbackCheck(feedbackDetails.get("name"));
+        assertEquals(feedbackDetails.get("age"), driver.findElement(By.id("age")).getText());
+        iSeeGenderInFeedbackCheck(feedbackDetails.get("gender"));
+    }
+
 }
