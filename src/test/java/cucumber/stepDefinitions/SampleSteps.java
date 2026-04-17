@@ -149,4 +149,16 @@ public class SampleSteps {
         assertEquals(name, driver.findElement(By.id("name")).getText());
         assertEquals(age, driver.findElement(By.id("age")).getText());
     }
+
+    @When("^I select feedback languages$")
+    public void selectLanguages(List<String> languages){
+        for (String l : languages){
+            driver.findElement(By.cssSelector("[value='" + l + "']")).click();
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check")
+    public void seeLanguages(String languages){
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
 }
