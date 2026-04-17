@@ -161,4 +161,38 @@ public class SampleSteps {
     public void iCanSeeAgeInFeedbackCheck(int age) throws Throwable {
         assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
     }
+
+    @When("^I select feedback languages$")
+    public void iSelectedFeedbackLanguages(List<String> languages) throws Throwable {
+        for (String language : languages) {
+            driver.findElement(By.cssSelector("[value='" + language + "']")).click();
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iSeeLanguagesInFeedbackCheck(String values) throws Throwable {
+        assertEquals(values, driver.findElement(By.id("language")).getText());
+    }
+
+    @When ("^I enter feedback values:$")
+    public void iEnterFeedbackValues(Map<String, String> valuesToEnter) throws Throwable {
+        iEnterFeedbackName(valuesToEnter.get("name"));
+
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(valuesToEnter.get("age"));
+
+        driver.findElement(By.cssSelector("[value='" + valuesToEnter.get("genre") + "']")).click();
+    }
+
+    @Then("^I can see gender \"([^\"]*)\" in feedback check$")
+    public void iSeeGenderInFeedbackCheck(String genre) throws Throwable {
+        assertEquals(genre, driver.findElement(By.id("gender")).getText());
+    }
+
+    @Then ("^I can see details in feedback check$")
+    public void iSeeDetailsInFeedbackCheck(Map<String, String> valuesToEnter) throws Throwable {
+        iCanSeeNameInFeedbackCheck(valuesToEnter.get("name"));
+        assertEquals(valuesToEnter.get("age"), driver.findElement(By.id("age")).getText());
+        iSeeGenderInFeedbackCheck(valuesToEnter.get("genre"));
+    }
 }
