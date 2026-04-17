@@ -39,4 +39,5 @@ Feature: Introduction to cucumber part 3
         | name  | age | feedbackName |  feedbackAge  |
         | Ann   | 5   | Ann          |  5            |
         | Marry | 50  | Marry        |  50           |
+        | Maks  | 22  | Maks         |  22           |
 
