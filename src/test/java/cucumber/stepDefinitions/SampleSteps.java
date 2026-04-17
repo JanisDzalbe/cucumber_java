@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -183,6 +184,56 @@ public class SampleSteps {
     @Given("^I am on action page$")
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
+    }
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+
+        for (String language : languages) {
+            WebElement checkbox = driver.findElement(
+                    By.cssSelector("input[name='language'][value='" + language + "']")
+            );
+
+            if (!checkbox.isSelected()) {
+                checkbox.click();
+            }
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String languages) {
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+
+    @When("I enter feedback data:")
+    public void iEnterFeedbackData(DataTable table) {
+
+        Map<String, String> data = table.asMap(String.class, String.class);
+
+        driver.findElement(By.id("fb_name")).sendKeys(data.get("name"));
+
+        driver.findElement(By.id("fb_age")).sendKeys(data.get("age"));
+
+        String genre = data.get("genre");
+
+        if (genre.equalsIgnoreCase("male")) {
+            driver.findElement(By.xpath("//input[@name='gender' and @value='male']")).click();
+        } else if (genre.equalsIgnoreCase("female")) {
+            driver.findElement(By.xpath("//input[@name='gender' and @value='female']")).click();
+        }
+    }
+
+    @Then("I should see name {string} and age {string} and genre {string}")
+    public void iShouldSeeSubmittedData(String name, String age, String genre) {
+
+        String actualName = driver.findElement(By.id("name")).getText();
+        String actualAge = driver.findElement(By.id("age")).getText();
+
+        String actualGenre = driver.findElement(By.id("gender")).getText();
+
+        assertEquals(name, actualName);
+        assertEquals(age, actualAge);
+        assertEquals(genre, actualGenre);
     }
 }
 
