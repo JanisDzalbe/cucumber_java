@@ -19,4 +19,8 @@ public class AgeSubmittedPage {
     public void checkMessageText(String messageText) {
         assertEquals(message.getText(), messageText);
     }
+
+    /* public void checkErrorMessage(String messageText) {
+        assertEquals(message.getText(), messageText);
+    }*/
 }

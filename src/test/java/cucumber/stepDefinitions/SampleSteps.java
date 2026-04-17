@@ -1,13 +1,13 @@
 package cucumber.stepDefinitions;
 
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
@@ -240,6 +240,114 @@ public class SampleSteps {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
 
+    @Given("^I am on people list page$")
+    public void iAmOnPeopleListPage(){
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+    }
 
+    @When("^I click Add person$")
+    public void iClickAddPerson() throws Throwable {
+        driver.findElement(By.id("addPersonBtn")).click();
+    }
 
+    @And("^I add person \"([^\"]*)\" with job \"([^\"]*)\"$")
+    public void iAddPersonWithJob(String name, String job) throws Throwable {
+        driver.findElement(By.id("name")).clear();
+        driver.findElement(By.id("name")).sendKeys(name);
+
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("job")).sendKeys(job);
+
+        driver.findElement(By.xpath("//button[text()='Add']")).click();
+    }
+
+    @Then("^I should see \"([^\"]*)\" with job \"([^\"]*)\" in the list$")
+    public void iShouldSeePersonWithJobInList(String name, String job) {
+
+        String listText = driver.findElement(By.id("listOfPeople")).getText();
+
+        assertTrue(listText.contains(name));
+        assertTrue(listText.contains(job));
+    }
+
+    @When("^I edit person \"([^\"]*)\" to have job \"([^\"]*)\"$")
+    public void iEditPersonToHaveJob(String name, String newjob) throws Throwable {
+        driver.findElement(By.xpath( "//li[.//span[text()='" + name + "']]//span[contains(@onclick,'openModalForEditPersonWithJob')]")).click();
+
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("job")).sendKeys(newjob);
+
+        driver.findElement(By.xpath("//button[text()='Edit']")).click();
+    }
+
+    @When("^I remove person \"([^\"]*)\"$")
+    public void iRemovePerson(String name) throws Throwable {
+        driver.findElement(By.xpath("//li[.//span[text()='" + name + "']]//span[contains(@onclick,'deletePerson')]")).click();
+    }
+
+    @Then("^I should not see \"([^\"]*)\" in the list$")
+    public void iShouldNotSeePerson(String name) {
+        String listText = driver.findElement(By.id("listOfPeople")).getText();
+        assertFalse(listText.contains(name));
+    }
+
+    @When("^I perform \"([^\"]*)\" on person \"([^\"]*)\" with job \"([^\"]*)\"$")
+    public void iPerformAction(String action, String name, String job) throws Throwable {
+
+        if(action.equals("add")) {
+
+            driver.findElement(By.id("addPersonBtn")).click();
+
+            driver.findElement(By.id("name")).clear();
+            driver.findElement(By.id("name")).sendKeys(name);
+
+            driver.findElement(By.id("job")).clear();
+            driver.findElement(By.id("job")).sendKeys(job);
+
+            driver.findElement(By.xpath("//button[text()='Add']")).click();
+        }
+
+        else {
+
+            // get all people
+            List<WebElement> people = driver.findElements(By.cssSelector("#listOfPeople li"));
+
+            for(WebElement person : people) {
+                if(person.getText().contains(name)) {
+                    if(action.equals("edit")) {
+
+                        person.findElements(By.tagName("span")).get(1).click();
+
+                        driver.findElement(By.id("job")).clear();
+                        driver.findElement(By.id("job")).sendKeys(job);
+
+                        driver.findElement(By.xpath("//button[text()='Edit']")).click();
+                    }
+
+                    else if(action.equals("remove")) {
+
+                        person.findElements(By.tagName("span")).get(0).click();
+                    }
+
+                    break;
+                }
+            }
+        }
+    }
+
+    @And("^I click Reset List$")
+    public void iClickResetList() throws Throwable {
+        driver.findElement(By.xpath("//button[text()='Reset List']")).click();
+    }
+
+    @Then("^I should see default people in the list$")
+    public void iShouldSeeDefaultPeopleInList() throws Throwable {
+
+        String listText = driver.findElement(By.id("listOfPeople")).getText();
+
+        assertTrue(listText.contains("Mike"));
+        assertTrue(listText.contains("Jill"));
+        assertTrue(listText.contains("Jane"));
+        assertTrue(listText.contains("John"));
+    }
 }
