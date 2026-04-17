@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -272,4 +272,111 @@ public class SampleSteps {
         }
     }
 
+    @Given("^I am on page \"People with jobs\"$")
+    public void iAmOnPagePeopleWithJobs() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs");
+    }
+
+    @When("^I click edit button of person \"([^\"]*)\"$")
+    public void iClickEditButtonOfPerson(String name) {
+        WebElement editButton = driver.findElement(By.xpath("//li[contains(@id,'person') and span[text()='" + name + "']]//i"));
+        editButton.click();
+    }
+
+    @When("^I change person's name to \"([^\"]*)\"$")
+    public void iChangePersonSNameTo(String new_name) {
+        WebElement nameElement = driver.findElement(By.id("name"));
+        nameElement.clear();
+        nameElement.sendKeys(new_name);
+    }
+
+    @When("^I change person's job to \"([^\"]*)\"$")
+    public void iChangePersonSJobTo(String new_job) {
+        WebElement jobElement = driver.findElement(By.id("job"));
+        jobElement.clear();
+        jobElement.sendKeys(new_job);
+    }
+
+    @When("^I confirm the edit$")
+    public void iClickOnEditButton() {
+        driver.findElement(By.xpath("//button[@id='modal_button' and text()='Edit']")).click();
+    }
+
+    @Then("^I see that \"([^\"]*)\" is a \"([^\"]*)\"$")
+    public void iSeeJobOfPerson(String name, String new_job) {
+        WebElement personElement = driver.findElement(By.xpath("//li[contains(@id,'person') and span[text()='" + name + "']]"));
+        assertEquals(new_job, personElement.findElement(By.className("job")).getText());;
+    }
+
+    @When("^I click button \"Add new person\"$")
+    public void iClickButtonAddNewPerson() {
+        driver.findElement(By.xpath("//button[@id='addPersonBtn' and text()='Add person']")).click();
+    }
+
+    @When("^I enter new person's name \"([^\"]*)\"$")
+    public void iEnterNewPersonsName(String name) {
+        WebElement nameField = driver.findElement(By.id("name"));
+        nameField.clear();
+        nameField.sendKeys(name);
+    }
+
+    @When("^I enter new person's job \"([^\"]*)\"$")
+    public void iEnterNewPersonsJob(String job) {
+        WebElement nameField = driver.findElement(By.id("job"));
+        nameField.clear();
+        nameField.sendKeys(job);
+    }
+
+    @When("^I click button to confirm new person's information$")
+    public void iClickButtonToConfirmNewPersonsInformation() {
+        driver.findElement(By.xpath("//button[@id='modal_button' and text()='Add']")).click();
+    }
+
+    @When("^I click remove button of person \"([^\"]*)\"$")
+    public void iClickRemoveButtonOfPerson(String name) {
+        WebElement removeButton = driver.findElement(By.xpath("//li[contains(@id,'person') and span[text()='" + name + "']]/span[text()='×']"));
+        removeButton.click();
+    }
+
+    @Then("^I see no person with name \"([^\"]*)\"$")
+    public void iSeeNoPersonWithName(String name) {
+        List<WebElement> elements = driver.findElements(By.className("name"));
+        long numberOfElements = elements.stream().filter(e -> e.getText().equals(name)).count();
+        assertEquals(0, numberOfElements);
+        // for some reason the following takes some 15 seconds
+        // assertThrows(Exception.class, () -> driver.findElement(By.xpath("//span[@class='name' and text()='" + name + "']")));
+    }
+
+    @When("^I click on Reset button$")
+    public void iClickOnResetButton() {
+        driver.findElement(By.xpath("//button[text()='Reset List']")).click();
+    }
+
+    @Then("^I see the initial list of persons$")
+    public void iSeeTheInitialListOfPersons() {
+        Map<String, String> peopleAndJobs = Map.of(
+                "Mike", "Web Designer",
+                "Jill", "Support",
+                "Jane", "Accountant",
+                "John", "Software Engineer",
+                "Sarah", "Product Manager",
+                "Carlos", "Data Analyst",
+                "Emily", "UX Designer",
+                "David", "Project Manager",
+                "Maria", "QA Engineer",
+                "Alex", "DevOps Engineer"
+        );
+        List<WebElement> elements = driver.findElements(By.xpath("//li[contains(@id, 'person')]"));
+        assertEquals(10, elements.size());
+
+        Map<String, String> peopleAndJobsOnWebsite = new HashMap<>();
+        for (WebElement element: elements) {
+            String name = element.findElement(By.className("name")).getText();
+            String job = element.findElement(By.className("job")).getText();
+            peopleAndJobsOnWebsite.put(name, job);
+        }
+        System.out.println(peopleAndJobs);
+        System.out.println(peopleAndJobsOnWebsite);
+        assertEquals(peopleAndJobs, peopleAndJobsOnWebsite);
+    }
 }
