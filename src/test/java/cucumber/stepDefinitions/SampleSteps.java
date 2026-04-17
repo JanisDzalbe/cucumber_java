@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -135,6 +136,37 @@ public class SampleSteps {
         for (String value : values) {
             driver.findElement(By.xpath("//input[@name='language' and @value='" + value + "']")).click();
         }
+    }
+
+    @When("^I add feedback details:$")
+    public void iAddFeedbackDetails(Map<String, String> feedbackDetails) throws Throwable {
+
+        iEnterNameInFeedback(feedbackDetails.get("name"));
+
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(feedbackDetails.get("age"));
+
+        driver.findElement(By.cssSelector("[value='" + feedbackDetails.get("gender") + "']")).click();
+    }
+    @Then("I can see gender \"([^\"]*)\" in feedback check$")
+    public void iSeeGenderInFeedbackCheck(String name) throws Throwable {
+        assertEquals(name, driver.findElement(By.id("gender")).getText());
+    }
+
+    @Then("^I should see feedback summary \"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\"$")
+    public void iShouldSeeFeedbackSummary(DataTable table) {
+
+        Map<String, String> expected = table.asMap(String.class, String.class);
+
+        String actualName = driver.findElement(By.id("name")).getText().trim();
+        String actualAge = driver.findElement(By.id("age")).getText().trim();
+        String actualLanguage = driver.findElement(By.id("language")).getText().trim();
+        String actualGender = driver.findElement(By.id("gender")).getText().trim();
+
+        assertEquals(expected.get("name"), actualName);
+        assertEquals(expected.get("age"), actualAge);
+        assertEquals(expected.get("language"), actualLanguage);
+        assertEquals(expected.get("gender").toLowerCase(), actualGender.toLowerCase());
     }
 
     @Then("^I can see languages \"([^\"]*)\" in feedback check$")
