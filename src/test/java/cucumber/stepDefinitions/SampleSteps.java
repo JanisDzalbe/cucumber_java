@@ -6,6 +6,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
@@ -97,4 +98,39 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+// -------------------------------
+// Sample 1
+// -------------------------------
+
+    @When("^I am on the locators page$")
+
+    public void iAMONTheLocatorPage() {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorsPageHeaders() {
+        assertEquals("Heading 1", driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text", driver.findElement(By.id("heading_2")).getText());
+
+    }
+
+    @Then("^Buttons in Locators page are clickable$")
+    public void buttonsInLocatorsPageAreClickable() {
+        assertTrue(driver.findElement(By.cssSelector("[name='randomButton1']")).isEnabled());
+        assertTrue(driver.findElement(By.cssSelector("[name='randomButton2']")).isEnabled());
+
+    }
+// -------------------------------
+// Sample 2
+// -------------------------------
+@Then("^I see error: \"([^\"]*)\"$")
+public void iSeeError(String error){
+    assertEquals(error, driver.findElement(By.id("error")).getText());
+}
+@And("^I am not navigated to age message page$")
+public void iAmNotNavigatedToAgeMessagePage(){
+    assertEquals("https://janisdzalbe.github.io/example-site/examples/age",driver.getCurrentUrl());
+}
 }
