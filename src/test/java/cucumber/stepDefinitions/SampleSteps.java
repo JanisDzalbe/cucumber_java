@@ -12,6 +12,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -121,4 +122,21 @@ public class SampleSteps {
         assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton1\"]")).isEnabled());
         assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton2\"]")).isEnabled());
     }
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeError(String expectedError) {
+        String actualError = driver.findElement(By.id("error")).getText();
+        assertEquals(expectedError, actualError);
+    }
+
+    @And("I am not navigated to age message page")
+    public void iAmNotNavigatedToAgeMessagePage() {
+
+        assertFalse(driver.getCurrentUrl().contains("/age_2.html"));
+    }
+
+    ////----------------------------------Sample2----------------------------------//
+
+
+
 }
