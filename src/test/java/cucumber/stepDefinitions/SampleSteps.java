@@ -7,6 +7,7 @@ import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.Alert;
 
 import java.util.List;
 import java.util.Map;
@@ -164,6 +165,32 @@ public class SampleSteps {
         assertEquals(age, driver.findElement(By.id("age")).getText());
 
 
+    }
+// -------------------------------
+// Task 1
+// -------------------------------
+    @Given("^I am on enter number page$")
+    public void iAmOnEnterNumberPage(){
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+    @When("^I enter number: \"([^\"]*)\"$")
+    public void iEnterNumber(String number){
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(number);
+    }
+    @And("^I click submit number$")
+    public void iClickSubmitNumber(){
+        driver.findElement(By.cssSelector("button[onclick='numberValidation()']")).click();
+    }
+    @Then("^I see number error: \"([^\"]*)\"$")
+    public void iSeeNumberError(String error){
+        assertEquals(error, driver.findElement(By.id("ch1_error")).getText());
+    }
+    @Then("^I see alert: \"([^\"]*)\"$")
+    public void iSeeAlert(String message){
+        Alert alert = driver.switchTo().alert();
+        assertEquals(message, alert.getText());
+        alert.accept();
     }
 
 }
