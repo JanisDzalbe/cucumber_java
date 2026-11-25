@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -132,4 +133,37 @@ public class SampleSteps {
         assertNotEquals("https://janisdzalbe.github.io/example-site/examples/age_2.html?name=khk&age=67",driver.getCurrentUrl());
     }
 
+    //---------------------------------------------------------
+    /*
+    --------------------task 3-------------------------------------
+     */
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() throws Throwable{
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+        assertEquals("https://janisdzalbe.github.io/example-site/tasks/provide_feedback",driver.getCurrentUrl());
+    }
+    @When("^I enter name in feedback page: \"([^\"]*)\"$")
+    public void iEnterNameInFeedbackPage(String name) {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("^I enter age in feedback page: (\\d+)$")
+    public void iEnterAgeInFeedbackPageAge(String age) {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(age);
+    }
+
+    @And("^I click send button$")
+    public void iClickSendButton() throws Throwable {
+        driver.findElement(By.className("w3-btn-block")).click();
+    }
+
+
+    @Then("^I see inputs \"([^\"]*)\"and (\\d+) on the correct fields$")
+    public void iSeeInputsAndAgeOnTheCorrectFields(String name, String age) {
+        assertEquals(name,driver.findElement(By.id("name")).getText());
+        assertEquals(age,driver.findElement(By.id("age")).getText());
+    }
 }
