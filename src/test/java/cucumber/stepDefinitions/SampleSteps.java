@@ -97,4 +97,79 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+
+    // -------------------------------
+    // Sample 1
+    // -------------------------------
+
+    @When("^I am on the locators page$")
+    public void iAmOnLocatorsPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorsPageHeaders() {
+        assertEquals("Heading 1", driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text", driver.findElement(By.id("heading_2")).getText());
+    }
+
+    @And("^Buttons in Locators page are clickable$")
+    public void btnsInLocatorsAreClickable() {
+        assertTrue(driver.findElement(By.cssSelector("[name = 'randomButton1']")).isEnabled());
+        assertTrue(driver.findElement(By.cssSelector("[name = 'randomButton2']")).isEnabled());
+    }
+
+
+    // -------------------------------
+    // Sample 2
+    // -------------------------------
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeErrorInAgePage(String error) {
+        assertEquals(error, driver.findElement(By.id("error")).getText());
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() {
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
+    }
+
+
+    // -------------------------------
+    // Sample 3
+    // -------------------------------
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter name \"([^\"]*)\" in feedback page$")
+    public void enterName(String name) {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("^I enter age (\\d*) in feedback page$")
+    public void enterAge(String age) {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(age);
+    }
+
+    @And("^I click Send feedback$")
+    public void sendFeedback() {
+        driver.findElement(By.cssSelector("[type='submit']")).click();
+    }
+
+    @Then("^I see submitted name \"([^\"]*)\"$")
+    public void assertNameInFeedbackReviewPage(String name) {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @And("^I see submitted age (\\d*)")
+    public void assertAgeInFeedbackReviewPage(String age) {
+        assertEquals(age, driver.findElement(By.id("age")).getText());
+    }
 }
+
