@@ -136,4 +136,38 @@ public class SampleSteps {
     public void iAmNotNavigatedToAgeMessagePage() throws Throwable {
         assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
     }
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+        // menu is loaded separately and moves the form down, so wait until it appears
+        driver.findElement(By.cssSelector("#header > *"));
+    }
+
+    @When("^I enter feedback name: \"([^\"]*)\"$")
+    public void iEnterFeedbackName(String name) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("^I enter feedback age: (\\d+)$")
+    public void iEnterFeedbackAge(int age) throws Throwable {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("^I click send feedback$")
+    public void iClickSendFeedback() throws Throwable {
+        driver.findElement(By.cssSelector("#fb_form button[type='submit']")).click();
+    }
+
+    @Then("^I see feedback name: \"([^\"]*)\"$")
+    public void iSeeFeedbackName(String name) throws Throwable {
+        assertEquals(name, driver.findElement(By.cssSelector("#fb_thx #name")).getText());
+    }
+
+    @And("^I see feedback age: (\\d+)$")
+    public void iSeeFeedbackAge(int age) throws Throwable {
+        assertEquals(String.valueOf(age), driver.findElement(By.cssSelector("#fb_thx #age")).getText());
+    }
 }

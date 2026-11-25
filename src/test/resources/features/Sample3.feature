@@ -21,9 +21,15 @@ Feature: Introduction to cucumber part 3
       | name | age | message                   |
       | Tom  | 15  | Hello, Tom, you are a kid |
 
-
-#   TODO - create Scenario Outline for 'Give us your feedback!' page
-#   URL: https://janisdzalbe.github.io/example-site/tasks/provide_feedback
-#   Navigate to page
-#   Set name and age based on test Examples
-#   Click "Send" button and verify that previous input is displayed in correct fields
+  Scenario Outline: feedback with name and age
+    Given I am on feedback page
+    When I enter feedback name: "<name>"
+    And I enter feedback age: <age>
+    And I click send feedback
+    Then I see feedback name: "<name>"
+    And I see feedback age: <age>
+    Examples:
+      | name  | age |
+      | Ann   | 5   |
+      | Marry | 50  |
+      | Bob   | 61  |
