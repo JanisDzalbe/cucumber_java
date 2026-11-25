@@ -114,7 +114,7 @@ public class SampleSteps {
                 driver.findElements(By.cssSelector("h2")).get(1).getText());
     }
 
-    @And("^Buttons in Locators page are clickable$")
+    @Then("^Buttons in Locators page are clickable$")
     public void iClickLocatorsPageButtons() throws Throwable {
 
         assertTrue(driver.findElements(By.xpath("//input[@type='button']")).get(0).isEnabled());
@@ -144,10 +144,46 @@ public class SampleSteps {
 //        assertEquals(error, driver.findElement(By.id("error")).getText());
 //    }
 
-    @And("^I am not navigated to age message page$")
+    @Then("^I am not navigated to age message page$")
     public void iNotNavigatedAgePage() throws Throwable {
 
         assertFalse(driver.getCurrentUrl().contains("/age_2.html"));
+    }
+
+    //----------------------------------
+    // Sample 3
+    //----------------------------------
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter name \"([^\"]*)\" in feedback page$")
+    public void iEnterNameInFeedbackPage(String name) throws Throwable {
+        driver.findElement(By.xpath("//*[contains(@id, 'name')]")).clear();
+        driver.findElement(By.xpath("//*[contains(@id, 'name')]")).sendKeys(name);
+    }
+
+    @When("^I enter age (\\d*) in feedback page$")
+    public void iEnterAgeInFeedbackPage(String age) throws Throwable {
+        driver.findElement(By.xpath("//*[contains(@id, 'age')]")).clear();
+        driver.findElement(By.xpath("//*[contains(@id, 'age')]")).sendKeys(age);
+    }
+
+    @When("^I click send feedback$")
+    public void iClickSubmitFeedback() throws Throwable {
+        driver.findElement(By.cssSelector("[type='submit']")).click();
+    }
+
+    @Then("^I see name \"([^\"]*)\" in feedback review page$")
+    public void iSeeSubmitFeedbackName(String name) throws Throwable {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @Then("^I see age (\\d*) in feedback review page$")
+    public void iSeeSubmitFeedbackAge(String age) throws Throwable {
+        assertEquals(age, driver.findElement(By.id("age")).getText());
     }
 
 }
