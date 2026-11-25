@@ -6,9 +6,14 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
+import java.time.Duration;
+
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -97,4 +102,78 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+    //-------------------------
+    //Sample 1
+    //-------------------------
+    
+    @Given("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() throws Throwable {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorsPageHeaders() throws Throwable {
+        assertEquals("Heading 1", driver.findElement(By.cssSelector("h2")).getText());
+        assertEquals("Heading 2 text", driver.findElement(By.xpath("//h2[@id='heading_2']")).getText());
+    }
+
+    @And("^Buttons in Locators page are clickable$")
+    public void buttonsInLocatorsPageAreClickable() throws Throwable {
+        List<WebElement> buttons = driver.findElements(By.cssSelector("button, input[type='button'], input[type='submit']")
+    );
+
+    assertTrue(buttons.size() >= 2, "Expected at least two buttons on the Locators page");
+
+    for (WebElement button : buttons) {
+        assertTrue(button.isDisplayed(), "Button should be visible");
+        assertTrue(button.isEnabled(), "Button should be enabled");
+    }
+    }
+
+    //-------------------------
+    //Sample 2
+    //-------------------------
+
+    @Then ("^I see error: \"([^\"]*)\"$")
+    public void iSeeError(String errorMessage) throws Throwable {
+        assertEquals(errorMessage, driver.findElement(By.id("error")).getText());
+    }
+
+    @Then("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() throws Throwable {
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age",driver.getCurrentUrl(), "The browser should stay on the age form page");
+    }
+
+    //-------------------------
+    //Sample 3
+    //-------------------------
+
+    @Given("^I am on the feedback page$")
+    public void iAmOnTheFeedbackPage() {
+    driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+}
+
+    @When("^I enter feedback name: \"([^\"]*)\"$")
+    public void iEnterFeedbackName(String name) {
+    driver.findElement(By.id("fb_name")).sendKeys(name);
+}
+
+    @And("^I enter feedback age: (\\d+)$")
+    public void iEnterFeedbackAge(int age) {
+    driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+}
+
+    @And("^I click Send on the feedback page$")
+    public void iClickSendOnTheFeedbackPage() {
+    driver.findElement(By.cssSelector("button[type='submit']")).click();
+}
+
+    @Then("^I see feedback name: \"([^\"]*)\" and age: (\\d+)$")
+    public void iSeeFeedbackNameAndAge(String name, int age) {
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
+    wait.until(ExpectedConditions.textToBe(By.id("name"), name));
+    wait.until(ExpectedConditions.textToBe(By.id("age"), String.valueOf(age)));
+}
 }
