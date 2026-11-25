@@ -123,6 +123,8 @@ public class SampleSteps {
         assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton2\"]")).isEnabled());
     }
 
+    ////----------------------------------Sample2----------------------------------//
+
     @Then("^I see error: \"([^\"]*)\"$")
     public void iSeeError(String expectedError) {
         String actualError = driver.findElement(By.id("error")).getText();
@@ -135,8 +137,39 @@ public class SampleSteps {
         assertFalse(driver.getCurrentUrl().contains("/age_2.html"));
     }
 
-    ////----------------------------------Sample2----------------------------------//
 
 
+    ////----------------------------------Sample3----------------------------------//
 
+    @Given("I navigate to provide feedback page")
+    public void iNavigateToProvideFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+
+    }
+
+    @When("I enter name \"([^\\\"]*)\" and age (\\d*)$")
+    public void iEnterNameAndAge(String name, String age) {
+        WebElement nameField = driver.findElement(By.id("fb_name"));
+        nameField.clear();
+        nameField.sendKeys(name);
+
+        WebElement ageField = driver.findElement(By.id("fb_age"));
+        ageField.clear();
+        ageField.sendKeys(age);
+    }
+
+
+    @And("I click Send button")
+    public void iClickSendButton() {
+        driver.findElement(By.cssSelector("[type=\"submit\"]")).click();
+    }
+
+    @Then("^I should see name \"([^\"]*)\" and age (\\d*) displayed in the feedback fields$")
+    public void iShouldSeeNameAndAgeDisplayedInTheFeedbackFields(String expectedName, String expectedAge) {
+        String actualName = driver.findElement(By.id("name")).getText();
+        String actualAge = driver.findElement(By.id("age")).getText() ;
+
+        assertEquals(expectedName, actualName);
+        assertEquals(expectedAge, actualAge);
+    }
 }
