@@ -46,6 +46,11 @@ public class TaskSteps {
     @When("^I enter \"([^\"]*)\"$")
     public void iEnterInput(String input) {
 
+         /*
+        In principle, the "clear" button can be left in, it doesn't affect speed or the underlying process,
+        but it can clear any internal text that might appear in the search bar—essentially
+        serving as a preemptive safeguard in the future. I think so...
+         */
        // driver.findElement(By.id("numb")).clear();
         driver.findElement(By.id("numb")).sendKeys(input);
     }
@@ -74,8 +79,12 @@ public class TaskSteps {
     // Enter correct number
     @When("^I enter a correct number$")
     public void iEnterCorrectNumber() {
-
-        driver.findElement(By.id("numb")).clear();
+        /*
+        In principle, the "clear" button can be left in, it doesn't affect speed or the underlying process,
+        but it can clear any internal text that might appear in the search bar—essentially
+        serving as a preemptive safeguard in the future. I think so...
+         */
+     // driver.findElement(By.id("numb")).clear();
 
         driver.findElement(By.id("numb")).sendKeys("75");
     }

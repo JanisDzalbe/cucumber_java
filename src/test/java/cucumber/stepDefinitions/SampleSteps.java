@@ -135,26 +135,6 @@ public class SampleSteps {
 // -------------------------------
 // -------------------------------
 // -------------------------------
-/*
-  Scenario: a new scenario error
-    When I enter name: "John" // Method already exist, so we don't need to write it again - @When("^I enter name: ...")
-
-
-    @When("^I enter name: \"([^\"]*)\"$")
-    public void iEnterName(String name) throws Throwable {
-    driver.findElement(By.id("name")).clear();
-    driver.findElement(By.id("name")).sendKeys(name);
-
-    And I click submit age // Method already exist, so we don't need to write it again - @And("^I click submit age$")
-    /*
-    @And("^I click submit age$")
-    public void iClickSubmitAge() throws Throwable {
-    driver.findElement(By.id("submit")).click();
-    }
-
-   Then I see error: "You haven't entered anything in age field"
-   And I am not navigated to age message page
- */
 
     @Then("^I see error: \"(.*)\"$")
     public void iSeeErrorInAgePage(String errorMessage) {
@@ -166,25 +146,6 @@ public class SampleSteps {
         assertFalse(driver.getCurrentUrl().contains("/age_2.html"));
     }
 
-// -------------------------------
-// Sample2.feature
-// -------------------------------
-// -------------------------------
-// -------------------------------
-
-/*
-Feature: Give us your feedback
-
-  Scenario Outline: Give us your feedback!
-
-    Given I am on feedback page
-    When I enter name: "<name>" - METHOD ALREADY EXIST
-    And I enter age: <age> - METHOD ALREADY EXIST
-    And I click Send button
-    Then I verify name field contains: "<name>"
-    And I verify age field contains: "<age>"
-
- */
     // -------------------------------
     // Sample3.feature
     // -------------------------------
