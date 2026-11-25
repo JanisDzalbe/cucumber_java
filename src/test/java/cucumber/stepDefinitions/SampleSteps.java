@@ -10,6 +10,8 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 import java.util.Map;
 
+import static cucumber.stepDefinitions.Hooks.driver;
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -97,4 +99,162 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+
+// -------------------------------
+// Sample1.feature
+// -------------------------------
+// -------------------------------
+// -------------------------------
+
+    @When("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() {
+        this.driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
+    @Then("I should see both locators page headers")
+    public void iShouldSeeBothLocatorsPageHeaders() {
+        assertEquals("Heading 1", driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text", driver.findElement(By.id("heading_2")).getText());
+    }
+
+    @And("Buttons in Locators page are clickable")
+    public void buttonsInLocatorsPageAreClickable() {
+        // assertTrue(this.driver.findElement(By.tagName("button")).isEnabled());
+        assertTrue(driver.findElement(By.cssSelector("[name='randomButton1']")).isEnabled());
+        assertTrue(driver.findElement(By.cssSelector("[name='randomButton2']")).isEnabled());
+
+        // TEACHERS WAY
+        //  assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton1\"]")).isEnabled());
+        //  assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton2\"]")).isEnabled());
+
+    }
+
+// -------------------------------
+// Sample2.feature
+// -------------------------------
+// -------------------------------
+// -------------------------------
+/*
+  Scenario: a new scenario error
+    When I enter name: "John" // Method already exist, so we don't need to write it again - @When("^I enter name: ...")
+
+
+    @When("^I enter name: \"([^\"]*)\"$")
+    public void iEnterName(String name) throws Throwable {
+    driver.findElement(By.id("name")).clear();
+    driver.findElement(By.id("name")).sendKeys(name);
+
+    And I click submit age // Method already exist, so we don't need to write it again - @And("^I click submit age$")
+    /*
+    @And("^I click submit age$")
+    public void iClickSubmitAge() throws Throwable {
+    driver.findElement(By.id("submit")).click();
+    }
+
+   Then I see error: "You haven't entered anything in age field"
+   And I am not navigated to age message page
+ */
+
+    @Then("^I see error: \"(.*)\"$")
+    public void iSeeErrorInAgePage(String errorMessage) {
+        assertEquals(errorMessage, driver.findElement(By.id("error")).getText());
+    }
+
+    @Then("^I am not navigated to age message page$")
+    public void urlDoesNotContainAgeMessagePageUrl() {
+        assertFalse(driver.getCurrentUrl().contains("/age_2.html"));
+    }
+
+// -------------------------------
+// Sample2.feature
+// -------------------------------
+// -------------------------------
+// -------------------------------
+
+/*
+Feature: Give us your feedback
+
+  Scenario Outline: Give us your feedback!
+
+    Given I am on feedback page
+    When I enter name: "<name>" - METHOD ALREADY EXIST
+    And I enter age: <age> - METHOD ALREADY EXIST
+    And I click Send button
+    Then I verify name field contains: "<name>"
+    And I verify age field contains: "<age>"
+
+ */
+    // -------------------------------
+    // Sample3.feature
+    // -------------------------------
+    // -------------------------------
+    // -------------------------------
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+
+    @When("^I enter name \"([^\"]*)\" in feedback page$")
+    public void iEnterNameInFeedbackPage(String name) {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+
+    @When("^I enter age (\\d*) in feedback page$")
+    public void iEnterAgeInFeedbackPage(String age) {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(age);
+    }
+
+
+    @When("^Send feedback$")
+    public void iSendFeedback() {
+        driver.findElement(By.cssSelector("[type=\"submit\"]")).click();
+    }
+
+
+    @Then("^I see name \"([^\"]*)\" in feedback review page$")
+    public void assertNameInFeedbackReviewPage(String name) {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+
+    @Then("^I see age (\\d*) in feedback review page$")
+    public void assertAgeInFeedbackReviewPage(String age) {
+        assertEquals(age, driver.findElement(By.id("age")).getText());
+    }
 }
+
+    /*
+
+
+    @Given("^I am on feedback page$")
+        public void iAmonFeedBackPage() {
+            driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+    @And("^I click Send button$")
+    public void iClickSendButton() {
+        driver.findElement(By.id("fb_name")).click();
+    }
+    @Then("\"^I verify name field contains: \"([^\"]*)\"$\"")
+    public void iVerifyNameFieldContainsName(String expectedName) {
+
+        String actualName = driver.findElement(By.id("name"))
+                .getAttribute("value");
+
+        assertEquals(expectedName, actualName);
+    }
+    @And("^I verify age field contains: \"?(\\d+)\"?$")
+    public void iVerifyThatAgeFieldContainsAge(int expectedAge) {
+
+        String actualAge = driver.findElement(By.id("age"))
+                .getAttribute("value");
+
+        assertEquals(String.valueOf(expectedAge), actualAge);
+
+     */
+
