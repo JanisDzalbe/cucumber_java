@@ -136,4 +136,39 @@ public class SampleSteps {
     public void iAmNotNavigatedToAgeMessagePage() throws Throwable {
         assertTrue(driver.getCurrentUrl().contains("/age"));
     }
+
+    // ..............................................................................................................
+    //sample 3
+    // ..........................................................................................................
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter feedback name: \"([^\"]*)\"$")
+    public void iEnterFeedbackName(String name) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+    @And("^I enter feedback age: (\\d+)$")
+    public void iEnterFeedbackAge(int age) throws Throwable {
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("^I click Send$")
+    public void iClickSend() throws Throwable {
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+    }
+
+    @Then("^I should see feedback name: \"([^\"]*)\"$")
+    public void iShouldSeeFeedbackName(String name) throws Throwable {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @And("^I should see feedback age: (\\d+)$")
+    public void iShouldSeeFeedbackAge(int age) throws Throwable {
+        assertEquals(String.valueOf(age), driver.findElement(By.id("age")).getText());
+    }
+
 }
