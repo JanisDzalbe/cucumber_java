@@ -10,8 +10,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -58,10 +57,10 @@ public class SampleSteps {
         driver.findElement(By.id("submit")).click();
     }
 
-    @Then("^I see message: \"([^\"]*)\"$")
-    public void iSeeMessage(String message) throws Throwable {
-        assertEquals(message, driver.findElement(By.id("message")).getText());
-    }
+//    @Then("^I see message: \"([^\"]*)\"$")
+//    public void iSeeMessage(String message) throws Throwable {
+//        assertEquals(message, driver.findElement(By.id("message")).getText());
+//    }
 
     @When("^I enter values:$")
     public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
@@ -97,4 +96,58 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+    //----------------------------------
+    // Sample 1
+    //----------------------------------
+
+    @Given("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() throws Throwable {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeLocatorPageHeaders() throws Throwable {
+        assertEquals("Heading 1",
+                driver.findElements(By.cssSelector("h2")).get(0).getText());
+        assertEquals("Heading 2 text",
+                driver.findElements(By.cssSelector("h2")).get(1).getText());
+    }
+
+    @And("^Buttons in Locators page are clickable$")
+    public void iClickLocatorsPageButtons() throws Throwable {
+
+        assertTrue(driver.findElements(By.xpath("//input[@type='button']")).get(0).isEnabled());
+        assertTrue(driver.findElements(By.xpath("//input[@type='button']")).get(1).isEnabled());
+    }
+
+    //----------------------------------
+    // Sample 2
+    //----------------------------------
+
+    @Then("^I see (error|message): \"([^\"]*)\"$")
+    public void iSeeSomething(String type, String message) throws Throwable {
+
+        switch (type) {
+            case "error":
+                assertEquals(message, driver.findElement(By.id("error")).getText());
+                break;
+            case "message":
+                assertEquals(message, driver.findElement(By.id("message")).getText());
+                break;
+        }
+
+    }
+
+    //    @Then("^I see error: \"([^\"]*)\"$")
+//    public void iSeeError(String error) throws Throwable {
+//        assertEquals(error, driver.findElement(By.id("error")).getText());
+//    }
+
+    @And("^I am not navigated to age message page$")
+    public void iNotNavigatedAgePage() throws Throwable {
+
+        assertFalse(driver.getCurrentUrl().contains("/age_2.html"));
+    }
+
 }
