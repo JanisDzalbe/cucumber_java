@@ -106,7 +106,7 @@ public class SampleSteps {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
 
-    // Activity 1 - Locators page
+    // ACTIVITY 1 - LOCATORS PAGE
 
     @When("^I am on the locators page$")
     public void iAmOnTheLocatorsPage() {
@@ -115,7 +115,6 @@ public class SampleSteps {
 
     @Then("^I should see both locators page headers$")
     public void iShouldSeeBothLocatorsPageHeaders() {
-
         assertEquals("Heading 1",
                 driver.findElement(By.id("heading_1")).getText());
 
@@ -125,7 +124,6 @@ public class SampleSteps {
 
     @And("^Buttons in Locators page are clickable$")
     public void buttonsInLocatorsPageAreClickable() {
-
         WebElement firstButton = driver.findElement(By.name("randomButton1"));
         WebElement secondButton = driver.findElement(By.name("randomButton2"));
 
@@ -139,18 +137,52 @@ public class SampleSteps {
         secondButton.click();
     }
 
-    // Activity 2 - Error validation
+    // ACTIVITY 2 - ERROR VALIDATION
 
     @Then("^I see error: \"([^\"]*)\"$")
     public void iSeeError(String errorMessage) {
-
         assertEquals(errorMessage,
                 driver.findElement(By.id("error")).getText());
     }
 
     @And("^I am not navigated to age message page$")
     public void iAmNotNavigatedToAgeMessagePage() {
-
         assertTrue(driver.getCurrentUrl().contains("/examples/age"));
+    }
+
+    // ACTIVITY 3 - FEEDBACK FORM
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter feedback name: \"([^\"]*)\"$")
+    public void iEnterFeedbackName(String name) {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("^I enter feedback age: (\\d+)$")
+    public void iEnterFeedbackAge(int age) {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("^I click Send$")
+    public void iClickSend() {
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+    }
+
+    @Then("^submitted name should be \"([^\"]*)\"$")
+    public void submittedNameShouldBe(String expectedName) {
+        assertEquals(expectedName,
+                driver.findElement(By.id("name")).getText());
+    }
+
+    @And("^submitted age should be \"([^\"]*)\"$")
+    public void submittedAgeShouldBe(String expectedAge) {
+        assertEquals(expectedAge,
+                driver.findElement(By.id("age")).getText());
     }
 }
