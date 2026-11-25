@@ -13,6 +13,8 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.openqa.selenium.WebElement;
+
 public class SampleSteps {
     private WebDriver driver;
 
@@ -96,5 +98,85 @@ public class SampleSteps {
     @Given("^I am on action page$")
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
+    }
+
+    //-------------------------------------------------------------------------
+    //Sample 1
+    //--------------------------------------------------------------------------
+
+    @When("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorsPageHeaders() {
+        List<WebElement> headers = driver.findElements(By.tagName("h2"));
+
+        assertEquals(2, headers.size());
+        assertEquals("Heading 1", headers.get(0).getText());
+        assertEquals("Heading 2 text", headers.get(1).getText());
+    }
+
+    @And("^Buttons in Locators page are clickable$")
+    public void buttonsInLocatorsPageAreClickable() {
+        List<WebElement> buttons = driver.findElements(By.tagName("input"));
+
+        assertEquals(2, buttons.size());
+
+        for (WebElement button : buttons) {
+            assertTrue(button.isDisplayed());
+            assertTrue(button.isEnabled());
+        }
+    }
+
+    //-------------------------------------------------------------------------
+    //Sample 2
+    //--------------------------------------------------------------------------
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeError(String error) {
+        assertEquals(error, driver.findElement(By.id("error")).getText());
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() {
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
+    }
+
+    //-------------------------------------------------------------------------
+    // Sample 3
+    //--------------------------------------------------------------------------
+
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter feedback name: \"([^\"]*)\"$")
+    public void iEnterFeedbackName(String name) {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("^I enter feedback age: (\\d+)$")
+    public void iEnterFeedbackAge(int age) {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+    @And("^I click Send button$")
+    public void iClickSendButton() {
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+    }
+
+    @Then("^I see feedback name: \"([^\"]*)\"$")
+    public void iSeeFeedbackName(String name) {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @And("^I see feedback age: (\\d+)$")
+    public void iSeeFeedbackAge(int age) {
+        assertEquals(String.valueOf(age),
+                driver.findElement(By.id("age")).getText());
     }
 }
