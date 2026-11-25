@@ -27,3 +27,16 @@ Feature: Introduction to cucumber part 3
 #   Navigate to page
 #   Set name and age based on test Examples
 #   Click "Send" button and verify that previous input is displayed in correct fields
+  @feedback
+  Scenario Outline: Testing feedback page
+    Given I am on feedback page
+    When I enter feedback name: "<name>"
+    And I enter feedback age: <age>
+    And I click Send button
+    Then I see submitted name: "<name>"
+    And I see submitted age: <age>
+
+    Examples:
+      | name   | age  |
+      | Anna   | 25   |
+      | Marita | 50   |
