@@ -170,4 +170,16 @@ public class SampleSteps {
     public void iSeeFeedbackAge(int age) throws Throwable {
         assertEquals(String.valueOf(age), driver.findElement(By.cssSelector("#fb_thx #age")).getText());
     }
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) throws Throwable {
+        for (String language : languages) {
+            driver.findElement(By.cssSelector("#lang_check [value='" + language + "']")).click();
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String languages) throws Throwable {
+        assertEquals(languages, driver.findElement(By.cssSelector("#fb_thx #language")).getText());
+    }
 }
