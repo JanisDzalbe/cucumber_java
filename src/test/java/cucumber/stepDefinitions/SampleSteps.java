@@ -132,4 +132,39 @@ public class SampleSteps {
     public void urlDoesNotContainAgeMessagePageUrl() throws Throwable {
         assertFalse(driver.getCurrentUrl().contains("/age_2.html"));
     }
+
+    // ---------------------------------
+    // Sample 3
+    // ---------------------------------
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter name \"([^\"]*)\" in feedback page$")
+    public void iEnterNameInFeedbackPage(String name) {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @When("^I enter age (\\d*) in feedback page$")
+    public void iEnterAgeInFeedbackPage(String age) {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(age);
+    }
+
+    @When("^Send feedback$")
+    public void iSendFeedback() {
+        driver.findElement(By.cssSelector("[type=\"submit\"]")).click();
+    }
+
+    @Then("^I see name \"([^\"]*)\" in feedback review page$")
+    public void assertNameInFeedbackReviewPage(String name) {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @Then("^I see age (\\d*) in feedback review page$")
+    public void assertAgeInFeedbackReviewPage(String age) {
+        assertEquals(age, driver.findElement(By.id("age")).getText());
+    }
 }
