@@ -138,4 +138,19 @@ public class SampleSteps {
         firstButton.click();
         secondButton.click();
     }
+
+    // Activity 2 - Error validation
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeError(String errorMessage) {
+
+        assertEquals(errorMessage,
+                driver.findElement(By.id("error")).getText());
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() {
+
+        assertTrue(driver.getCurrentUrl().contains("/examples/age"));
+    }
 }
