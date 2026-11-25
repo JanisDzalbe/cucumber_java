@@ -6,6 +6,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SampleSteps {
     private WebDriver driver;
+    private String enteredNumber; // for checking the answer
 
     public SampleSteps() {
         this.driver = Hooks.driver;
@@ -167,4 +169,41 @@ public class SampleSteps {
     public void assertAgeInFeedbackReviewPage(String age) {
         assertEquals(age, driver.findElement(By.id("age")).getText());
     }
+
+    // ---------------------------------
+    // Task 1
+    // ---------------------------------
+    @Given("^I (?:am on|open) The Roots of a quadratic equation page$")
+    public void onRootsPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+
+    @When("^I enter number: \"([^\"]*)\"$")
+    public void iEnterNumber(String number) throws Throwable {
+        enteredNumber = number;
+        WebElement input = driver.findElement(By.id("numb"));
+        input.clear();
+        input.sendKeys(number);
+    }
+
+    @And("^I click submit number$")
+    public void iClickSubmitNumber() throws Throwable {
+        driver.findElement(By.className("w3-btn")).click();
+    }
+    @Then("^I see number error: \"([^\"]*)\"$")
+    public void iSeeNumberError(String error) throws Throwable {
+        assertEquals(error, driver.findElement(By.id("ch1_error")).getText());
+    }
+    @Then("^I see square root result: \"([^\"]*)\"$")
+    public void iSeeSquareRootResult(String result) throws Throwable {
+
+        String alertText = driver.switchTo().alert().getText();
+        driver.switchTo().alert().accept();
+        // chek the answer
+        assertEquals("Square root of " + enteredNumber + " is " + result, alertText);
+
+        // check that no error is shown
+        String expectedError = "";
+        assertEquals(expectedError, driver.findElement(By.id("ch1_error")).getText());
+        }
 }
