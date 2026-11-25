@@ -11,6 +11,10 @@ Feature: Introduction to cucumber part 1
 #  TODO - Add implementation for missing steps
 #  @test
 #  Scenario: New Simple scenario
+  Scenario: New Simple scenario
+    When I am on the locators page
 #    When I am on the locators page
 #    Then I should see both locators page headers
+    Then I should see both locators page headers
 #    And Buttons in Locators page are clickable
+    And Buttons in Locators are clickable

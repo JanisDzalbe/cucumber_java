@@ -10,8 +10,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -97,4 +96,68 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+//sample1
+    @When("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/examples/locators");
+    }
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorsPageHeaders() throws Throwable {
+        assertEquals("Heading 1", driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text", driver.findElement(By.id("heading_2")).getText());
+           }
+    @And("^Buttons in Locators are clickable$")
+    public void iButtonsInLocatorsAreClickable() throws Throwable {
+        assertTrue(driver.findElement(By.name("randomButton1")).isEnabled());
+        assertTrue(driver.findElement(By.name("randomButton2")).isEnabled());
+    }
+    //sample 2
+    @Then("^I see error: \"(.*)\"$")
+    public void iSeeErrorInAgePage(String errorMessage) throws Throwable {
+        assertEquals(errorMessage, driver.findElement(By.id("error")).getText());
+
+    }
+    @Then("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() throws Throwable {
+        assertFalse(driver.getCurrentUrl().contains("/age_2.html"));
+    }
+    //sample 3
+    @Given("^I am on give us feedback page$")
+    public void iAmOnGiveUsFeedbackPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+    @When("^I enter name: \"([^\"]*)\" in feedback$")
+    public void iEnterNameInFeedback(String name) throws Throwable {
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+    @When("^I enter age: (\\d*) in feedback$")
+    public void iEnterAgeInFeedback(String age) throws Throwable {
+        driver.findElement(By.id("fb_age")).sendKeys(age);
+    }
+    @When("^I send feedback$")
+    public void iSendFeedback() throws Throwable {
+        driver.findElement(By.cssSelector("[type=\"submit\"]")).click();
+    }
+    @Then("^I see \"([^\"]*)\" in feedback review$")
+    public void assertiSeeNameFeedbackReview(String name) throws Throwable {
+       assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+    @Then("^I see (\\d*) in feedback review$")
+    public void assertiSeeAgeFeedbackReview(String age) throws Throwable {
+        assertEquals(age, driver.findElement(By.id("age")).getText());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
