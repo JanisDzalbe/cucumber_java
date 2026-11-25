@@ -6,6 +6,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
@@ -96,5 +97,31 @@ public class SampleSteps {
     @Given("^I am on action page$")
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
+    }
+
+    @Given("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorsPageHeaders() throws Throwable {
+        WebElement firstHeader = driver.findElement(By.id("heading_1"));
+        assertTrue(firstHeader.isDisplayed());
+        assertEquals("Heading 1", firstHeader.getText());
+
+        WebElement secondHeader = driver.findElement(By.id("heading_2"));
+        assertTrue(secondHeader.isDisplayed());
+        assertEquals("Heading 2 text", secondHeader.getText());
+    }
+
+    @And("^Buttons in Locators page are clickable$")
+    public void buttonsInLocatorsPageAreClickable() throws Throwable {
+        List<WebElement> buttons = driver.findElements(By.cssSelector("input[type='button']"));
+        assertEquals(2, buttons.size());
+        for (WebElement button : buttons) {
+            assertTrue(button.isDisplayed());
+            assertTrue(button.isEnabled());
+        }
     }
 }
