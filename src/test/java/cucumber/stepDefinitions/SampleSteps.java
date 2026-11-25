@@ -118,6 +118,21 @@ public class SampleSteps {
         assertTrue(driver.findElement(By.name("randomButton2")).isEnabled());
     }
 
+    //Sample 2
+    //--------------------
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void SeeError(String error) throws Throwable {
+        assertEquals(error, driver.findElement(By.id("error")).getText());
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() throws Throwable {
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
+    }
+
+
+
 
 
 
