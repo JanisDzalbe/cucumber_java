@@ -10,6 +10,8 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -97,4 +99,37 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+    //---------------------------------------------------------
+    /*
+    --------------------task1-------------------------------------
+     */
+    @Given("^I am on the locators page$")
+    public void iAmOnTheLocatorPage() throws Throwable {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorPageHeaders() throws Throwable {
+        assertEquals("Heading 1", driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text", driver.findElement(By.id("heading_2")).getText());
+    }
+    @And("^Buttons in Locators page are clickable$")
+    public void iClickButtonsInLocatorPage() throws Throwable {
+        assertTrue(driver.findElement(By.name("randomButton1")).isEnabled());
+        assertTrue(driver.findElement(By.name("randomButton2")).isEnabled());
+    }
+    //---------------------------------------------------------
+    /*
+    --------------------task 2-------------------------------------
+     */
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void validateErrorMsgWithNoAgeInputs(String errorMsg) throws Throwable {
+        assertEquals(errorMsg, driver.findElement(By.id("error")).getText());
+    }
+    @And("^I am not navigated to age message page$")
+    public void AssertIamNotInAgeMsgPage(){
+        assertNotEquals("https://janisdzalbe.github.io/example-site/examples/age_2.html?name=khk&age=67",driver.getCurrentUrl());
+    }
+
 }
