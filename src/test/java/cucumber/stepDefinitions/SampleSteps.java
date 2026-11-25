@@ -182,4 +182,20 @@ public class SampleSteps {
     public void iCanSeeLanguagesInFeedbackCheck(String languages) throws Throwable {
         assertEquals(languages, driver.findElement(By.cssSelector("#fb_thx #language")).getText());
     }
+
+    @When("^I enter feedback values:$")
+    public void iEnterFeedbackValues(Map<String, String> valuesToEnter) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(valuesToEnter.get("name"));
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(valuesToEnter.get("age"));
+        driver.findElement(By.cssSelector("[name='gender'][value='" + valuesToEnter.get("genre") + "']")).click();
+    }
+
+    @Then("^I see feedback values:$")
+    public void iSeeFeedbackValues(Map<String, String> expectedValues) throws Throwable {
+        assertEquals(expectedValues.get("name"), driver.findElement(By.cssSelector("#fb_thx #name")).getText());
+        assertEquals(expectedValues.get("age"), driver.findElement(By.cssSelector("#fb_thx #age")).getText());
+        assertEquals(expectedValues.get("genre"), driver.findElement(By.cssSelector("#fb_thx #gender")).getText());
+    }
 }
