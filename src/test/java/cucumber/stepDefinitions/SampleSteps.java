@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 import java.util.Map;
 
+import static java.awt.Color.blue;
 import static org.junit.jupiter.api.Assertions.*;
 
 ///
@@ -136,6 +137,42 @@ public class SampleSteps {
         String currentUrl = driver.getCurrentUrl();
         assertNotEquals("https://janisdzalbe.github.io/example-site/examples/age_2.html", currentUrl,"I am not navigated to age message page"
         );
+    }
+
+    //=========================================
+    //Sample3Steps
+    //=========================================
+
+    @Given("^I am on feedback page$")
+    public void iAmOnTheFeedbackPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter name on feedback page: \"([^\"]*)\"$")
+    public void iEnterNameOnFeedback(String name) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("^I enter age on feedback page: (\\d+)$")
+    public void iEnterAgeOnFeedback(int age) throws Throwable {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+    }
+
+    @And("^I click send button$")
+    public void iClickSendButton() throws Throwable {
+        driver.findElement(By.cssSelector("[type=\"submit\"]")).click();
+    }
+
+    @Then("^I see the correct name: \"([^\"]*)\"$")
+    public void iSeeMessageTheCorrectName(String message) throws Throwable {
+        assertEquals(message, driver.findElement(By.id("name")).getText());
+    }
+
+    @Then("^I see the correct age: \"([^\"]*)\"$")
+    public void iSeeMessageTheCorrectAge(String message) throws Throwable {
+        assertEquals(message, driver.findElement(By.id("age")).getText());
     }
 
 }
