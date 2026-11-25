@@ -148,7 +148,6 @@ public class SampleSteps {
 
     @When("^I enter feedback name: \"([^\"]*)\"$")
     public void iEnterFeedbackName(String name) throws Throwable {
-        driver.findElement(By.id("fb_name")).clear();
         driver.findElement(By.id("fb_name")).sendKeys(name);
     }
     @And("^I enter feedback age: (\\d+)$")
