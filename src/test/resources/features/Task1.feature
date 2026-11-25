@@ -29,4 +29,6 @@ Feature: number input validation
   When I enter number "64" on the page
   And I click Submit
   Then I see alert: "Square root of 64 is 8.00"
+    When I accept the alert
+    Then I see no error message
 

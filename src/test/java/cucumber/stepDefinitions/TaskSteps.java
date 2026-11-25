@@ -46,9 +46,17 @@ public class TaskSteps {
 
     @Then("^I see alert: \"([^\"]*)\"$")
     public void iSeeAlert(String alert) {
-        Alert actualAlert = driver.switchTo().alert();
-        assertEquals(alert, actualAlert.getText());
-        actualAlert.accept();
+        assertEquals(alert, driver.switchTo().alert().getText());
+    }
+
+    @When("^I accept the alert$")
+    public void iAcceptTheAlert() {
+        driver.switchTo().alert().accept();
+    }
+
+    @Then("^I see no error message$")
+    public void iSeeNoErrorMessage() {
+        assertEquals("", driver.findElement(By.className("error")).getText());
     }
 
 }
