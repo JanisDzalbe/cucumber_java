@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -97,4 +98,61 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+    // ------------------
+    // sample task
+    // ------------------
+
+    @When("^I am on the locators page$")
+    public void iAmOnLocatorsPage() {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorsPageHeaders() throws Throwable {
+        assertEquals("Heading 1",
+                driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text",
+                driver.findElement(By.id("heading_2")).getText());
+    }
+
+    @And("^Buttons in Locators page are clickable$")
+    public void buttonsInLocatorsPageAreClickable() throws Throwable {
+        assertTrue(driver.findElement(By.cssSelector("input[name='randomButton1']")).isEnabled());
+        assertTrue(driver.findElement(By.cssSelector("input[name='randomButton2']")).isEnabled());
+    }
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void ISeeErrorMessage(String errorMessage) {
+        assertEquals(errorMessage, driver.findElement(By.id("error")).getText());
+    }
+
+    @Then("^I am not navigated to age message page$")
+    public void IamNotNavigatedToAgeMessagePage() {
+        assertTrue(driver.findElement(By.xpath("//h1[text()='Age page']")).isDisplayed());
+
+
+    }
+
+    @Given("^I am on the feedback page$")
+    public void iAmOnLFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter name \"([^\"]*)\" in feedback page$")
+    public void iEnterNameOnFeedbackPage(String name) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+
+    @When("^I enter age (//d*) in feedback page$")
+    public void iEnterAgeInFeedbackPage(String age) throws Throwable {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(age);
+
+
+    }
+
 }
+
