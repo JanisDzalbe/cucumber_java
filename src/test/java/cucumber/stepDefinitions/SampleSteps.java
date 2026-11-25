@@ -98,6 +98,8 @@ public class SampleSteps {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
 
+
+    // ..............................................................................................................
     //sample 1
     // ..........................................................................................................
 
@@ -117,5 +119,21 @@ public class SampleSteps {
     public void buttonsinlocatorspageareclickable() throws Throwable {
         assertTrue(driver.findElement(By.name("randomButton1")).isEnabled());
         assertTrue(driver.findElement(By.id("buttonId")).isEnabled());
+    }
+
+
+    // ..............................................................................................................
+    //sample 2
+    // ..............................................................................................................
+
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeError(String error) throws Throwable {
+        assertEquals(error, driver.findElement(By.id("error")).getText());
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage() throws Throwable {
+        assertTrue(driver.getCurrentUrl().contains("/age"));
     }
 }
