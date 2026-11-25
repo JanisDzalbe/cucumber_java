@@ -10,8 +10,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -116,5 +115,18 @@ public class SampleSteps {
     public void buttonsInLocatorsPageAreClickable() throws Throwable {
         driver.findElement(By.cssSelector("[name=\"randomButton1\"]")).click();
         driver.findElement(By.cssSelector("[name=\"randomButton2\"]")).click();
+    }
+
+    //----------------
+    //sample2
+    //----------------
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeError(String error) throws Throwable {
+        assertEquals(error, driver.findElement(By.id("error")).getText());
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void urlDoesNotContainAgeMessagePageUrl() throws Throwable {
+        assertFalse(driver.getCurrentUrl().contains("https://acctabootcamp.github.io/site/examples/age_2.html"));
     }
 }
