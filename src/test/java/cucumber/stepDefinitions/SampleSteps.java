@@ -10,8 +10,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 ///
 public class SampleSteps {
@@ -121,5 +120,22 @@ public class SampleSteps {
             assertTrue(driver.findElement(By.name("randomButton1")).isEnabled());
             assertTrue(driver.findElement(By.name("randomButton2")).isEnabled());
         }
+
+    //=========================================
+    //Sample2Steps
+    //=========================================
+
+    @Then("^I see error: \\\"([^\\\"]*)\\\"$$")
+    public void iSeeErrorMessage(String name) throws Throwable {
+        assertEquals("You haven't entered anything in age field",
+                driver.findElement(By.id("error")).getText());
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void agePageIsNotNavigated() throws Throwable {
+        String currentUrl = driver.getCurrentUrl();
+        assertNotEquals("https://janisdzalbe.github.io/example-site/examples/age_2.html", currentUrl,"I am not navigated to age message page"
+        );
+    }
 
 }
