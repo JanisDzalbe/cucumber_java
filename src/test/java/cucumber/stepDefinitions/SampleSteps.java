@@ -4,9 +4,13 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -137,7 +141,7 @@ public class SampleSteps {
     }
 
     //-------------------------------
-    //Sample 32
+    //Sample 3
     //-------------------------------
 
     @Given("^I am on feedback page$")
@@ -171,6 +175,57 @@ public class SampleSteps {
     @Then("^I see age (\\d*) in feedback review page$")
     public void assertAgeInFeedbackReviewPage(String age) {
         assertEquals(age, driver.findElement(By.id("age")).getText());
+    }
+
+
+    //-------------------------------
+    //Task 1
+    //-------------------------------
+
+    //Given I am on enter a number page
+    @Given("^I am on enter a number page$")
+    public void iAmOnEnterANumberPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+
+    //When I enter value "<value>" in enter a number page
+    //When I enter value "81" in enter a number page
+    @When("^I enter value \"([^\"]*)\" in enter a number page$")
+    public void iEnterValueInEnterANumberPage(String value) {
+        driver.findElement(By.id("numb")).clear();
+        driver.findElement(By.id("numb")).sendKeys(value);
+    }
+
+    //And I click submit in enter a number page
+    @When("^I click submit in enter a number page$")
+    public void iClickSubmitInEnterANumberPage() {
+        driver.findElement(By.className("w3-orange")).click();
+    }
+
+    //Then I see error "<error>" in enter a number page
+    @Then("^I see error \"([^\"]*)\" in enter a number page$")
+    public void assertErrorInEnterANumberPage(String error) {
+        assertEquals(error, driver.findElement(By.id("ch1_error")).getText());
+    }
+
+    //I see alert "Square root of 81 is 9.00" in enter a number page
+    @Then("^I see alert \"([^\"]*)\" in enter a number page$")
+    public void assertAlertInEnterANumberPage(String alertText) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+        assertEquals(alertText, alert.getText());
+    }
+
+    //I accept alert in enter a number page
+    @Then("^I accept alert in enter a number page$")
+    public void iAcceptAlertInEnterANumberPage() {
+        driver.switchTo().alert().accept();
+    }
+
+    //And I see no error in enter a number page
+    @Then("^I see no error in enter a number page$")
+    public void assertNoErrorInEnterANumberPage() {
+        assertEquals("", driver.findElement(By.id("ch1_error")).getText());
     }
 
 }
