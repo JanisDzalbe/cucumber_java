@@ -125,12 +125,46 @@ public class SampleSteps {
 // -------------------------------
 // Sample 2
 // -------------------------------
-@Then("^I see error: \"([^\"]*)\"$")
-public void iSeeError(String error){
-    assertEquals(error, driver.findElement(By.id("error")).getText());
-}
-@And("^I am not navigated to age message page$")
-public void iAmNotNavigatedToAgeMessagePage(){
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeError(String error){
+      assertEquals(error, driver.findElement(By.id("error")).getText());
+    }
+    @And("^I am not navigated to age message page$")
+    public void iAmNotNavigatedToAgeMessagePage(){
     assertEquals("https://janisdzalbe.github.io/example-site/examples/age",driver.getCurrentUrl());
+      }
+// -------------------------------
+// Sample 3
+// -------------------------------
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage(){
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+    @When("^I enter name: \"([^\"]*)\" in feedback page$")
+    public void iEnterFeedbackName(String name){
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+
+    }
+    @When("^I enter age (\\d+) in feedback page$")
+    public void iEnterFeedbackAge(String age){
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(age);
+    }
+    @And("^I click send feedback$")
+    public void iClickSendFeedback(){
+        driver.findElement(By.cssSelector("[type='submit']")).click();
+    }
+    @Then("^I see feedback name: \"([^\"]*)\"$")
+    public void iSeeFeedbackName(String name){
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+    @Then("^I see feedback age: \"([^\"]*)\"$")
+    public void iSeeFeedbackAge(String age) {
+        assertEquals(age, driver.findElement(By.id("age")).getText());
+
+
+    }
+
 }
-}
+
