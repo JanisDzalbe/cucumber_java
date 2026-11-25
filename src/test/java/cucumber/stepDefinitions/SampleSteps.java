@@ -6,6 +6,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -184,5 +185,58 @@ public class SampleSteps {
     public void submittedAgeShouldBe(String expectedAge) {
         assertEquals(expectedAge,
                 driver.findElement(By.id("age")).getText());
+    }
+
+    // TASK 1 - ENTER A NUMBER
+
+    @Given("^I am on enter a number page$")
+    public void iAmOnEnterANumberPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
+    }
+
+    @When("^I enter number \"([^\"]*)\"$")
+    public void iEnterNumber(String number) {
+        WebElement numberInput = driver.findElement(By.id("numb"));
+        numberInput.clear();
+        numberInput.sendKeys(number);
+    }
+
+    @And("^I click number submit$")
+    public void iClickNumberSubmit() {
+        driver.findElement(
+                By.cssSelector("button[onclick='numberValidation()']")
+        ).click();
+    }
+
+    @Then("^I should see number error: \"([^\"]*)\"$")
+    public void iShouldSeeNumberError(String expectedError) {
+
+        List<WebElement> errorElements =
+                driver.findElements(By.id("ch1_error"));
+
+        boolean errorFound = false;
+
+        for (WebElement errorElement : errorElements) {
+            if (errorElement.isDisplayed()
+                    && errorElement.getText().equals(expectedError)) {
+                errorFound = true;
+                break;
+            }
+        }
+
+        assertTrue(errorFound,
+                "Expected error message was not displayed: " + expectedError);
+    }
+
+    @Then("^I should see alert: \"([^\"]*)\"$")
+    public void iShouldSeeAlert(String expectedMessage) {
+
+        Alert alert = driver.switchTo().alert();
+
+        String actualMessage = alert.getText();
+
+        assertEquals(expectedMessage, actualMessage);
+
+        alert.accept();
     }
 }
