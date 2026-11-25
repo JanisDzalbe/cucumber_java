@@ -4,8 +4,10 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
@@ -96,5 +98,27 @@ public class SampleSteps {
     @Given("^I am on action page$")
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
+    }
+
+    
+    ////----------------------------------Sample1----------------------------------//
+    @When("I am on the locators page")
+    public void iAmOnTheLocatorsPage() {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
+    @Then("I should see both locators page headers")
+    public void iShouldSeeBothLocatorsPageHeaders() {
+        WebElement header1 = driver.findElement(By.id("heading_1"));
+        WebElement header2 = driver.findElement(By.id("heading_2"));
+        assertEquals("Heading 1", header1.getText());
+        assertEquals("Heading 2 text", header2.getText());
+    }
+
+    @And("Buttons in Locators page are clickable")
+    public void buttonsInLocatorsPageAreClickable() {
+
+        assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton1\"]")).isEnabled());
+        assertTrue(driver.findElement(By.cssSelector("[name=\"randomButton2\"]")).isEnabled());
     }
 }
