@@ -10,13 +10,13 @@ Feature: Introduction to cucumber part 3
     And I enter age: <age>
     And I click submit age
     Then I see message: "<message>"
-  @working
+    @working
     Examples:
       | name  | age | message                        |
       | Ann   | 5   | Hello, Ann, you are a kid      |
       | Marry | 50  | Hello, Marry, you are an adult |
       | Bob   | 61  | Hello, Bob, you are an adult   |
-  @not_working
+    @not_working
     Examples:
       | name | age | message                   |
       | Tom  | 15  | Hello, Tom, you are a kid |
@@ -27,3 +27,19 @@ Feature: Introduction to cucumber part 3
 #   Navigate to page
 #   Set name and age based on test Examples
 #   Click "Send" button and verify that previous input is displayed in correct fields
+
+  Scenario Outline: Provide Feedback
+    Given I am on Provide Feedback page
+    When I enter any user name: "<name>"
+    And I enter user's age: <age>
+    And I click send button
+    Then I see feedback confirmation message: "Is this the feedback you want to give us?"
+    Then I see username: "<name>" on feedback review page
+    And I see user's age: <age>
+    And I click yes button
+
+    Examples:
+      | name       | age |
+      | Junior Jha | 5   |
+      | Marry Me   | 55  |
+      | Bob Marley | 66  |

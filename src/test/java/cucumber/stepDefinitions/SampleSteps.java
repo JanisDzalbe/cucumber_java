@@ -97,4 +97,90 @@ public class SampleSteps {
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
+
+    //    ----------------------------------------------------------------------
+    //    #  TODO - Add implementation for missing steps
+    //    #  @Test
+    //    #  Sample 1 Task
+    //    --------*******************************************************-------
+
+    @Given("^I am on the locators page$")
+    public void iamonLocatorsPage() {
+        driver.get("https://acctabootcamp.github.io/site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorsPageHeaders() throws Throwable {
+        assertEquals("Heading 1", driver.findElement(By.id("heading_1")).getText());
+        assertEquals("Heading 2 text", driver.findElement(By.id("heading_2")).getText());
+    }
+
+    @And("Buttons in Locators page are clickable")
+    public void buttonsinLocatorsPageareClickable() {
+        assertTrue(driver.findElement(By.xpath("//input[@value =\"This is a button\"]")).isEnabled());
+        assertTrue(driver.findElement(By.xpath("//input[@value=\"This is also a button\"]")).isEnabled());
+    }
+
+    //    #  TODO - Add implementation for missing steps
+    //    #  @Test  -   Sample 2 Task
+    //    --------------*************-------------------
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeErrorMessage(String errorMessageString) {
+        assertEquals(errorMessageString, driver.findElement(By.id("error")).getText());
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void notNavigatedtoAgePage() {
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
+    }
+
+//    #   TODO - create Scenario Outline for 'Give us your feedback!' page
+//    #   URL: https://janisdzalbe.github.io/example-site/tasks/provide_feedback
+//    #   Navigate to page
+//    #   Set name and age based on test Examples
+//    #   Click "Send" button and verify that previous input is displayed in correct fields
+
+    @Given("^I am on Provide Feedback page$")
+    public void iamonProvideFeedbackPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+        driver.manage().window().maximize();
+    }
+
+    @When("^I enter any user name: \"([^\"]*)\"$")
+    public void iEnterAnyUserName(String userName) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(userName);
+    }
+
+    @And(("^I enter user's age: (\\d+)$"))
+    public void iEnterUsersAge(String age) throws Throwable {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(age);
+    }
+
+    @And("^I click send button$")
+    public void iClickSubmitButton() throws Throwable {
+        driver.findElement(By.xpath("//*[text()=\"Send\"]")).click();
+    }
+
+    @Then("^I see feedback confirmation message: \"([^\"]*)\"$")
+    public void seeFeedbackConfirmationMessage(String message) {
+        assertEquals(message, driver.findElement(By.xpath("//*[text()=\"Is this the feedback you want to give us?\"]")).getText());
+    }
+
+    @Then("^I see username: \"([^\"]*)\" on feedback review page$")
+    public void iSeeUsernameOnFeedbackReviewPage(String userName) throws Throwable {
+        assertEquals(userName, driver.findElement(By.id("name")).getText());
+    }
+
+    @And("^I see user's age: (\\d+)$")
+    public void iSeeUsersAge(String age) throws Throwable {
+        assertEquals(age, driver.findElement(By.id("age")).getText());
+    }
+
+    @And("^I click yes button$")
+    public void iClickYesButton() throws Throwable {
+        driver.findElement(By.xpath("//*[text()='Yes']"));
+    }
 }
