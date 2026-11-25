@@ -1,11 +1,14 @@
+
 package cucumber.stepDefinitions;
 
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
@@ -14,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SampleSteps {
+
     private WebDriver driver;
 
     public SampleSteps() {
@@ -33,7 +37,8 @@ public class SampleSteps {
 
     @And("^I should see home page description$")
     public void iShouldSeeHomePageDescription() throws Throwable {
-        assertEquals("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        assertEquals(
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                 driver.findElement(By.cssSelector("p")).getText());
     }
 
@@ -60,13 +65,15 @@ public class SampleSteps {
 
     @Then("^I see message: \"([^\"]*)\"$")
     public void iSeeMessage(String message) throws Throwable {
-        assertEquals(message, driver.findElement(By.id("message")).getText());
+        assertEquals(message,
+                driver.findElement(By.id("message")).getText());
     }
 
     @When("^I enter values:$")
     public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
         driver.findElement(By.id("name")).clear();
         driver.findElement(By.id("name")).sendKeys(valuesToEnter.get("name"));
+
         driver.findElement(By.id("age")).clear();
         driver.findElement(By.id("age")).sendKeys(valuesToEnter.get("age"));
     }
@@ -90,11 +97,45 @@ public class SampleSteps {
 
     @Then("^message for checkboxes \"([^\"]*)\" is seen$")
     public void messageForCheckboxesIsSeen(String message) throws Throwable {
-        assertEquals(message, driver.findElement(By.id("result_checkbox")).getText());
+        assertEquals(message,
+                driver.findElement(By.id("result_checkbox")).getText());
     }
 
     @Given("^I am on action page$")
     public void iAmOnActionPage() {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
+    }
+
+    // Activity 1 - Locators page
+
+    @When("^I am on the locators page$")
+    public void iAmOnTheLocatorsPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/examples/locators");
+    }
+
+    @Then("^I should see both locators page headers$")
+    public void iShouldSeeBothLocatorsPageHeaders() {
+
+        assertEquals("Heading 1",
+                driver.findElement(By.id("heading_1")).getText());
+
+        assertEquals("Heading 2 text",
+                driver.findElement(By.id("heading_2")).getText());
+    }
+
+    @And("^Buttons in Locators page are clickable$")
+    public void buttonsInLocatorsPageAreClickable() {
+
+        WebElement firstButton = driver.findElement(By.name("randomButton1"));
+        WebElement secondButton = driver.findElement(By.name("randomButton2"));
+
+        assertTrue(firstButton.isDisplayed());
+        assertTrue(firstButton.isEnabled());
+
+        assertTrue(secondButton.isDisplayed());
+        assertTrue(secondButton.isEnabled());
+
+        firstButton.click();
+        secondButton.click();
     }
 }
