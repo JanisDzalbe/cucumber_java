@@ -183,4 +183,29 @@ public class SampleSteps {
     public void iClickYesButton() throws Throwable {
         driver.findElement(By.xpath("//*[text()='Yes']"));
     }
+
+    //    #  TODO - Add implementation for missing steps
+//    #  @Test
+//    ******************************************************************************************************************
+    @Given("^I am on feedback page$")
+    public void iamonFeedbackPage() {
+        iamonProvideFeedbackPage();
+    }
+
+    @When("^I select feedback languages$")
+    public void iselectfeedbacklanguages(List<String> languages) throws Throwable {
+        for (String language : languages) {
+            driver.findElement(By.cssSelector("[value='" + language + "']")).click();
+        }
+    }
+
+    @And("^I click send feedback$")
+    public void iclicksendfeedback() throws Throwable {
+        iClickSubmitButton();
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void icanseeLanguages(String languages) throws Throwable {
+        assertEquals(languages, driver.findElement(By.xpath("//span[text()=\"English,Spanish\"]")).getText());
+    }
 }
