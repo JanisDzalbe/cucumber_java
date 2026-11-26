@@ -14,7 +14,7 @@ public class AgePage {
     private WebElement ageInput;
     @FindBy(how = How.ID, using = "submit")
     private WebElement submitButton;
-    @FindBy(how = How.CLASS_NAME, using = "error") // By.className("error)
+    @FindBy(className = "error") // By.className("error)
     private WebElement errorText;
 
 
