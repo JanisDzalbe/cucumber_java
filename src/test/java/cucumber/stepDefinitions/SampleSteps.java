@@ -206,4 +206,23 @@ public class SampleSteps {
         String expectedError = "";
         assertEquals(expectedError, driver.findElement(By.id("ch1_error")).getText());
         }
+    // ---------------------------------
+    // Sample 4
+    // ---------------------------------
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages){
+        for(String language : languages){
+            driver.findElement(By.cssSelector("[type='checkbox'][value='"+language+"']")).click();
+        }
+    }
+
+    @When("^I click send feedback$")
+    public void iClickSendFeedback(){
+        iSendFeedback();
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void assertLanguagesInFeedbackReviewPage(String languages){
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
 }
