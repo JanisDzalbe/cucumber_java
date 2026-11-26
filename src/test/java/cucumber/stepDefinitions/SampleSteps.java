@@ -123,71 +123,84 @@ public class SampleSteps {
         assertTrue(driver.findElement(By.cssSelector("[name='randomButton2']")).isEnabled());
 
     }
+
 // -------------------------------
 // Sample 2
 // -------------------------------
     @Then("^I see error: \"([^\"]*)\"$")
-    public void iSeeError(String error){
-      assertEquals(error, driver.findElement(By.id("error")).getText());
+    public void iSeeError(String error) {
+        assertEquals(error, driver.findElement(By.id("error")).getText());
     }
+
     @And("^I am not navigated to age message page$")
-    public void iAmNotNavigatedToAgeMessagePage(){
-    assertEquals("https://janisdzalbe.github.io/example-site/examples/age",driver.getCurrentUrl());
-      }
+    public void iAmNotNavigatedToAgeMessagePage() {
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age", driver.getCurrentUrl());
+    }
+
 // -------------------------------
 // Sample 3
 // -------------------------------
     @Given("^I am on feedback page$")
-    public void iAmOnFeedbackPage(){
+    public void iAmOnFeedbackPage() {
         driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
     }
+
     @When("^I enter name: \"([^\"]*)\" in feedback page$")
-    public void iEnterFeedbackName(String name){
+    public void iEnterFeedbackName(String name) {
         driver.findElement(By.id("fb_name")).clear();
         driver.findElement(By.id("fb_name")).sendKeys(name);
 
     }
+
     @When("^I enter age (\\d+) in feedback page$")
-    public void iEnterFeedbackAge(String age){
+    public void iEnterFeedbackAge(String age) {
         driver.findElement(By.id("fb_age")).clear();
         driver.findElement(By.id("fb_age")).sendKeys(age);
     }
+
     @And("^I click send feedback$")
-    public void iClickSendFeedback() throws Exception{
+    public void iClickSendFeedback() throws Exception {
         driver.findElement(By.cssSelector("[type='submit']")).click();
     }
+
     @Then("^I see feedback name: \"([^\"]*)\"$")
-    public void iSeeFeedbackName(String name){
+    public void iSeeFeedbackName(String name) {
         assertEquals(name, driver.findElement(By.id("name")).getText());
     }
+
     @Then("^I see feedback age: \"([^\"]*)\"$")
     public void iSeeFeedbackAge(String age) {
         assertEquals(age, driver.findElement(By.id("age")).getText());
 
 
     }
+
 // -------------------------------
 // Task 1
 // -------------------------------
     @Given("^I am on enter number page$")
-    public void iAmOnEnterNumberPage(){
+    public void iAmOnEnterNumberPage() {
         driver.get("https://janisdzalbe.github.io/example-site/tasks/enter_a_number");
     }
+
     @When("^I enter number: \"([^\"]*)\"$")
-    public void iEnterNumber(String number){
+    public void iEnterNumber(String number) {
         driver.findElement(By.id("numb")).clear();
         driver.findElement(By.id("numb")).sendKeys(number);
     }
+
     @And("^I click submit number$")
-    public void iClickSubmitNumber(){
+    public void iClickSubmitNumber() {
         driver.findElement(By.cssSelector("button[onclick='numberValidation()']")).click();
     }
+
     @Then("^I see number error: \"([^\"]*)\"$")
-    public void iSeeNumberError(String error){
+    public void iSeeNumberError(String error) {
         assertEquals(error, driver.findElement(By.id("ch1_error")).getText());
     }
+
     @Then("^I see alert: \"([^\"]*)\"$")
-    public void iSeeAlert(String message){
+    public void iSeeAlert(String message) {
         Alert alert = driver.switchTo().alert();
         assertEquals(message, alert.getText());
         alert.accept();
@@ -197,30 +210,86 @@ public class SampleSteps {
 // -------------------------------
 
     @When("^I select feedback languages$")
-    public void iSelectFeedbackLanguages(List<String>languages){
-        for (String language : languages){
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        for (String language : languages) {
             driver.findElement(By.cssSelector("input[value='" + language + "']")).click();
         }
     }
+
     @Then("^I can see languages \"([^\"]*)\" in feedback check$")
-    public void iCanSeeLanguagesInFeedbackCheck(String langauges){
+    public void iCanSeeLanguagesInFeedbackCheck(String langauges) {
         assertEquals(langauges, driver.findElement(By.id("language")).getText());
     }
+
 // -------------------------------
 // Sample 5
 // -------------------------------
     @When("^I enter feedback data:$")
-    public void iEnterFeedbackData(Map<String, String> data){
+    public void iEnterFeedbackData(Map<String, String> data) {
         driver.findElement(By.id("fb_name")).clear();
         driver.findElement(By.id("fb_name")).sendKeys(data.get("name"));
         driver.findElement(By.id("fb_age")).clear();
         driver.findElement(By.id("fb_age")).sendKeys(data.get("age"));
         driver.findElement(By.cssSelector("input[type='radio'][value='" + data.get("genre") + "']")).click();
     }
+
     @Then("^I see feedback genre: \"([^\"]*)\"$")
-    public void iSeeFeedbackGenre(String genre){
+    public void iSeeFeedbackGenre(String genre) {
         assertEquals(genre, driver.findElement(By.id("gender")).getText());
     }
 
+
+// -------------------------------
+// Task 2
+// -------------------------------
+    private By person(String name) {
+        return By.xpath("//li[span='" + name + "']");
+    }
+
+    @Given("I open the people list page")
+    public void iOpenThePeopleListPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+    }
+
+    @When("I click reset list")
+    public void iClickResetList() {
+        driver.findElement(By.xpath("//button[normalize-space()='Reset List']")).click();
+    }
+    @When("I add a person with name {string} and job {string}")
+    public void iAddPerson(String name, String job){
+        driver.findElement(By.xpath("//button[normalize-space()='Add person']")).click();
+        driver.findElement(By.id("name")).clear();
+        driver.findElement(By.id("name")).sendKeys(name);
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("job")).sendKeys(job);
+        driver.findElement(By.id("modal_button")).click();
+    }
+    @When("I edit person {string} to name {string} and job {string}")
+    public void iEditAPerson(String oldName, String newName, String newJob){
+        driver.findElement(person(oldName)).findElement(By.className("editbtn")).click();
+        driver.findElement(By.id("name")).clear();
+        driver.findElement(By.id("name")).sendKeys(newName);
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("job")).sendKeys(newJob);
+        driver.findElement(By.id("modal_button")).click();
+    }
+    @When("I remove person {string}")
+    public void iRemoveAPerson(String name){
+        driver.findElement(person(name)).findElement(By.className("closebtn")).click();
+    }
+    @Then("I see {string} with job {string} in the list")
+    public void iSeePersonWithJob(String name, String job){
+        assertEquals(job, driver.findElement(person(name)).findElement(By.className("job")).getText());
+    }
+    @Then("I do not see {string} in the list")
+    public void iDoNotSeePerson(String name){
+        assertEquals(0, driver.findElements(person(name)).size());
+    }
+    @Then("the list has {int} people")
+    public void theListHasPeople(int count){
+        assertEquals(count, driver.findElements(By.cssSelector("#listOfPeople li")).size());
+    }
+
 }
+
 
