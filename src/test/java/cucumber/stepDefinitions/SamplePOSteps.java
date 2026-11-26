@@ -11,6 +11,7 @@ import cucumber.pages_sample.*;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SamplePOSteps {
     private WebDriver driver;
@@ -52,5 +53,19 @@ public class SamplePOSteps {
     public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
         agePage.enterName(valuesToEnter.get("name"));
         agePage.enterAge(valuesToEnter.get("age"));
+    }
+
+    //.................................................................................................
+    //SampleUsingPO2
+    //.................................................................................................
+
+    @Then("^I see error: \"([^\"]*)\" using PO$")
+    public void iSeeError(String errorMessage) throws Throwable {
+        agePage.checkErrorMessage(errorMessage);
+    }
+
+    @And("^I remain in age page using PO$")
+    public void iRemainInAgePage() throws Throwable {
+        assertTrue(driver.getCurrentUrl().contains("/examples/age"));
     }
 }
