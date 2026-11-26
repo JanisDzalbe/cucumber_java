@@ -140,7 +140,7 @@ public class SampleSteps {
 
     }
 
-    //    @Then("^I see error: \"([^\"]*)\"$")
+//    @Then("^I see error: \"([^\"]*)\"$")
 //    public void iSeeError(String error) throws Throwable {
 //        assertEquals(error, driver.findElement(By.id("error")).getText());
 //    }
@@ -161,13 +161,13 @@ public class SampleSteps {
     }
 
     @When("^I enter name \"([^\"]*)\" in feedback page$")
-    public void iEnterNameInFeedbackPage(String name) throws Throwable {
+    public void iEnterNameInFeedbackPage(String name) {
         driver.findElement(By.xpath("//*[contains(@id, 'name')]")).clear();
         driver.findElement(By.xpath("//*[contains(@id, 'name')]")).sendKeys(name);
     }
 
     @When("^I enter age (\\d*) in feedback page$")
-    public void iEnterAgeInFeedbackPage(String age) throws Throwable {
+    public void iEnterAgeInFeedbackPage(String age) {
         driver.findElement(By.xpath("//*[contains(@id, 'age')]")).clear();
         driver.findElement(By.xpath("//*[contains(@id, 'age')]")).sendKeys(age);
     }
@@ -178,12 +178,12 @@ public class SampleSteps {
     }
 
     @Then("^I see name \"([^\"]*)\" in feedback review page$")
-    public void iSeeSubmitFeedbackName(String name) throws Throwable {
+    public void assertNameInFeedbackReviewPage(String name) {
         assertEquals(name, driver.findElement(By.id("name")).getText());
     }
 
     @Then("^I see age (\\d*) in feedback review page$")
-    public void iSeeSubmitFeedbackAge(String age) throws Throwable {
+    public void assertAgeInFeedbackReviewPage(String age) {
         assertEquals(age, driver.findElement(By.id("age")).getText());
     }
 
@@ -202,6 +202,39 @@ public class SampleSteps {
     @Then("^I can see languages \"([^\"]*)\" in feedback check$")
     public void messageForLanguagesIsSeen(String languages) throws Throwable {
         assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+
+    //----------------------------------
+    // Sample 5
+    //----------------------------------
+
+    @When("^I input Name, Age and Genre in feedback$")
+    public void iInputNameAgeGenreInFeedback(Map<String, String> inputMap) {
+        iEnterNameInFeedbackPage(inputMap.get("name"));
+        iEnterAgeInFeedbackPage(inputMap.get("age"));
+        driver.findElement(By.cssSelector("[name='gender'][value='" + inputMap.get("genre") + "']")).click();
+    }
+
+    @Then("^I see genre \"([^\"]*)\" in feedback review page$")
+    public void assertGenreInFeedbackReviewPage(String gender) {
+        assertEquals(gender, driver.findElement(By.id("gender")).getText());
+    }
+
+    @Then("^I see Name, Age and Genre in feedback review page$")
+    public void assertNameAgeGenreInFeedbackReviewPage(Map<String, String> inputMap) {
+        assertNameInFeedbackReviewPage(inputMap.get("name"));
+        assertAgeInFeedbackReviewPage(inputMap.get("age"));
+        assertGenreInFeedbackReviewPage(inputMap.get("genre"));
+    }
+
+    @Then("^I assert Name, Age and Genre in feedback review page$")
+    public void assertNameAgeGenreInFeedbackReviewPage(DataTable inputTable) {
+        List<Map<String, String>> mapList = inputTable.asMaps(String.class, String.class);
+        for (Map<String, String> inputMap : mapList) {
+            assertNameInFeedbackReviewPage(inputMap.get("name"));
+            assertAgeInFeedbackReviewPage(inputMap.get("age"));
+            assertGenreInFeedbackReviewPage(inputMap.get("genre"));
+        }
     }
 
 }
