@@ -195,16 +195,16 @@ public class SampleSteps {
 
     @When("^I enter values in feedback page$")
     public void iEnterValuesInFeedbackPage(Map<String,String>values) throws Throwable{
-     driver.findElement(By.id("name")).clear();
-        driver.findElement(By.id("name")).sendKeys(values.get("name"));
-     driver.findElement(By.id("age")).clear();
-        driver.findElement(By.id("age")).sendKeys(values.get("age"));
+     driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(values.get("name"));
+     driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(values.get("age"));
 
         driver.findElement(By.cssSelector("[value='" +values.get("genre")+ "']")).click();
     }
 
     @Then("^I see \"([^\"]*)\",\"([^\"]*)\",\"([^\"]*)\" in correct fields$")
-    public void iSeeInCorrectFields(String arg0, String name, String age, String genre) {
+    public void iSeeInCorrectFields(String name, String age, String genre) {
         assertEquals(name,driver.findElement(By.id("name")).getText());
         assertEquals(age,driver.findElement(By.id("age")).getText());
         assertEquals(genre,driver.findElement(By.id("gender")).getText());
