@@ -179,4 +179,44 @@ public class SampleSteps {
         assertEquals(String.valueOf(age),
                 driver.findElement(By.id("age")).getText());
     }
+//-------------------------------------------------------------------------
+// Sample 4
+//--------------------------------------------------------------------------
+    @When("^I select feedback languages$" )
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        for (String language : languages) {
+            driver.findElement(By.cssSelector("[value='" + language + "']")).click();
+        }
+    }
+
+    @And("^I click send feedback$")
+    public void iClickSendFeedback() {
+        iClickSendButton();
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedback(String languages) {
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+//-------------------------------------------------------------------------
+// Sample 5
+//--------------------------------------------------------------------------
+    @When("^I enter feedback values:$")
+    public void iEnterFeedbackValues(Map<String, String> values) {
+        iEnterFeedbackName(values.get("name"));
+        iEnterFeedbackAge(Integer.parseInt(values.get("age")));
+        driver.findElement(By.cssSelector("[type='radio'][value='" + values.get("genre") + "']")).click();
+    }
+
+    @Then("^I see feedback genre: \"([^\"]*)\"$")
+    public void iSeeFeedbackGenre(String genre) {
+        assertEquals(genre, driver.findElement(By.id("gender")).getText());
+    }
+
+    @Then("^I see Name, Age and Genre in feedback review page$")
+    public void iSeeFeedbackValues(Map<String, String> values) {
+        iSeeFeedbackName(values.get("name"));
+        iSeeFeedbackAge(Integer.parseInt(values.get("age")));
+        iSeeFeedbackGenre(values.get("genre"));
+    }
 }
