@@ -2,6 +2,8 @@ package cucumber.stepDefinitions;
 
 import cucumber.customDataTableType.PersonData;
 import io.cucumber.datatable.*;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.WebDriver;
 
@@ -9,6 +11,8 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DataTableExampleSteps {
     private WebDriver driver;
@@ -41,7 +45,7 @@ public class DataTableExampleSteps {
         System.out.println(table.toString());
 
         System.out.println("Value of second item, index starts from 0 (0,0 = first row, first column)----");
-        System.out.println(table.cell(1,0));
+        System.out.println(table.cell(1, 0));
         System.out.println(table.row(1));
 
         System.out.println("Prints the first column from table------");
@@ -83,7 +87,7 @@ public class DataTableExampleSteps {
     public void iReceiveTwoColumnsDataTable(DataTable table) {
         System.out.println("Value of second row, and separately the second column for that row----");
         System.out.println(table.row(1));
-        System.out.println(table.cell(1,1));
+        System.out.println(table.cell(1, 1));
 
         System.out.println("Print out converted DataTable into Map");
         Map<String, String> convertedTable = table.asMap();
@@ -137,7 +141,7 @@ public class DataTableExampleSteps {
         System.out.println("Print out third column");
         System.out.println(table.column(2));
         System.out.println("Print out the cell that is on second row in second column");
-        System.out.println(table.cell(1,1));
+        System.out.println(table.cell(1, 1));
         System.out.println();
     }
 
@@ -207,4 +211,5 @@ public class DataTableExampleSteps {
         System.out.println(person);
         System.out.println();
     }
+
 }

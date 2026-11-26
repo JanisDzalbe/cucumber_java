@@ -33,9 +33,30 @@ Feature: Introduction to cucumber part 4
 
  # TODO - create Scenario Outline for 'Give us your feedback!' page
   # URL: https://janisdzalbe.github.io/example-site/tasks/provide_feedback
-  # Navigate to page
-  # Set Name, Age and Genre
-  # - All input MUST be done in single step
-  # - All input MUST use Examples for data
-  # - Step can use Map or Domain object
-  # Click "Send" button and verify that previous input is displayed in correct fields
+#   Navigate to page
+#   Set Name, Age and Genre
+#   - All input MUST be done in single step
+#   - All input MUST use Examples for data
+#   - Step can use Map or Domain object
+#   Click "Send" button and verify that previous input is displayed in correct fields
+
+
+  Scenario Outline: a new scenario outline 2
+    Given I am on the provide feedback page
+    When I enter Name, Age and Genre in feedback page:
+      | name   | <name> |
+      | age    | <age>  |
+      | genre  | <genre>  |
+
+    And I click send button
+    And I see the correct name: "<name>"
+    And I see the correct age: "<age>"
+    And I see genre "<genre>" in feedback review page
+    And I see Name, Age and Genre in feedback review page
+      | name  | <name>  |
+      | age   | <age>   |
+      | genre | <genre> |
+    Examples:
+      | name      | age | genre  |
+      | Krishna   | 35  | male   |
+      | Ann       | 50  | female |

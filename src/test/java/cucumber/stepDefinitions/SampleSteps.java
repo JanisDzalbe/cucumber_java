@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -156,7 +157,7 @@ public class SampleSteps {
     }
 
     @And("^I enter age on feedback page: (\\d+)$")
-    public void iEnterAgeOnFeedback(int age) throws Throwable {
+    public void iEnterAgeOnFeedback(String age) throws Throwable {
         driver.findElement(id("fb_age")).clear();
         driver.findElement(id("fb_age")).sendKeys(String.valueOf(age));
     }
@@ -197,4 +198,34 @@ public class SampleSteps {
         assertEquals(languages, driver.findElement(id("language")).getText());
     }
 
-}
+    //=========================================
+    //Sample5Steps
+    //=========================================
+
+    @Given("^I am on the provide feedback page$")
+    public void iAmOnProvideFeedbackPage() throws Throwable {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+    }
+
+    @When("^I enter Name, Age and Genre in feedback page:$")
+    public void iEnterNameAgeGenreInFeedback(Map<String, String> inputMap)throws Throwable {
+        iEnterNameOnFeedback(inputMap.get("name"));
+        iEnterAgeOnFeedback(inputMap.get("age"));
+        driver.findElement(By.cssSelector("[name='gender'][value='"+inputMap.get("genre")+"']")).click();
+    }
+
+    @And("^I see genre \"([^\"]*)\" in feedback review page$")
+    public void assertGenreInFeedbackReviewPage(String gender){
+        assertEquals(gender, driver.findElement(By.id("gender")).getText());
+    }
+
+    @And("^I see Name, Age and Genre in feedback review page$")
+    public void iSeeNameAgeGenreInFeedbackReviewPage(Map<String, String> expectedValues)throws Throwable {
+        assertEquals(expectedValues.get("name"), driver.findElement(By.cssSelector("#fb_thx #name")).getText());
+        assertEquals(expectedValues.get("age"), driver.findElement(By.cssSelector("#fb_thx #age")).getText());
+        assertEquals(expectedValues.get("genre"), driver.findElement(By.cssSelector("#fb_thx #gender")).getText());
+    }
+
+    }
+
+
