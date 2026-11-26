@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -226,6 +227,108 @@ public class SampleSteps {
     @Then("^I see no error in enter a number page$")
     public void assertNoErrorInEnterANumberPage() {
         assertEquals("", driver.findElement(By.id("ch1_error")).getText());
+    }
+
+    //-------------------------------
+    //Sample 4
+    //-------------------------------
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        for (String language : languages) {
+            driver.findElement(By.cssSelector("[type='checkbox'][value='" + language + "']")).click();
+
+        }
+
+    }
+
+    @When("^I click send feedback$")
+    public void iClickSendFeedback() {
+        iSendFeedback();
+
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void assertLanguagesFeedbackReviewPage(String languages) {
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+
+    //-------------------------------
+    //Sample 5
+    //-------------------------------
+
+    @When("^I input Name, Age and Genre in feedback$")
+    public void iInputNameAgeGenreInFeedback(Map<String, String> inputMap) {
+        iEnterNameInFeedbackPage(inputMap.get("name"));
+        iEnterAgeInFeedbackPage(inputMap.get("age"));
+        driver.findElement(By.cssSelector("[name='gender'][value='" + inputMap.get("genre") + "']")).click();
+
+    }
+
+    @Then("^I see genre \"([^ ]*)\" in feedback review page$")
+    public void assertGenreInFeedbackReviewPage(String gender) {
+        assertEquals(gender, driver.findElement(By.id("gender")).getText());
+    }
+
+    @Then("^I see Name, Age and Genre in review page$")
+    public void assertNameAgeGenreInFeedback(Map<String, String> inputMap) {
+        assertNameInFeedbackReviewPage(inputMap.get("name"));
+        assertAgeInFeedbackReviewPage(inputMap.get("age"));
+        assertGenreInFeedbackReviewPage(inputMap.get("genre"));
+
+    }
+
+    //-------------------------------
+    //Task 2
+    //-------------------------------
+
+    @Given("^I am on list of people page$")
+    public void iAmOnListOfPeoplePage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs");
+    }
+
+    @When("^I add a new person$")
+    public void iAddANewPerson(Map<String, String> inputMap) {
+        driver.findElement(By.xpath("//button[text()='Add person']")).click();
+        driver.findElement(By.id("name")).sendKeys(inputMap.get("name"));
+        driver.findElement(By.id("job")).sendKeys(inputMap.get("job"));
+        driver.findElement(By.xpath("//button[text()='Add']")).click();
+    }
+
+    @When("^I change job of person \"([^\"]*)\" to \"([^\"]*)\"$")
+    public void iChangeJobOfPerson(String name, String job) {
+        driver.findElement(By.xpath("//li[.//span[text()='" + name + "']]//*[contains(@class,'editbtn')]")).click();
+        driver.findElement(By.id("job")).clear();
+        driver.findElement(By.id("job")).sendKeys(job);
+        driver.findElement(By.xpath("//button[text()='Edit']")).click();
+    }
+
+    @When("^I remove person \"([^\"]*)\"$")
+    public void iRemovePerson(String name) {
+        driver.findElement(By.xpath("//li[.//span[text()='" + name + "']]//*[contains(@class,'closebtn')]")).click();
+    }
+
+    @When("^I click reset list$")
+    public void iClickResetList() {
+        driver.findElement(By.xpath("//button[text()='Reset List']")).click();
+    }
+
+    @Then("^I see person \"([^\"]*)\" with job \"([^\"]*)\"$")
+    public void assertPersonWithJob(String name, String job) {
+        assertEquals(job, driver.findElement(By.xpath("//li[.//span[text()='" + name + "']]//*[contains(@class,'job')]")).getText());
+    }
+
+    @Then("^I don't see person \"([^\"]*)\"$")
+    public void assertPersonIsNotInList(String name) {
+        assertEquals(0, driver.findElements(By.xpath("//li[.//span[text()='" + name + "']]")).size());
+    }
+
+    @Then("^I see original list of people$")
+    public void assertOriginalListOfPeople(Map<String, String> people) {
+        assertEquals(people.size(), driver.findElements(By.cssSelector("#listOfPeople li")).size());
+        for (String name : people.keySet()) {
+            assertPersonWithJob(name, people.get(name));
+        }
     }
 
 }
