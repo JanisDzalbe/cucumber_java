@@ -12,45 +12,58 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SamplePOSteps {
-    private WebDriver driver;
-    static AgePage agePage;
-    static AgeSubmittedPage ageSubmittedPage;
+    public class SamplePOSteps {
+        private WebDriver driver;
+        static AgePage agePage;
+        static AgeSubmittedPage ageSubmittedPage;
 
-    public SamplePOSteps() {
-        this.driver = Hooks.driver;
-        agePage = PageFactory.initElements(Hooks.driver, AgePage.class);
-        ageSubmittedPage = PageFactory.initElements(Hooks.driver, AgeSubmittedPage.class);
-    }
+        public SamplePOSteps() {
+            this.driver = Hooks.driver;
+            agePage = PageFactory.initElements(Hooks.driver, AgePage.class);
+            ageSubmittedPage = PageFactory.initElements(Hooks.driver, AgeSubmittedPage.class);
+        }
 
-    @When("^I enter name: \"([^\"]*)\" using PO$")
-    public void iEnterName(String name) throws Throwable {
-        agePage.enterName(name);
-    }
+        @When("^I enter name: \"([^\"]*)\" using PO$")
+        public void iEnterName(String name) throws Throwable {
+            agePage.enterName(name);
+        }
 
-    @And("^I enter age: (\\d+) using PO$")
-    public void iEnterAge(int age) throws Throwable {
-        agePage.enterAge(age);
-    }
+        @And("^I enter age: (\\d+) using PO$")
+        public void iEnterAge(int age) throws Throwable {
+            agePage.enterAge(age);
+        }
 
-    @Given("^I (?:am on|open) age page using PO$")
-    public void iAmOnAgePage() throws Throwable {
-        driver.get(agePage.getPageUrl());
-    }
+        @Given("^I (?:am on|open) age page using PO$")
+        public void iAmOnAgePage() throws Throwable {
+            driver.get(agePage.getPageUrl());
+        }
 
-    @And("^I click submit age using PO$")
-    public void iClickSubmitAge() throws Throwable {
-        agePage.clickSubmit();
-    }
+        @And("^I click submit age using PO$")
+        public void iClickSubmitAge() throws Throwable {
+            agePage.clickSubmit();
+        }
 
-    @Then("^I see message: \"(.*)\" using PO$")
-    public void iSeeMessage(String message) throws Throwable {
-        ageSubmittedPage.checkMessageText(message);
-    }
+        @Then("^I see message: \"(.*)\" using PO$")
+        public void iSeeMessage(String message) throws Throwable {
+            ageSubmittedPage.checkMessageText(message);
+        }
 
-    @When("^I enter values using PO:$")
-    public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
-        agePage.enterName(valuesToEnter.get("name"));
-        agePage.enterAge(valuesToEnter.get("age"));
+        @When("^I enter values using PO:$")
+        public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
+            agePage.enterName(valuesToEnter.get("name"));
+            agePage.enterAge(valuesToEnter.get("age"));
+        }
+
+        //---------------
+        //Sample PO 2
+        //----------------
+        @Then("^I see error: \"([^\"]*)\" using PO$")
+        public void iSeeErrorMessageInAgePage(String message) throws Throwable {
+            agePage.checkErrorMessage(message);
+        }
+
+        @And("^I remain in age page using PO$")
+        public void iRemainInAgePage() throws Throwable {
+            assertEquals(agePage.getPageUrl(), driver.getCurrentUrl());
+        }
     }
-}
