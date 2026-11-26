@@ -101,7 +101,7 @@ public class SampleSteps {
         driver.get("https://janisdzalbe.github.io/example-site/examples/actions");
     }
 
-    
+
     ////----------------------------------Sample1----------------------------------//
     @When("I am on the locators page")
     public void iAmOnTheLocatorsPage() {
@@ -138,7 +138,6 @@ public class SampleSteps {
     }
 
 
-
     ////----------------------------------Sample3----------------------------------//
 
     @Given("I navigate to provide feedback page")
@@ -167,9 +166,27 @@ public class SampleSteps {
     @Then("^I should see name \"([^\"]*)\" and age (\\d*) displayed in the feedback fields$")
     public void iShouldSeeNameAndAgeDisplayedInTheFeedbackFields(String expectedName, String expectedAge) {
         String actualName = driver.findElement(By.id("name")).getText();
-        String actualAge = driver.findElement(By.id("age")).getText() ;
+        String actualAge = driver.findElement(By.id("age")).getText();
 
         assertEquals(expectedName, actualName);
         assertEquals(expectedAge, actualAge);
+    }
+
+
+    ////----------------------------------Sample4----------------------------------//
+
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        for (String language : languages) {
+            driver.findElement(By.cssSelector("[type='checkbox'][value='" + language + "']")).click();
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String expectedLanguages) {
+        String actualLanguages = driver.findElement(By.id("language")).getText();
+
+        assertEquals(expectedLanguages, actualLanguages);
     }
 }
