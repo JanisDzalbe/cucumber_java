@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -184,6 +185,23 @@ public class SampleSteps {
     @Then("^I see age (\\d*) in feedback review page$")
     public void iSeeSubmitFeedbackAge(String age) throws Throwable {
         assertEquals(age, driver.findElement(By.id("age")).getText());
+    }
+
+    //----------------------------------
+    // Sample 4
+    //----------------------------------
+
+
+    @When("^I select feedback languages$")
+    public void iClickedOnLanguages(List<String> languages) throws Throwable {
+        for (String language : languages) {
+            driver.findElement(By.cssSelector("[value='" + language + "']")).click();
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void messageForLanguagesIsSeen(String languages) throws Throwable {
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
     }
 
 }
