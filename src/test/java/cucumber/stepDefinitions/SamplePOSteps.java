@@ -2,6 +2,7 @@ package cucumber.stepDefinitions;
 
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import org.openqa.selenium.By;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.WebDriver;
@@ -9,8 +10,14 @@ import org.openqa.selenium.support.PageFactory;
 import cucumber.pages_sample.*;
 
 import java.util.Map;
+import java.time.Duration;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SamplePOSteps {
     private WebDriver driver;
@@ -53,4 +60,20 @@ public class SamplePOSteps {
         agePage.enterName(valuesToEnter.get("name"));
         agePage.enterAge(valuesToEnter.get("age"));
     }
+
+    //---------------
+    //SampleUsingPO2
+    //---------------
+
+    @Then("^I see error: \"([^\"]*)\" using PO$")
+    public void iSeeError(String expectedMessage) {
+    String pageText = driver.findElement(By.tagName("body")).getText();
+
+    assertTrue(pageText.contains(expectedMessage),"Expected error: " + expectedMessage + "\nPage text:\n" + pageText);
+}
+
+    @And("^I remain in age page using PO$")
+    public void iRemainInAgePage() {
+    assertEquals(agePage.getPageUrl(), driver.getCurrentUrl());
+}
 }

@@ -176,4 +176,40 @@ public class SampleSteps {
     wait.until(ExpectedConditions.textToBe(By.id("name"), name));
     wait.until(ExpectedConditions.textToBe(By.id("age"), String.valueOf(age)));
 }
+
+    //-------------------------
+    //Sample 4
+    //-------------------------
+
+     @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+    for (String language : languages) {
+    driver.findElement(By.cssSelector("[type='checkbox'][value='" + language + "']")).click();
+     }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String expectedLanguages) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.textToBe(By.id("language"), expectedLanguages));
+    }
+
+    //-------------------------
+    //Sample 5
+    //-------------------------
+
+    @When("^I enter feedback values:$")
+    public void iEnterFeedbackValues(Map<String, String> values) {
+    driver.findElement(By.id("fb_name")).sendKeys(values.get("name"));
+    driver.findElement(By.id("fb_age")).sendKeys(values.get("age"));
+
+    String genre = values.get("genre");
+    driver.findElement(By.cssSelector("input[name='gender'][value='" + genre + "']")).click();
+    }
+
+    @And("^I see feedback genre: \"([^\"]*)\"$")
+    public void iSeeFeedbackGenre(String expectedGenre) {
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+    wait.until(ExpectedConditions.textToBe(By.id("gender"), expectedGenre));
+    }
 }
