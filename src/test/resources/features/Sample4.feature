@@ -24,9 +24,17 @@ Feature: Introduction to cucumber part 4
 #  TODO - Add implementation for missing steps
 #  @test
 #  Scenario: Feedback with only languages
+  Scenario: Feedback with only languages
 #    Given I am on feedback page
+    Given I am on give us feedback page
 #    When I select feedback languages
+    When I select feedback languages:
+      | English |
+      | Spanish |
 #      | English |
 #      | Spanish |
+
 #    And I click send feedback
+    And I send feedback
 #    Then I can see languages "English,Spanish" in feedback check
+    Then I can see languages "English,Spanish" in feedback check

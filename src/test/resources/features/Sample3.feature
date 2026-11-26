@@ -25,7 +25,7 @@ Feature: Introduction to cucumber part 3
 #   TODO - create Scenario Outline for 'Give us your feedback!' page
 #   URL: https://janisdzalbe.github.io/example-site/tasks/provide_feedback
 #   Navigate to page
-    @debug
+    @debugs
     Scenario Outline: a give us your feedback scenario
       Given I am on give us feedback page
       When I enter name: "<name>" in feedback
