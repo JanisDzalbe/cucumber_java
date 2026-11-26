@@ -157,7 +157,7 @@ public class SampleSteps {
         driver.findElement(By.id("fb_age")).sendKeys(age);
     }
 
-    @And("^I click Send feedback$")
+    @And("^I click send feedback$")
     public void sendFeedback() {
         driver.findElement(By.cssSelector("[type='submit']")).click();
     }
@@ -170,6 +170,47 @@ public class SampleSteps {
     @And("^I see submitted age (\\d*)")
     public void assertAgeInFeedbackReviewPage(String age) {
         assertEquals(age, driver.findElement(By.id("age")).getText());
+    }
+
+
+    // -------------------------------
+    // Sample 4
+    // -------------------------------
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        for (String language : languages) {
+            driver.findElement(By.cssSelector("input[name='language'][value='" + language + "']")).click();
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String language) {
+        assertEquals(language, driver.findElement(By.id("language")).getText());
+    }
+
+    // -------------------------------
+    // Sample 5
+    // -------------------------------
+
+    @When("^I input Name, Age and Genre in feedback$")
+    public void iInputNameAgeGenreInFeedback(Map<String, String> inputMap) {
+        enterName(inputMap.get("name"));
+        enterAge(inputMap.get("age"));
+        driver.findElement(By.cssSelector("[name='gender'][value='" + inputMap.get("genre").toLowerCase() + "']")).click();
+    }
+
+
+    @And("^I can see \"([^\"]*)\" selected in the genre field$")
+    public void assertGenreInFeedbackReviewPage(String genre) {
+        assertEquals(genre.toLowerCase(), driver.findElement(By.id("gender")).getText());
+    }
+
+    @And("^I see Name, Age and Genre in feedback review page$")
+    public void assertNameAgeGenreInFeedbackReviewPage(Map<String, String> inputMap) {
+        assertNameInFeedbackReviewPage(inputMap.get("name"));
+        assertAgeInFeedbackReviewPage(inputMap.get("age"));
+        assertGenreInFeedbackReviewPage(inputMap.get("genre"));
     }
 }
 
