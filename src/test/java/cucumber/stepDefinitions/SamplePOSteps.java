@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import cucumber.pages_sample.*;
@@ -11,8 +12,10 @@ import cucumber.pages_sample.*;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SamplePOSteps {
+    private static final CharSequence PAGE_URL = "https://janisdzalbe.github.io/example-site/examples/age";
     private WebDriver driver;
     static AgePage agePage;
     static AgeSubmittedPage ageSubmittedPage;
@@ -53,4 +56,16 @@ public class SamplePOSteps {
         agePage.enterName(valuesToEnter.get("name"));
         agePage.enterAge(valuesToEnter.get("age"));
     }
+
+//-------------------------
+// Sample PO2
+//-------------------------
+    @Then("^I see error: \"(.*)\" using PO$")
+    public void iSeeError(String errorMessage)  {
+       assertEquals(errorMessage, driver.findElement(By.className("error")).getText());
+    }
+    @And("^I remain in age page using PO$")
+    public void iRemainInAgePage() {
+         assertTrue(driver.getCurrentUrl().contains(PAGE_URL));
+     }
 }
