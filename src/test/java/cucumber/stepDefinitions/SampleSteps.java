@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.datatable.DataTable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -224,5 +225,36 @@ public class SampleSteps {
     @Then("^I can see languages \"([^\"]*)\" in feedback check$")
     public void assertLanguagesInFeedbackReviewPage(String languages){
         assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+    // ---------------------------------
+    // Sample 5
+    // ---------------------------------
+    @When("^I input Name, Age and Genre in feedback$")
+    public void iInputNameAgeGenreInFeedback(Map<String, String> inputMap){
+        iEnterNameInFeedbackPage(inputMap.get("name"));
+        iEnterAgeInFeedbackPage(inputMap.get("age"));
+        driver.findElement(By.cssSelector("[name='gender'][value='"+inputMap.get("genre")+"']")).click();
+    }
+
+    @Then("^I see genre \"([^\"]*)\" in feedback review page$")
+    public void assertGenreInFeedbackReviewPage(String gender){
+        assertEquals(gender, driver.findElement(By.id("gender")).getText());
+    }
+
+    @Then("^I see Name, Age and Genre in feedback review page$")
+    public void assertNameAgeGenreInFeedbackReviewPage(Map<String, String> inputMap){
+        assertNameInFeedbackReviewPage(inputMap.get("name"));
+        assertAgeInFeedbackReviewPage(inputMap.get("age"));
+        assertGenreInFeedbackReviewPage(inputMap.get("genre"));
+    }
+
+    @Then("^I assert Name, Age and Genre in feedback review page$")
+    public void assertDataTableNameAgeGenreInFeedbackReviewPage(DataTable inputTable){
+        List<Map<String, String>> mapList = inputTable.asMaps(String.class, String.class);
+        for(Map<String, String> inputMap : mapList){
+            assertNameInFeedbackReviewPage(inputMap.get("name"));
+            assertAgeInFeedbackReviewPage(inputMap.get("age"));
+            assertGenreInFeedbackReviewPage(inputMap.get("genre"));
+        }
     }
 }
