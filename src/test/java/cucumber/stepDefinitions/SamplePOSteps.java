@@ -1,11 +1,14 @@
+
 package cucumber.stepDefinitions;
 
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
+
 import cucumber.pages_sample.*;
 
 import java.util.Map;
@@ -13,14 +16,20 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SamplePOSteps {
+
     private WebDriver driver;
+
     static AgePage agePage;
     static AgeSubmittedPage ageSubmittedPage;
 
     public SamplePOSteps() {
         this.driver = Hooks.driver;
+
         agePage = PageFactory.initElements(Hooks.driver, AgePage.class);
-        ageSubmittedPage = PageFactory.initElements(Hooks.driver, AgeSubmittedPage.class);
+
+        ageSubmittedPage = PageFactory.initElements(
+                Hooks.driver, AgeSubmittedPage.class
+        );
     }
 
     @When("^I enter name: \"([^\"]*)\" using PO$")
@@ -52,5 +61,17 @@ public class SamplePOSteps {
     public void iEnterValues(Map<String, String> valuesToEnter) throws Throwable {
         agePage.enterName(valuesToEnter.get("name"));
         agePage.enterAge(valuesToEnter.get("age"));
+    }
+
+    // ACTIVITY 6 - ERROR SCENARIO
+
+    @Then("^I see error: \"([^\"]*)\" using PO$")
+    public void iSeeErrorUsingPO(String errorMessage) {
+        agePage.checkErrorMessage(errorMessage);
+    }
+
+    @And("^I remain in age page using PO$")
+    public void iRemainInAgePageUsingPO() {
+        agePage.checkRemainOnAgePage();
     }
 }
