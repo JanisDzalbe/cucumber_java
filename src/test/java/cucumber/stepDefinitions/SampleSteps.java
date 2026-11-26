@@ -1,11 +1,14 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 import java.util.Map;
@@ -162,5 +165,51 @@ public class SampleSteps {
         assertEquals(age, driver.findElement(By.id("age")).getText());
     }
 
+    //Sample 3
+    //-------------------
+
+    @When("I select feedback languages")
+    public void selectFeedbackLanguages(List<String> languages) {
+        for (String language : languages) {
+            WebElement checkbox = driver.findElement(By.xpath("//input[@type='checkbox' and @name='language' and @value='" + language + "']")
+            );
+            if (!checkbox.isSelected()) {
+                checkbox.click();
+            }
+        }
+    }
+
+    @Then("I can see languages {string} in feedback check")
+    public void seeLanguagesInFeedbackCheck(String expectedLanguages) {
+        WebElement languageResult = driver.findElement(By.id("language"));
+        assertEquals(expectedLanguages, languageResult.getText());
+    }
+
+    //Sample 5
+    //--------------
+    @When("I enter feedback values:")
+    public void enterFeedbackValues(Map<String, String> values) {
+        WebElement nameInput = driver.findElement(By.id("fb_name"));
+        nameInput.clear();
+        nameInput.sendKeys(values.get("name"));
+
+
+        WebElement ageInput = driver.findElement(By.id("fb_age"));
+        ageInput.clear();
+        ageInput.sendKeys(values.get("age"));
+
+        String genreValue = values.get("genre").toLowerCase();
+        WebElement genreRadio = driver.findElement(
+                By.xpath("//input[@type='radio' and @name='gender' and @value='" + genreValue + "']")
+        );
+        genreRadio.click();
+    }
+
+    @Then("I see feedback values:")
+    public void seeFeedbackValues(Map<String, String> expectedValues) {
+        assertEquals(expectedValues.get("name"), driver.findElement(By.id("name")).getText());
+        assertEquals(expectedValues.get("age"), driver.findElement(By.id("age")).getText());
+        assertEquals(expectedValues.get("genre"), driver.findElement(By.id("gender")).getText());
+    }
 
 }
