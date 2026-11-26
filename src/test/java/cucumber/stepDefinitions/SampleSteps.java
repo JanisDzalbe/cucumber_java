@@ -92,7 +92,9 @@ public class SampleSteps {
     @When("^I clicked on checkboxes:$")
     public void iClickedOnCheckboxes(List<String> values) throws Throwable {
         for (String value : values) {
-            driver.findElement(By.cssSelector("[value='" + value + "']")).click();
+            driver.findElement(
+                    By.cssSelector("[value='" + value + "']")
+            ).click();
         }
     }
 
@@ -238,5 +240,69 @@ public class SampleSteps {
         assertEquals(expectedMessage, actualMessage);
 
         alert.accept();
+    }
+
+    // ACTIVITY 4 - FEEDBACK WITH ONLY LANGUAGES
+
+    @When("^I select feedback languages$")
+    public void selectFeedbackLanguages(List<String> languages) {
+
+        for (String language : languages) {
+            driver.findElement(
+                    By.cssSelector(
+                            "input[type='checkbox'][value='" + language + "']"
+                    )
+            ).click();
+        }
+    }
+
+    @And("^I click send feedback$")
+    public void clickSendFeedback() {
+        driver.findElement(
+                By.cssSelector("button[type='submit']")
+        ).click();
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String expectedLanguages) {
+
+        assertEquals(
+                expectedLanguages,
+                driver.findElement(By.id("language")).getText()
+        );
+    }
+
+    // ACTIVITY 5 - SCENARIO OUTLINE WITH FEEDBACK DETAILS
+
+    @When("^I enter feedback details:$")
+    public void iEnterFeedbackDetails(Map<String, String> feedbackDetails) {
+
+        // Enter name
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name"))
+                .sendKeys(feedbackDetails.get("name"));
+
+        // Enter age
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age"))
+                .sendKeys(feedbackDetails.get("age"));
+
+        // Select gender
+        String genre = feedbackDetails.get("genre");
+
+        driver.findElement(
+                By.cssSelector(
+                        "input[name='gender'][value='" + genre + "']"
+                )
+        ).click();
+    }
+
+    @And("^submitted genre should be \"([^\"]*)\"$")
+    public void submittedGenreShouldBe(String expectedGenre) {
+
+        assertEquals(
+                expectedGenre,
+                driver.findElement(By.id("gender")).getText()
+        );
     }
 }

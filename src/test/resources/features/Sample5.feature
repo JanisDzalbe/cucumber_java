@@ -1,7 +1,9 @@
-@regression @part4
-Feature: Introduction to cucumber part 4
+
+@regression @part5
+
+Feature: Introduction to cucumber part 5
   As a test engineer
-  I want to be able to write and execute a scenario with steps that have 2 column tables
+  I want to write and execute scenarios using Scenario Outline and Examples
 
   Background:
     Given I am on age page
@@ -26,16 +28,25 @@ Feature: Introduction to cucumber part 4
       | age  | <age>  |
     And I click submit age
     Then I see message: "<message>"
+
     Examples:
       | name | age | message                      |
       | Ann  | 5   | Hello, Ann, you are a kid    |
       | Bob  | 61  | Hello, Bob, you are an adult |
 
- # TODO - create Scenario Outline for 'Give us your feedback!' page
-  # URL: https://janisdzalbe.github.io/example-site/tasks/provide_feedback
-  # Navigate to page
-  # Set Name, Age and Genre
-  # - All input MUST be done in single step
-  # - All input MUST use Examples for data
-  # - Step can use Map or Domain object
-  # Click "Send" button and verify that previous input is displayed in correct fields
+  Scenario Outline: Give us your feedback
+    Given I am on feedback page
+    When I enter feedback details:
+      | name  | <name>  |
+      | age   | <age>   |
+      | genre | <genre> |
+    And I click Send
+    Then submitted name should be "<name>"
+    And submitted age should be "<age>"
+    And submitted genre should be "<genre>"
+
+    Examples:
+      | name  | age | genre  |
+      | Anna  | 25  | female |
+      | John  | 30  | male   |
+      | Maria | 28  | female |
