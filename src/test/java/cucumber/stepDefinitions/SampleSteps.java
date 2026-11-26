@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -145,9 +146,9 @@ public class SampleSteps {
     }
 
     @And("^I enter feedback age: (\\d+)$")
-    public void ienterFeedbackAge(int age) throws Throwable {
+    public void iEnterFeedbackAge(String age) throws Throwable {
         driver.findElement(By.id("fb_age")).clear();
-        driver.findElement(By.id("fb_age")).sendKeys(String.valueOf(age));
+        driver.findElement(By.id("fb_age")).sendKeys(age);
     }
 
     @And("^I click Send button$")
@@ -183,5 +184,44 @@ public class SampleSteps {
     @Then("^I can see languages \"([^\"]*)\" in feedback check$")
     public void iCanSeeLanguagesInFeedbackCheck(String expectedLanguages) throws Throwable {
         assertEquals(expectedLanguages, driver.findElement(By.id("language")).getText());
+    }
+
+    //----------------
+    //sample5
+    //----------------
+    @When("^I enter feedback values:$")
+    public void iEnterFeedbackValues(Map<String, String> inputMap) throws Throwable {
+        iEnterFeedbackName(inputMap.get("name"));
+//        driver.findElement(By.id("fb_name")).clear();
+//        driver.findElement(By.id("fb_name")).sendKeys(inputMap.get("name"));
+
+        iEnterFeedbackAge(inputMap.get("age"));
+//        driver.findElement(By.id("fb_age")).clear();
+//        driver.findElement(By.id("fb_age")).sendKeys(inputMap.get("age"));
+
+        String genre = inputMap.get("genre");
+        driver.findElement(By.cssSelector("[name='gender'][value='" + genre + "']")).click();
+    }
+
+    @And("^I see submitted gender: \"([^\"]*)\"$")
+    public void iSeeSubmittedGender(String gender) throws Throwable {
+        assertEquals(gender, driver.findElement(By.id("gender")).getText());
+    }
+//possible ways
+    @And("^I see Name, Age and Genre in feedback review page$")
+    public void iSeeNameAgeGenreInFeedbackReviewPage(Map<String, String> inputMap) throws Throwable {
+        iSeeSubmittedName(inputMap.get("name"));
+        iSeeSubmittedAge(Integer.parseInt(inputMap.get("age")));
+        iSeeSubmittedGender(inputMap.get("genre"));
+    }
+
+    @And("^I assert Name, Age and Genre in feedback review page$")
+    public void assertDataTableNameAgeGenreInFeedbackReviewPage(DataTable inputTable) throws Throwable {
+        List<Map<String, String>> mapList = inputTable.asMaps(String.class, String.class);
+        for (Map<String, String> inputMap : mapList) {
+            iSeeSubmittedName(inputMap.get("name"));
+            iSeeSubmittedAge(Integer.parseInt(inputMap.get("age")));
+            iSeeSubmittedGender(inputMap.get("genre"));
+        }
     }
 }
