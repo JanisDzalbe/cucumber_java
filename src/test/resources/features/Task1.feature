@@ -18,7 +18,7 @@ Feature: enter a number and validate the result
       | 101   | Number is too big     |
       | abc   | Please enter a number |
 
-  Scenario Outline: calculate square root with valid numbers
+  Scenario: calculate square root with valid numbers
     Given I am on enter a number page
     When I enter value: "64"
     And I click submit
