@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -190,5 +191,34 @@ public class SampleSteps {
     public void iCanSeeLanguagesInFeedbackCheck(String languages) throws Throwable {
         assertEquals(languages, driver.findElement(By.id("language")).getText());
     }
+
+    // ..............................................................................................................
+    //sample 5
+    // ..........................................................................................................
+
+    @When("^I enter feedback values:$")
+    public void iEnterFeedbackValues(DataTable table) throws Throwable {
+        Map<String, String> values = table.asMap(String.class, String.class);
+
+        driver.findElement(By.name("name")).sendKeys(values.get("name"));
+        driver.findElement(By.name("age")).sendKeys(values.get("age"));
+        driver.findElement(By.cssSelector("input[name='gender'][value='" + values.get("genre").toLowerCase() + "']")).click();
+    }
+
+    @Then("^I can see name \"([^\"]*)\" in feedback field$")
+    public void iCanSeeNameInFeedbackField(String name) throws Throwable {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @Then("^I can see age \"([^\"]*)\" in feedback field$")
+    public void iCanSeeAgeInFeedbackField(String age) throws Throwable {
+        assertEquals(age, driver.findElement(By.id("age")).getText());
+    }
+
+    @Then("^I can see genre \"([^\"]*)\" in feedback field$")
+    public void iCanSeeGenreInFeedbackField(String genre) throws Throwable {
+        assertEquals(genre.toLowerCase(), driver.findElement(By.id("gender")).getText());
+    }
+
 
 }

@@ -3,9 +3,6 @@ Feature: Introduction to cucumber part 4
   As a test engineer
   I want to be able to write and execute a scenario with steps that have 2 column tables
 
-  Background:
-    Given I am on age page
-
   Scenario: a new scenario with 2-column table
     When I enter values:
       | name | Ann |
@@ -39,3 +36,21 @@ Feature: Introduction to cucumber part 4
   # - All input MUST use Examples for data
   # - Step can use Map or Domain object
   # Click "Send" button and verify that previous input is displayed in correct fields
+
+  Scenario Outline: Submit feedback with different fields
+    Given I am on feedback page
+    When I enter feedback values:
+      | name  | <name>  |
+      | age   | <age>   |
+      | genre | <genre> |
+    And I click send feedback
+    Then I can see name "<name>" in feedback field
+    And I can see age "<age>" in feedback field
+    And I can see genre "<genre>" in feedback field
+
+    Examples:
+      | name | age | genre  |
+      | Ann  | 5   | Female |
+      | Bob  | 61  | Male   |
+
+
