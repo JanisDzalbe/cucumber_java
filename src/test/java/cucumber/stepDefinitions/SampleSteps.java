@@ -6,6 +6,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -23,6 +24,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Step definitions mapping Gherkin steps in feature files to Selenium WebDriver actions.
  */
 public class SampleSteps {
+    private static final List<String> ORIGINAL_PEOPLE_LIST = List.of(
+            "Mike, Web Designer",
+            "Jill, Support",
+            "Jane, Accountant",
+            "John, Software Engineer",
+            "Sarah, Product Manager",
+            "Carlos, Data Analyst",
+            "Emily, UX Designer",
+            "David, Project Manager",
+            "Maria, QA Engineer",
+            "Alex, DevOps Engineer"
+    );
+
     private WebDriver driver;
 
     /**
@@ -273,5 +287,255 @@ public class SampleSteps {
         WebElement errorElement = driver.findElement(By.id("ch1_error"));
         assertFalse(errorElement.isDisplayed());
         assertEquals("", errorElement.getText());
+    }
+
+    // -------------------------
+    // Sample 4
+    // -------------------------
+
+    /**
+     * Navigates to the feedback page by reusing the existing navigation step.
+     */
+    @Given("^I am on feedback page$")
+    public void iAmOnFeedbackPage() {
+        iAmOnTheProvideFeedbackPage();
+    }
+
+    /**
+     * Checks each language checkbox listed in the 1-column Cucumber data table.
+     *
+     * @param languages list of language values to select
+     */
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        for (String language : languages) {
+            driver.findElement(By.cssSelector("[type='checkbox'][value='" + language + "']")).click();
+        }
+    }
+
+    /**
+     * Clicks the Send button on the feedback form by reusing the existing submit step.
+     */
+    @When("^I click send feedback$")
+    public void iClickSendFeedback() {
+        iClickTheSendFeedbackButton();
+    }
+
+    /**
+     * Verifies that the selected languages are displayed on the feedback summary page.
+     *
+     * @param languages expected comma-separated language string in {@code #language}
+     */
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void assertLanguagesInFeedbackReviewPage(String languages) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.urlContains("check_feedback.html"));
+        wait.until(d -> !d.findElement(By.id("language")).getText().isEmpty());
+
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+
+    // -------------------------
+    // Sample 5
+    // -------------------------
+
+    /**
+     * Enters Name, Age, and Genre on the feedback form in a single step using a 2-column Map table.
+     *
+     * @param inputMap map containing keys {@code name}, {@code age}, and {@code genre}
+     */
+    @When("^I input Name, Age and Genre in feedback$")
+    public void iInputNameAgeGenreInFeedback(Map<String, String> inputMap) {
+        WebElement nameInput = driver.findElement(By.id("fb_name"));
+        WebElement ageInput = driver.findElement(By.id("fb_age"));
+
+        nameInput.clear();
+        nameInput.sendKeys(inputMap.get("name"));
+        ageInput.clear();
+        ageInput.sendKeys(inputMap.get("age"));
+        driver.findElement(By.cssSelector("[name='gender'][value='" + inputMap.get("genre") + "']")).click();
+    }
+
+    /**
+     * Verifies that the submitted Name, Age, and Genre match the expected values on the review page.
+     *
+     * @param expectedMap map containing expected {@code name}, {@code age}, and {@code genre} values
+     */
+    @Then("^I see Name, Age and Genre in feedback review page$")
+    public void assertNameAgeGenreInFeedbackReviewPage(Map<String, String> expectedMap) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.urlContains("check_feedback.html"));
+        wait.until(d -> !d.findElement(By.id("name")).getText().isEmpty());
+
+        assertEquals(expectedMap.get("name"), driver.findElement(By.id("name")).getText());
+        assertEquals(expectedMap.get("age"), driver.findElement(By.id("age")).getText());
+        assertEquals(expectedMap.get("genre"), driver.findElement(By.id("gender")).getText());
+    }
+
+    // -------------------------
+    // Task 2
+    // -------------------------
+
+    /**
+     * Navigates to the "List of people with jobs" task page and waits for the list to render.
+     */
+    @Given("^I am on the list of people with jobs page$")
+    public void iAmOnTheListOfPeopleWithJobsPage() {
+        driver.get("https://janisdzalbe.github.io/example-site/tasks/list_of_people_with_jobs.html");
+        createWait().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#listOfPeople li")));
+    }
+
+    /**
+     * Opens the Add person form, fills in Name and Job, submits, and waits to return to the list page.
+     *
+     * @param name the new person's name
+     * @param job  the new person's job title
+     */
+    @When("^I add a new person with name \"([^\"]*)\" and job \"([^\"]*)\"$")
+    public void iAddANewPersonWithNameAndJob(String name, String job) {
+        driver.findElement(By.xpath("//button[text()='Add person']")).click();
+
+        WebDriverWait wait = createWait();
+        WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("name")));
+        WebElement jobInput = driver.findElement(By.id("job"));
+
+        nameInput.clear();
+        nameInput.sendKeys(name);
+        jobInput.clear();
+        jobInput.sendKeys(job);
+        driver.findElement(By.id("modal_button")).click();
+
+        wait.until(ExpectedConditions.urlContains("list_of_people_with_jobs"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#listOfPeople li")));
+    }
+
+    /**
+     * Opens the Edit form for an existing person, verifies their name, updates their job, and saves.
+     *
+     * @param name   the existing person's name
+     * @param newJob the new job title to save
+     */
+    @When("^I edit person \"([^\"]*)\" to have job \"([^\"]*)\"$")
+    public void iEditPersonToHaveJob(String name, String newJob) {
+        WebElement person = findPersonListItemByName(name);
+        person.findElement(By.className("editbtn")).click();
+
+        WebDriverWait wait = createWait();
+        WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("name")));
+        WebElement jobInput = driver.findElement(By.id("job"));
+
+        assertEquals(name, nameInput.getDomProperty("value"));
+        jobInput.clear();
+        jobInput.sendKeys(newJob);
+        driver.findElement(By.id("modal_button")).click();
+
+        wait.until(ExpectedConditions.urlContains("list_of_people_with_jobs"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#listOfPeople li")));
+    }
+
+    /**
+     * Clicks the remove icon for the specified person and waits for the page to reload.
+     *
+     * @param name the name of the person to remove
+     */
+    @When("^I remove person \"([^\"]*)\" from the people list$")
+    public void iRemovePersonFromThePeopleList(String name) {
+        WebElement oldList = driver.findElement(By.id("listOfPeople"));
+        WebElement person = findPersonListItemByName(name);
+        person.findElement(By.className("closebtn")).click();
+
+        WebDriverWait wait = createWait();
+        wait.until(ExpectedConditions.stalenessOf(oldList));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#listOfPeople li")));
+    }
+
+    /**
+     * Clicks the "Reset List" button and waits for the reloaded list to appear.
+     */
+    @When("^I click the Reset List button$")
+    public void iClickTheResetListButton() {
+        WebElement oldList = driver.findElement(By.id("listOfPeople"));
+        driver.findElement(By.xpath("//button[text()='Reset List']")).click();
+
+        WebDriverWait wait = createWait();
+        wait.until(ExpectedConditions.stalenessOf(oldList));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#listOfPeople li")));
+    }
+
+    /**
+     * Asserts that the rendered people list has the exact expected number of entries.
+     *
+     * @param expectedSize expected number of people in the list
+     */
+    @Then("^the people list contains (\\d+) entries$")
+    public void thePeopleListContainsEntries(int expectedSize) {
+        assertEquals(expectedSize, getCurrentPeopleList().size());
+    }
+
+    /**
+     * Asserts that the specified person and job combination is present in the people list.
+     *
+     * @param name expected person's name
+     * @param job  expected person's job
+     */
+    @And("^person \"([^\"]*)\" with job \"([^\"]*)\" is in the people list$")
+    public void personWithJobIsInThePeopleList(String name, String job) {
+        assertTrue(getCurrentPeopleList().contains(name + ", " + job));
+    }
+
+    /**
+     * Asserts that the specified person and job combination is not present in the people list.
+     *
+     * @param name person's name
+     * @param job  person's job
+     */
+    @And("^person \"([^\"]*)\" with job \"([^\"]*)\" is not in the people list$")
+    public void personWithJobIsNotInThePeopleList(String name, String job) {
+        assertFalse(getCurrentPeopleList().contains(name + ", " + job));
+    }
+
+    /**
+     * Asserts that the entire people list matches the original 10 entries in size, order, and content.
+     */
+    @Then("^the people list matches the original 10 entries$")
+    public void thePeopleListMatchesTheOriginalEntries() {
+        List<String> actualPeople = getCurrentPeopleList();
+        assertEquals(ORIGINAL_PEOPLE_LIST.size(), actualPeople.size());
+        assertEquals(ORIGINAL_PEOPLE_LIST, actualPeople);
+    }
+
+    /**
+     * Creates a 10-second explicit wait configured to ignore stale element references.
+     *
+     * @return configured {@link WebDriverWait}
+     */
+    private WebDriverWait createWait() {
+        return (WebDriverWait) new WebDriverWait(driver, Duration.ofSeconds(10))
+                .ignoring(StaleElementReferenceException.class);
+    }
+
+    /**
+     * Finds a person's {@code <li>} element on the page by exact displayed name.
+     *
+     * @param name exact name text inside {@code .name}
+     * @return matching {@code <li>} WebElement
+     */
+    private WebElement findPersonListItemByName(String name) {
+        return driver.findElement(
+                By.xpath("//li[.//span[contains(@class, 'name') and text()='" + name + "']]")
+        );
+    }
+
+    /**
+     * Reads all visible people entries into a list formatted as {@code "Name, Job"}.
+     *
+     * @return list of currently displayed people
+     */
+    private List<String> getCurrentPeopleList() {
+        return driver.findElements(By.cssSelector("#listOfPeople li"))
+                .stream()
+                .map(person -> person.findElement(By.className("name")).getText()
+                        + ", " + person.findElement(By.className("job")).getText())
+                .toList();
     }
 }
