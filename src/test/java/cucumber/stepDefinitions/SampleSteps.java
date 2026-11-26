@@ -153,7 +153,7 @@ public class SampleSteps {
         driver.findElement(By.id("fb_age")).sendKeys(age);
     }
     @And("^I click send feedback$")
-    public void iClickSendFeedback(){
+    public void iClickSendFeedback() throws Exception{
         driver.findElement(By.cssSelector("[type='submit']")).click();
     }
     @Then("^I see feedback name: \"([^\"]*)\"$")
@@ -191,6 +191,35 @@ public class SampleSteps {
         Alert alert = driver.switchTo().alert();
         assertEquals(message, alert.getText());
         alert.accept();
+    }
+// -------------------------------
+// Sample 4
+// -------------------------------
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String>languages){
+        for (String language : languages){
+            driver.findElement(By.cssSelector("input[value='" + language + "']")).click();
+        }
+    }
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String langauges){
+        assertEquals(langauges, driver.findElement(By.id("language")).getText());
+    }
+// -------------------------------
+// Sample 5
+// -------------------------------
+    @When("^I enter feedback data:$")
+    public void iEnterFeedbackData(Map<String, String> data){
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(data.get("name"));
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(data.get("age"));
+        driver.findElement(By.cssSelector("input[type='radio'][value='" + data.get("genre") + "']")).click();
+    }
+    @Then("^I see feedback genre: \"([^\"]*)\"$")
+    public void iSeeFeedbackGenre(String genre){
+        assertEquals(genre, driver.findElement(By.id("gender")).getText());
     }
 
 }
