@@ -150,8 +150,44 @@ public class SampleSteps {
     public void iEnterAgeInFeedbackPage(String age) throws Throwable {
         driver.findElement(By.id("fb_age")).clear();
         driver.findElement(By.id("fb_age")).sendKeys(age);
+    }
 
+    @When("^I click send feedback$")
+    public void clickSendFeedback() {
+        driver.findElement(By.cssSelector(".w3-btn-block.w3-blue")).click();
+    }
+    @When("^I select feedback languages$")
+    public void selectFeedbackLanguages(List<String> languages) {
+        for (String language : languages) {
+            driver.findElement(By.xpath("//input[@type='checkbox' and @value='" + language + "']")).click();
+        }
+    }
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void canSeeLanguagesInFeedbackCheck(String expectedLanguages) {
+        String actualLanguages = driver.findElement(By.id("language")).getText();
+        assertEquals(expectedLanguages, actualLanguages);
+    }
 
+    //----------------
+    //Sample 5
+    //-----------------
+
+    @When("^I enter feedback data$")
+    public void IEnterFeedbackData(Map<String, String> data) {
+        driver.findElement(By.id("fb_name")).sendKeys(data.get("name"));
+        driver.findElement(By.id("fb_age")).sendKeys(data.get("age"));
+        driver.findElement(By.xpath("//input[@type='radio' and @value='" + data.get("genre") + "']")).click();
+    }
+
+    @When("^I click send button$")
+    public void IClickSendButton() {
+        driver.findElement(By.cssSelector(".w3-btn-block.w3-blue")).click();
+    }
+    @Then("^I see feedback data on check page$")
+    public void ISeeFeedbackDataOnCheckPage(Map<String, String> expected) {
+        assertEquals(expected.get("name"),  driver.findElement(By.id("name")).getText());
+        assertEquals(expected.get("age"),   driver.findElement(By.id("age")).getText());
+        assertEquals(expected.get("genre"), driver.findElement(By.id("gender")).getText());
     }
 
 }
