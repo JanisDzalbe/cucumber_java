@@ -25,7 +25,8 @@ Feature: Task 2 - List of people with jobs
 
   Scenario: remove a person
     When I remove person "Sarah"
-    Then I see person "Sarah" with job "Product Managert" is removed from the initial list
+    Then I see person "Sarah" with job "Product Manager" is removed from the initial list
+    And I see the people list should contain 9 entries
 
   Scenario: reset the list after adding a person
     When I add person "Krishna Prabhu" with job "Test Specialist"

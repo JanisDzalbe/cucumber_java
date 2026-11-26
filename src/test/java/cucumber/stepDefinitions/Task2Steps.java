@@ -90,7 +90,7 @@ public class Task2Steps {
     @Then("I see person {string} with job {string} is removed from the initial list")
     public void iSeeThePersonIsRemovedFromTheList(String name, String job) {
         assertTrue(driver.findElements(By.xpath("//li[.//span[contains(@class,'name') and text()='Sarah']]")).isEmpty());
-        assertEquals(9, driver.findElements(By.xpath("//ul[@id='listOfPeople']//li")).size());
+        //assertEquals(9, driver.findElements(By.xpath("//ul[@id='listOfPeople']//li")).size());
     }
 
     @When("^I reset the list$")
