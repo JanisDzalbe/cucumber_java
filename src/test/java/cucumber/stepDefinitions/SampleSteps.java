@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -137,7 +138,7 @@ public class SampleSteps {
 
 //    #   TODO - create Scenario Outline for 'Give us your feedback!' page
 //    #   URL: https://janisdzalbe.github.io/example-site/tasks/provide_feedback
-//    #   Navigate to page
+//    #   Navigate to page                      Sample 3
 //    #   Set name and age based on test Examples
 //    #   Click "Send" button and verify that previous input is displayed in correct fields
 
@@ -185,7 +186,7 @@ public class SampleSteps {
     }
 
     //    #  TODO - Add implementation for missing steps
-//    #  @Test
+//    #  @Test      Sample 4 Task
 //    ******************************************************************************************************************
     @Given("^I am on feedback page$")
     public void iamonFeedbackPage() {
@@ -208,4 +209,63 @@ public class SampleSteps {
     public void icanseeLanguages(String languages) throws Throwable {
         assertEquals(languages, driver.findElement(By.xpath("//span[text()=\"English,Spanish\"]")).getText());
     }
+
+//-------------------------------Sample 5 Task********************************************--------------------------------
+
+    // Store the values from the Examples table
+    Map<String, String> feedbackDetails;
+
+    // Navigate to feedback page
+    @Given("Navigate to provide feedback page")
+    public void navigateToProvideFeedbackPage() {
+        iamonFeedbackPage();
+    }
+
+    // Enter Name, Age and Genre in a single step
+    @When("I enter feedback details:")
+    public void iEnterFeedbackDetails(DataTable dataTable) {
+
+        feedbackDetails = dataTable.asMap(String.class, String.class);
+
+        // Enter Name
+        driver.findElement(By.id("fb_name"))
+                .sendKeys(feedbackDetails.get("name"));
+
+        // Enter Age
+        driver.findElement(By.id("fb_age"))
+                .sendKeys(feedbackDetails.get("age"));
+
+        // Select Genre
+        driver.findElement(By.cssSelector(
+                "input[name='gender'][value='" + feedbackDetails.get("genre") + "']"
+        )).click();
+    }
+
+    // Click Send button
+    @When("I click Send button")
+    public void iClickSendButton() {
+
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+    }
+
+    // Verify submitted feedback details
+    @Then("I should see the submitted feedback details")
+    public void iShouldSeeTheSubmittedFeedbackDetails() {
+
+        // Verify confirmation page
+        assertTrue(driver.getCurrentUrl().contains("check_feedback"));
+
+        // Verify Name
+        assertEquals(feedbackDetails.get("name"),
+                driver.findElement(By.id("name")).getText());
+
+        // Verify Age
+        assertEquals(feedbackDetails.get("age"),
+                driver.findElement(By.id("age")).getText());
+
+        // Verify Genre
+        assertEquals(feedbackDetails.get("genre"),
+                driver.findElement(By.id("gender")).getText());
+    }
+
 }
