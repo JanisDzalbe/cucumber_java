@@ -189,4 +189,34 @@ public class SampleSteps {
 
         assertEquals(expectedLanguages, actualLanguages);
     }
+
+    ////----------------------------------Sample5----------------------------------//
+
+
+    @When("^I enter feedback values:$")
+    public void iEnterFeedbackValues(Map<String, String> valuesToEnter) {
+       /* driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(valuesToEnter.get("name"));
+
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(valuesToEnter.get("age"));*/
+      ;
+        iEnterNameAndAge(valuesToEnter.get("name"), valuesToEnter.get("age"));
+        String genreValue = valuesToEnter.get("genre");
+     //   driver.findElement(By.cssSelector("[type='radio'][value='" + genreValue + "']")).click();
+        driver.findElement(By.xpath("//input[@name='gender' and @value='" + genreValue + "']")).click();
+
+    }
+
+
+    @Then("^I should see name, age and genre in feedback check$")
+    public void assertNameAgeGenreInFeedbackReviewPage(Map<String, String> inputMap) {
+        iShouldSeeNameAndAgeDisplayedInTheFeedbackFields(inputMap.get("name"), inputMap.get("age"));
+        assertGenreInFeedbackReviewPage(inputMap.get("genre"));
+    }
+
+    public void assertGenreInFeedbackReviewPage(String expectedGenre) {
+        String actualGenre = driver.findElement(By.id("gender")).getText();
+        assertEquals(expectedGenre, actualGenre);
+    }
 }
