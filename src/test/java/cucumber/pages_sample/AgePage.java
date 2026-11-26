@@ -66,4 +66,8 @@ public class AgePage {
         assertEquals(ageInput.getAttribute("value"), "");
         assertFalse(errorText.isDisplayed());
     }
+    public void checkIamInAgePage(){
+        assertEquals("https://janisdzalbe.github.io/example-site/examples/age",getPageUrl());
+    }
+
 }
