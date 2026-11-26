@@ -1,5 +1,6 @@
 package cucumber.stepDefinitions;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -188,7 +189,6 @@ public class SampleSteps {
     public void assertAgeInFeedbackReviewPage(String age) {
         assertEquals(age, driver.findElement(By.id("age")).getText());
     }
-}
 
     /*
 
@@ -218,4 +218,130 @@ public class SampleSteps {
         assertEquals(String.valueOf(expectedAge), actualAge);
 
      */
+
+// -------------------------------
+// Sample4.feature
+// -------------------------------
+// -------------------------------
+// -------------------------------
+
+    /*
+     Scenario: Feedback with only languages
+       Given I am on feedback page
+       When I select feedback languages
+         | English |
+          | Spanish |
+        And I click send feedback
+        Then I can see languages "English,Spanish" in feedback check
+     */
+    /*
+@Given("^I am on feedback page$")
+public void iAmOnFeedbackPage() {
+    driver.get("https://janisdzalbe.github.io/example-site/tasks/provide_feedback");
+*/
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+        for (String language : languages) {
+            driver.findElement(
+                    By.cssSelector("[type='checkbox'][value='" + language + "']")
+            ).click();
+        }
+    }
+
+    @When("^I click send feedback$")
+    public void iClickSendFeedback() {
+        iSendFeedback();
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void assertLanguagesInFeedbackReviewPage(String languages) {
+        assertEquals(
+                languages,
+                driver.findElement(By.id("language")).getText());
+    }
+
+
+/*
+    // Select feedback languages
+
+    @When("I select feedback languages")
+    public void iSelectFeedbackLanguages(List<String> languages) {
+
+
+        // Loop through all languages from the Gherkin DataTable.
+        for (String language : languages) {
+
+            // Create a CSS Selector for the specific language.
+            String locator = "input[name='language'][value='" + language + "']";
+
+            // Find the checkbox and click it.
+            driver.findElement(By.cssSelector(locator)).click();
+        }
+    }
+
+    // Click send feedback
+    @And("I click send feedback")
+    public void iClickSendFeedback() {
+
+        // Find the Send button and click it.
+        driver.findElement(
+                By.xpath("//button[normalize-space()='Send']")
+        ).click();
+    }
+
+    // Verify selected languages
+    @Then("I can see languages {string} in feedback check")
+    public void iCanSeeLanguagesInFeedbackCheck(String expectedLanguages) {
+
+        //  Get all visible text from the page.
+        String actualText = driver.findElement(By.tagName("body")).getText();
+
+        // Check that the expected languages are present in the result.
+        assertTrue(
+                actualText.contains(expectedLanguages),
+                "Expected languages were not found: " + expectedLanguages
+        );
+    }
+*/
+
+// -------------------------------
+// Sample5.feature
+// -------------------------------
+// -------------------------------
+// -------------------------------
+
+    @When("^I input Name, Age and Genre in feedback$")
+    public void iInputNameAgeGenreInFeedback(Map<String, String> inputMap) {
+
+        iEnterNameInFeedbackPage(inputMap.get("name"));
+
+        iEnterAgeInFeedbackPage(inputMap.get("age"));
+
+        driver.findElement(By.cssSelector("[name='gender'][value='" + inputMap.get("genre") + "']")).click();
+    }
+
+
+    @Then("^I see genre \"([^\"]*)\" in feedback review page$")
+    public void assertGenreInFeedbackReviewPage(String gender) {
+
+        assertEquals(gender, driver.findElement(By.id("gender")).getText());
+    }
+
+
+    @Then("^I see Name, Age and Genre in feedback review page$")
+    public void assertNameAgeGenreInFeedbackReviewPage(Map<String, String> inputMap) {
+
+        assertNameInFeedbackReviewPage(inputMap.get("name"));
+
+        assertAgeInFeedbackReviewPage(inputMap.get("age"));
+
+        assertGenreInFeedbackReviewPage(inputMap.get("genre"));
+    }
+}
+
+
+
+
+
 
