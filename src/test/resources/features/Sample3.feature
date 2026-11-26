@@ -33,7 +33,7 @@ Feature: Introduction to cucumber part 3
       Given I am on feedback page
       When I enter name "<name>" in feedback page
       And I enter age <age> in feedback page
-      And I click Send feedback
+      And I click send feedback
       Then I see submitted name "<name>"
       And I see submitted age <age>
 
