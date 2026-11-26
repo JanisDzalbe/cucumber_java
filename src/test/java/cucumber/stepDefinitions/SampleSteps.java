@@ -166,4 +166,48 @@ public class SampleSteps {
         assertEquals(name,driver.findElement(By.id("name")).getText());
         assertEquals(age,driver.findElement(By.id("age")).getText());
     }
+
+    //---------------------------------------------------------
+    /*
+    --------------------task 4-------------------------------------
+     */
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> values)  throws Throwable{
+      for(String value : values){
+          driver.findElement(By.cssSelector("[value='" +value+ "']")).click();
+      }
+    }
+
+    @And("^I click send feedback$")
+    public void iClickSendFeedback() throws Throwable {
+        iClickSendButton();
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguagesInFeedbackCheck(String languageText) {
+      assertEquals(languageText,driver.findElement(By.id("language")).getText());
+    }
+    //---------------------------------------------------------
+    /*
+    --------------------task5-------------------------------------
+     */
+
+    @When("^I enter values in feedback page$")
+    public void iEnterValuesInFeedbackPage(Map<String,String>values) throws Throwable{
+     driver.findElement(By.id("name")).clear();
+        driver.findElement(By.id("name")).sendKeys(values.get("name"));
+     driver.findElement(By.id("age")).clear();
+        driver.findElement(By.id("age")).sendKeys(values.get("age"));
+
+        driver.findElement(By.cssSelector("[value='" +values.get("genre")+ "']")).click();
+    }
+
+    @Then("^I see \"([^\"]*)\",\"([^\"]*)\",\"([^\"]*)\" in correct fields$")
+    public void iSeeInCorrectFields(String arg0, String name, String age, String genre) {
+        assertEquals(name,driver.findElement(By.id("name")).getText());
+        assertEquals(age,driver.findElement(By.id("age")).getText());
+        assertEquals(genre,driver.findElement(By.id("gender")).getText());
+    }
 }
+

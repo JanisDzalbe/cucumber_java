@@ -37,5 +37,20 @@ Feature: Introduction to cucumber part 4
   # Set Name, Age and Genre
   # - All input MUST be done in single step
   # - All input MUST use Examples for data
-  # - Step can use Map or Domain object
+  # - Step can use Map or Data TABLE
   # Click "Send" button and verify that previous input is displayed in correct fields
+
+
+  Scenario Outline: a new scenario outline for  Give us your feedback
+    Given I am on feedback page
+    When I enter values in feedback page
+      | name |<name> |
+      | age |  <age> |
+      | genre | <genre> |
+    And I click send feedback
+    Then I see "<name>","<age>","<genre>" in correct fields
+    Examples:
+      |name | age| genre |
+      |ann  |17| female |
+      |joy  |21| male |
+
